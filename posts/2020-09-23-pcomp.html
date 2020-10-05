@@ -1,0 +1,188 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>PComp Labs Week 2</title>
+ </head>
+
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">PComp Labs Week 2</header>
+   <div class="section-content">
+    <p>This is my blog post for working on week 2's labs.</p>
+
+    <section class="section section-level-1">
+     <header class="section-header">
+      Beforehand: Setting up the documentation process
+     </header>
+     <div class="section-content">
+      <p>
+       Based on my experience doucmenting last week, I modified my set up
+       significantly from last week. My camera is now mounted over my work.
+       Here's what what looks like:
+      </p>
+
+      <gallery>
+       <figure>
+        <figcaption><p>Nice, flat view of the floor.</p></figcaption>
+        <img
+         src="https://user-images.githubusercontent.com/1570168/94015063-391bce00-fd61-11ea-8ec7-979abf119cce.jpg"
+        />
+       </figure>
+       <figure>
+        <figcaption><p>Let's make the background white.</p></figcaption>
+        <img
+         src="https://user-images.githubusercontent.com/1570168/94015084-4042dc00-fd61-11ea-90d2-9354755812f9.jpg"
+        />
+       </figure>
+      </gallery>
+
+      <p>Here's what it looks like when I'm getting out supplies:</p>
+      <gallery>
+       <figure>
+        <figcaption><p>Before</p></figcaption>
+        <img
+         src="https://user-images.githubusercontent.com/1570168/94014932-125d9780-fd61-11ea-982d-66936c4da877.jpg"
+        />
+       </figure>
+       <figure>
+        <figcaption><p>After</p></figcaption>
+        <img
+         src="https://user-images.githubusercontent.com/1570168/94014942-15588800-fd61-11ea-8671-ffca76075d53.jpg"
+        />
+       </figure>
+      </gallery>
+     </div>
+    </section>
+
+    <section class="section section-level-1">
+     <header class="section-header">Lab 1: Digital I/O</header>
+     <div class="section-content">
+      <p>
+       <a
+        href="https://itp.nyu.edu/physcomp/videos/videos-digital-and-analog-input-and-output/#Digital_Input_and_Output"
+        target="_blank"
+        >https://itp.nyu.edu/physcomp/videos/videos-digital-and-analog-input-and-output/#Digital_Input_and_Output</a
+       >
+      </p>
+
+      <figure>
+       <figcaption><p>Here's the result!</p></figcaption>
+       <img
+        src="https://user-images.githubusercontent.com/1570168/94015436-b47d7f80-fd61-11ea-9072-7208897c47a0.gif"
+        alt="DSC04885-ANIMATION"
+       />
+      </figure>
+      <p>
+       💡💡💡<br />
+       For this lab, I didn't run into any issues building this, EXCEPT that
+       initially I couldn't get the connection between the computer and the
+       Arduino to work at all. After some time of trying all kinds of software
+       fixes, I realized that the issue was that I was using a bad micro-USB
+       cable. Turns out only some of the transfer data.
+      </p>
+     </div>
+    </section>
+
+    <section class="section section-level-1">
+     <header class="section-header">Lab 2: Analog I/O</header>
+     <div class="section-content">
+      <p>
+       <a
+        href="https://itp.nyu.edu/physcomp/labs/labs-arduino-digital-and-analog/analog-in-with-an-arduino/"
+        target="_blank"
+        >https://itp.nyu.edu/physcomp/labs/labs-arduino-digital-and-analog/analog-in-with-an-arduino/</a
+       >
+      </p>
+      <p>Also ran into no issues with the lab.</p>
+
+      <section class="section section-level-2">
+       <header class="section-header">Add a potentiometer and LED</header>
+       <div class="section-content">
+        <gallery>
+         <figure>
+          <figcaption><p>LED output</p></figcaption>
+          <img
+           src="https://user-images.githubusercontent.com/1570168/94015726-1a6a0700-fd62-11ea-9e1f-a8b2bc020e97.gif"
+          />
+         </figure>
+         <figure>
+          <figcaption>Speaker output</figcaption>
+          <a href="https://photos.app.goo.gl/cQaHQ55L9eMRkPhPA" target="_blank"
+           >⏯ Video</a
+          >
+         </figure>
+        </gallery>
+       </div>
+      </section>
+
+      <section class="section section-level-2">
+       <header class="section-header">Other variable resistors</header>
+       <div class="section-content">
+        <section class="section section-level-3">
+         <header class="section-header">Phototransistor</header>
+         <div class="section-content">
+          <p>
+           💡💡💡<br />
+           This is the first exercise so far where the code isn't included.
+           Here's the critical part of the code I wrote:
+          </p>
+
+          <pre>
+int in = analogRead(A0);
+
+int out = 255 - map(in, 0, 10, 0, 255);
+if (out &lt; 0) {
+  out = 0;
+}
+
+analogWrite(ledPin, out);</pre
+          >
+          <p>
+           I had to experiment a bit to get a useful relationship between the
+           input and output values. I chose to invert the relationship, turning
+           the device into a night-light!
+          </p>
+
+          <gallery>
+           <figure>
+            <figcaption><p>Activating by dimming the room</p></figcaption>
+            <img
+             src="https://user-images.githubusercontent.com/1570168/94015743-1fc75180-fd62-11ea-8ba7-4645519ecae8.gif"
+            />
+           </figure>
+           <figure>
+            <figcaption><p>Activating with my hand</p></figcaption>
+            <img
+             src="https://user-images.githubusercontent.com/1570168/94015758-248c0580-fd62-11ea-900d-6cfa237b42a4.gif"
+            />
+           </figure>
+          </gallery>
+         </div>
+        </section>
+
+        <section class="section section-level-3">
+         <header class="section-header">Force-sensing resistors</header>
+         <div class="section-content">
+          <p>Pretty straightforward.</p>
+
+          <figure>
+           <img
+            src="https://user-images.githubusercontent.com/1570168/94015774-29e95000-fd62-11ea-868c-5ec60bebdd8f.gif"
+            alt="DSC04918-ANIMATION"
+           />
+          </figure>
+         </div>
+        </section>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+

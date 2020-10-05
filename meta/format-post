@@ -1,0 +1,6 @@
+#!/bin/bash
+
+deno run \
+  --allow-read \
+  "meta/format-post-lib/main.ts" \
+  "$@"

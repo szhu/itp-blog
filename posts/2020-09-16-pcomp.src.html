@@ -1,0 +1,309 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer src="posts.js"></script>
+  <script dev-only type="module" src="posts-dev.js"></script>
+</head>
+
+<section id="PComp Labs Week 1">
+  <md>
+    Hello, world! This is my first ITP blog post, in which I document my first
+    lab for the Introduction to Physical Computing class!
+  </md>
+
+  <section id="Beforehand: Setting up the documentation process">
+    <md>
+      Since this is my first time documenting a process at ITP, I (1) had to set
+      up this blog. (Here it is!)
+      <!--  -->
+      ... and (2) had to create a camera setup for capturing my process. Here's
+      what it looks like:
+    </md>
+
+    <gallery>
+      <img
+        caption="Before getting my hands dirty"
+        src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/vtXKTkEowR0dlXTbliYUXjk1.jpg"
+      />
+      <img
+        caption="After finishing all of these labs"
+        src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/RKRRXuocM8QF0aLR0M-ZIkrN.jpg"
+      />
+    </gallery>
+
+    <md>
+      Equipment shown:
+      <!--  -->
+      - A long table and a over-the-bed adjustable desk. I love both of these.
+      <!--  -->
+      - An iPhone for recording a time-lapse overhead video.
+      <!--  -->
+      - A monitor -- mine happens to be a 40" TV -- for displaying the
+      time-lapse viewfinder.
+      <!--  -->
+      - The phone is sort of precariously mounted onto a tripod, streaming to a
+      Apple TV 3rd gen via AirPlay and connected to the monitor, so that it was
+      easy to make sure my hands were always in frame. This seems complicated
+      but I'm just making do with the equipment I have.
+      <!--  -->
+      - A nice aesthetic light I randomly got from IKEA a few years back. It has
+      an internal battery and charges via USB, which is quite nice.
+      <!--  -->
+      - A Sony NEX-6 digital mirrorless camera. I couldn't use my phone to take
+      pictures because it was recording the time-lapse videos.
+      <!--  -->
+      None of this equipment was super expensive! I bought most of this stuff
+      used rather than new.
+      <!--  -->
+      And a note about the post-processing:
+      <!--  -->
+      - The large GIFs: Taken using continuous shooting mode on the camera.
+      Photos -> GIF conversion done using Google Photos.
+      <!--  -->
+      - The time-lapse GIFs: Taking using time-lapse mode on the phone. Video ->
+      GIF conversion done using a Mac app called Gifski. (I've done the
+      conversion process before using ffmpeg but it requires finding the right
+      args to pass to it. The app does the same thing more intuitively.)
+      <!--  -->
+      I've had some basic EE experience before, so the labs were pretty
+      straightforward to follow -- I mostly just followed the instructions and
+      tried to recreate the reference photos throughout the process! I've used a
+      💡 to denote insight and questions I had.
+    </md>
+  </section>
+
+  <section id="Lab 1: Setting up a breadboard">
+    <md>[](https://itp.nyu.edu/physicalcomputing/labs/breadboard/)</md>
+
+    <img
+      caption="Time-lapse of me doing the entire lab"
+      src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/BhyqiZnRcyJZaBZhrOUCiR0U.gif"
+    />
+
+    <md>
+      💡💡💡\<!--  -->
+      For this lab, I didn't have the listed power source. Instead, I used the
+      Arduino's 3V power out pin, which later labs included instructions for.
+    </md>
+
+    <section id="Will it light? Test your understanding">
+      <section id="Test 1">
+        <gallery>
+          <img
+            caption="Reference"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/dyNxvp8Q5vyTb1sPwnpy1WUJ.png"
+          />
+          <img
+            caption="My result"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/tCFFGwQmmDSeRJ7q7LkHNdb4.png"
+          />
+        </gallery>
+      </section>
+
+      <section id="Test 2">
+        <gallery>
+          <img
+            caption="Reference"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/DDa_t_0miXICinbZr_Dc10JS.png"
+          />
+          <img
+            caption="My result"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/a1JIuP5fB4Gz3zPzHAU7SDmD.png"
+          />
+        </gallery>
+      </section>
+
+      <section id="Test 3">
+        <gallery>
+          <img
+            caption="Reference"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/3Wc2hE559D4bA7ccXJbvk9AV.png"
+          />
+          <img
+            caption="My result"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/PMCOHy0C8GmTEAeMiH3M5xFr.png"
+          />
+        </gallery>
+      </section>
+
+      <section id="Test 4">
+        <gallery>
+          <img
+            caption="Reference"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/Px9b1pR2A-45irDDgxXx4G9x.png"
+          />
+          <img
+            caption="My result"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/Otg0OYEUnMmU9kEz0tHD48sD.png"
+          />
+        </gallery>
+      </section>
+
+      <section id="Test 5">
+        <gallery>
+          <img
+            caption="Reference"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/nKyilhDYvZv1Qpdt1eMu6z6Y.png"
+          />
+          <img
+            caption="My result"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/_yXBVNEi74LaMbuQ4zFlrZhM.png"
+          />
+        </gallery>
+      </section>
+
+      <section id="LEDs in parallel">
+        <gallery>
+          <img
+            caption="Reference"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/glmkfLQ3tYIdHr4eir1jemLs.jpg"
+          />
+          <img
+            caption="My result"
+            src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/sw6SOi7BewMl7MbXCk7O6Jc9.png"
+          />
+        </gallery>
+      </section>
+    </section>
+  </section>
+
+  <section id="Lab 2: Electronics and multimeter">
+    <md>[](https://itp.nyu.edu/physicalcomputing/labs/electronics/)</md>
+
+    <img
+      caption="Time-lapse of me doing the entire lab"
+      src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/gEEE0an_gKmLE5a9_yh-AUTx.gif"
+    />
+
+    <section id="Testing the meter">
+      <gallery>
+        <img
+          caption="Reference"
+          src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/7-bCYQjiC8IolUf3OcMX-_bC.jpg"
+        />
+        <img
+          caption="My result"
+          src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/IVS3OUH6JMx4Mg_3ZE-B1N80.png"
+        />
+      </gallery>
+    </section>
+
+    <section id="Measuring resistance of a component">
+      <img
+        src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/QNppf1z4RJ7vW1CJcgAAVWIK.png"
+      />
+    </section>
+    <section id="Measuring resistance across your hand">
+      <gallery>
+        <img
+          caption="Initial reading"
+          src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/F_ER0RYDF91xocPFXttXfGAV.png"
+        />
+        <img
+          caption="After my hand got sweaty"
+          src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/S37SLUBx0U_lGkSy81ln_K4J.png"
+        />
+      </gallery>
+    </section>
+
+    <section id="Measuring voltage">
+      <md>
+        💡💡💡\<!--  -->
+        In which I discovered the convenience of alligator clips.
+      </md>
+
+      <gallery>
+        <img
+          caption="My result"
+          src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/kNBw6V8YfwwceuoeQIVNrcep.png"
+        />
+        <img
+          caption="My result, but with alligator clips"
+          src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/2mefvEwL_7mqbS2DbaVRP-yY.png"
+        />
+      </gallery>
+    </section>
+    <section id="A switched LED circuit">
+      <img
+        src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/bQ-dg-Bzh0U9UDAOWhmIv8Ay.gif"
+      />
+    </section>
+    <section id="Components in series">
+      <img
+        src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/rd-IVqK6_GPiWWrTE3_TrWC-.gif"
+      />
+
+      <md>
+        💡💡💡\<!--  -->
+        The LEDs aren't lighting up! As the lab states, the LEDs require 2V
+        minimum to light up. The lab assumes we're using a 5V power source (each
+        LED gets 2.5V), but I'm using a 3V power source and there's a resistor
+        attached (each LED gets less than 1.5V), so it makes sense that the LEDs
+        don't light up.
+      </md>
+    </section>
+    <section id="Components in parallel/measuring amperage">
+      <gallery>
+        <img
+          caption="Reference"
+          src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/dpeonkHjupMjZHCShiyJ8gmZ.jpg"
+        />
+        <img
+          caption="My result"
+          src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/nb0rPL4TeDG6oulHkpoeXlRM.jpg"
+        />
+      </gallery>
+    </section>
+    <section id="Generating a variable voltage with a potentiometer">
+      <img
+        src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/Puwc33fJRIxyEbsi-buH1kfz.gif"
+      />
+    </section>
+  </section>
+
+  <section id="Lab 3: Switches and pushbuttons">
+    <md>[](https://itp.nyu.edu/physicalcomputing/labs/switches/)</md>
+
+    <img
+      caption="Time-lapse of me doing the entire lab"
+      src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/pr2FGhLN376XgUGcoi5MHggS.gif"
+    />
+
+    <section id="Make your own switch">
+      <md>I made a switch that turns on when I close my laptop lid!</md>
+
+      <img
+        src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/uSgqgWUQsUei42ukqnDnAHZq.gif"
+      />
+
+      <md>
+        💡💡💡\<!--  -->
+        My initial thought was that I could use the lid as a conductor, and so I
+        could put the clips anywhere I wanted. It turns out that homehow the
+        MacBook body doesn't conduct electricity? Perhaps there's some
+        nonconductive coating on it. I work around that, I positioned the clips
+        so that they would touch when the lid was closed.
+      </md>
+    </section>
+    <section id="Project 1: Three switches in parallel">
+      <img
+        src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/-XBfVr4e-qkrJb-Hm99ia7Dk.gif"
+      />
+    </section>
+    <section id="Project 2: Three switches in series">
+      <img
+        src="https://static.slab.com/prod/uploads/owvelvwf/posts/images/oJhHDjvhQqAStFm86d4DStYW.jpg"
+      />
+    </section>
+    <section id="Project 3: Switching a motor">
+      <md>
+        💡💡💡\<!--  -->
+        I didn't do this part! This project requires motor and a dual-pole
+        switch, neither of which I had available.
+      </md>
+    </section>
+  </section>
+
+  <md>And that's all for my first blog post!</md>
+</section>

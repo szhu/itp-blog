@@ -1,0 +1,12 @@
+{
+  "overrides": [
+    {
+      "files": "posts/*.html",
+      "options": {
+        "parser": "angular",
+        "tabWidth": 2,
+        "proseWrap": "always"
+      }
+    }
+  ]
+}
