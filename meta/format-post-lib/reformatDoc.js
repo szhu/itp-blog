@@ -154,6 +154,7 @@ export default function reformatDoc(document) {
   }
 
   for (let video of document.querySelectorAll("video")) {
+    video.preload = "metadata";
     video.controls = true;
   }
 

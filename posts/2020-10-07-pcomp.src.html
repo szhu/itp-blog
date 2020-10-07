@@ -1,0 +1,178 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer src="posts.js"></script>
+  <script dev-only type="module" src="posts-dev.js"></script>
+</head>
+
+<section id="PComp Labs Week 4">
+  <md>
+    This is my blog post for working on week 4's assignment, which is to
+    complete Project 1!
+    <!--  -->
+    This is the first week where I didn't have a significant setup change. My
+    egg carton parts holder from last week continues to work well. 👌
+  </md>
+  <section id="Project 1: Walker">
+    <md>
+      The prompt:
+      <!--  -->
+      > Come up with a simple application using digital and/or analog input and
+      output to a microcontroller.
+    </md>
+    <section id="The Idea">
+      <md>
+        My inspiration for this project came from the last exercise of last
+        week's lab. After wiring up a variable pressure sensor to a servo and
+        turning the power on, the servo twitched and pushed itself slightly off
+        the table, as if it the plastic cross attached was a leg.
+      </md>
+      <img src="../files/2020-09-pcomp/week-3/2_servo/DSC04986-ANIMATION.gif" />
+      <md>
+        I wonder if that's how
+        [Galvani](https://en.m.wikipedia.org/wiki/Luigi_Galvani) felt seeing his
+        frog legs come to life…
+      </md>
+      <img
+        class="small"
+        from="https://www.researchgate.net/figure/Galvani-Experiment-Two-Metals-Attached-to-the-Frog-Cause-Muscles-to-Twitch_fig5_321537516"
+        src="../files/2020-09-pcomp/week-4/Galvani-Experiment-Two-Metals-Attached-to-the-Frog-Cause-Muscles-to-Twitch.png"
+      />
+      <md>
+        For this project, I will making **Walker**, a small walking robot based
+        on this circuit and code, turning this wanna-be leg into something more
+        functional.
+      </md>
+    </section>
+    <section id="The Legs">
+      <md>
+        "How should I build legs and attach them to the servo," I thought as I
+        sipped some boba…
+      </md>
+      <gallery>
+        <img
+          caption="Yum!"
+          src="../files/2020-09-pcomp/week-4/walker/process/DSC04996.JPG"
+        />
+        <img
+          caption="Hmm…"
+          src="../files/2020-09-pcomp/week-4/walker/process/DSC04998.JPG"
+        />
+      </gallery>
+      <img
+        caption="Aha!"
+        src="../files/2020-09-pcomp/week-4/walker/process/DSC04999.JPG"
+      />
+      <md>And that's the story of how Walker got legs.</md>
+      <video
+        caption="Just doing some stretches."
+        src="../files/2020-09-pcomp/week-4/walker/process/MAH05000-edit.mov"
+      ></video>
+    </section>
+    <section id="The Feet">
+      <md>
+        For some reason, I thought that after I put legs on Walker, Walker would
+        magically walk. That did not happen.
+        <!--  -->
+        To make feet, I needed something so that Walker wouldn't fall over even
+        though Walker is top-heavy. The solution? Really big feet.
+        <!--  -->
+        The feet also needed to be attached to the legs very sturdily. For this
+        job, I still didn't have to look past my boba cup. I cut feet from the
+        cup rim, and left a T-shaped part of the cup attached as "ankles" for
+        attaching to the legs. I curled up the ankles and inserted them into the
+        straw feet. Finally Walker could stand… but not for long.
+      </md>
+      <gallery>
+        <img
+          caption="Cup feet."
+          src="../files/2020-09-pcomp/week-4/walker/process/DSC05002.JPG"
+        />
+        <video
+          src="../files/2020-09-pcomp/week-4/walker/process/MAH05004-edit.mov"
+        ></video>
+      </gallery>
+      <md>
+        I changed the program slightly such that the leg would only move 30°
+        instead of 180°.
+      </md>
+      <pre lang="diff">
+      -   int servoAngle = map(analogValue, 0, 1023, 0, 179);
+      +   int servoAngle = map(analogValue, 0, 1023, 0, 30);
+      </pre>
+      <video
+        src="../files/2020-09-pcomp/week-4/walker/process/MAH05029-edit.MP4"
+      ></video>
+      <md>
+        The result was significantly more stable, but now Walker was just kind
+        of shuffling around without going anywhere. His feet were too smooth,
+        even against a porous surface like cardboard.
+      </md>
+      <video
+        caption="One more attempt, one more cry of exasperation…"
+        src="../files/2020-09-pcomp/week-4/walker/process/MAH05030-edit.MP4"
+      ></video>
+      <md>
+        I continued tweaking the legs iteratively, each time taking variations
+        on the leg designs that worked best in the previous rounds.
+      </md>
+    </section>
+    <section id="Final Feet">
+      <md
+        >My artificial evolution and selection process finally yielded feet that
+        worked:</md
+      >
+      <gallery>
+        <video
+          caption="Side view."
+          src="../files/2020-09-pcomp/week-4/walker/process/MAH05031-edit.MP4"
+        ></video>
+        <video
+          caption="Top view."
+          src="../files/2020-09-pcomp/week-4/walker/process/MAH05034-edit.MP4"
+        ></video>
+      </gallery>
+      <md>Success! A few more shots:</md>
+      <gallery>
+        <video
+          caption="How do you do?"
+          src="../files/2020-09-pcomp/week-4/walker/process/MAH05035-edit.mov"
+        ></video>
+        <img
+          caption="Glam shot."
+          src="../files/2020-09-pcomp/week-4/walker/process/DSC05041-edit.JPG"
+        />
+      </gallery>
+      <md>
+        An astute reader might observe that Walker is moving not forward or
+        sideways, but diagonally. Given that that is how some crabs walk, I will
+        call this gait a feature rather than a bug.
+      </md>
+    </section>
+    <section id="The Housing">
+      <md>
+        I almost forgot that Walker needed some clothes! I used some pieces of
+        styrofoam padding to cover up the ugly bits.
+      </md>
+      <img
+        caption="All covered up."
+        src="../files/2020-09-pcomp/week-4/walker/process/DSC05042.JPG"
+      />
+    </section>
+    <md>
+      Lessons learned:
+      <!--  -->
+      - Making things walk is hard.
+      <!--  -->
+      - Making things walk is _fun_.
+      <!--  -->
+      - Let boba inspire you.
+      <!--  -->
+    </md>
+    <video
+      caption="Thanks, Walker!"
+      src="../files/2020-09-pcomp/week-4/walker/process/MAH05044-edit.mov"
+    ></video>
+  </section>
+</section>

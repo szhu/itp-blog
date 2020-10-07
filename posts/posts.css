@@ -72,6 +72,12 @@ ul {
   margin: 8px 0;
 }
 
+blockquote {
+  border-left: 5px solid gainsboro;
+  padding-left: var(--padding-h);
+  opacity: 0.6;
+}
+
 details {
   margin: 12px 0;
   border: 1px solid black;
