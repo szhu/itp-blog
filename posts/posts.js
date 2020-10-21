@@ -9,8 +9,10 @@ window.addEventListener("load", function () {
     });
   }
 
-  for (let img of document.querySelectorAll("img")) {
+  for (let img of document.querySelectorAll("img, video")) {
     img.addEventListener("dblclick", (e) => {
+      e.preventDefault();
+
       if (e.metaKey || e.ctrlKey || e.shiftKey) {
         window.open(img.src);
       } else {
