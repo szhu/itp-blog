@@ -1,5 +1,5 @@
 {
-  "editor.defaultFormatter": "ms-vscode.cpptools",
+  "editor.defaultFormatter": null,
   "C_Cpp.clang_format_fallbackStyle": "Google",
   "files.associations": {
     "*.sublime-settings": "jsonc",

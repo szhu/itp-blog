@@ -1,0 +1,169 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer src="posts.js"></script>
+  <script dev-only type="module" src="posts-dev.js"></script>
+</head>
+
+<section id="PComp Labs Week 6">
+  <section id="Another week, another setup change">
+    <md>
+      Adjusting my setup is honestly my favorite part of each lab.
+      <!--  -->
+      Classes are remote, and I got tired of sitting almost the entire day every
+      day! This week, I adjusted my setup to make it just as comfortable to sit
+      or stand.
+    </md>
+    <img
+      caption="Having the TV at that angle makes it easier to do work involving more precise control."
+      src="../files/2020-09-pcomp/week-6/0_setup/DSC01138.JPG"
+    />
+    <md>
+      I also found some new tricks that allowed me to have a better
+      documentation setup:
+      <!--  -->
+      For documentation labs for this class, I typically need to record both the
+      screen and the physical world simultaneously. I previously accomplished
+      this by taking camera pictures of the circuit juxtaposed with a screen.
+      The fidelity on these "screenshots" just isn't super great.
+      <!--  -->
+      This week, I going to take screen recordings instead. I am now able to
+      bring the real world into the screen using these two tricks:
+      <!--  -->
+      - When I was reading the help manual for QuickTime Player (reading
+      documentation is, for some reason, something I do for fun), I found this
+      cool feature:
+    </md>
+    <img
+      class="small"
+      caption="You can view a iPhone's screen by connecting it to a Mac."
+      src="../files/2020-09-pcomp/week-6/0_setup/Screen Shot 2020-10-21 at 4.25.46 AM.png"
+    />
+    <md>
+      - I searched around for an iPhone app that displays just the camera, with
+      no decorations around the image. I finally found one called [Full Screen
+      Camera](https://apps.apple.com/us/app/full-screen-camera/id1504011874) --
+      it looks like the developer created it specifically for this purpose.
+      <!--  -->
+      Putting all of this together, I could now capture both worlds in a single
+      screen recording. Here's what the setup looks like:
+    </md>
+    <img src="../files/2020-09-pcomp/week-6/0_setup/DSC01139.JPG" />
+    <md>
+      There is a slight lag with the phone screen mirroring, but I hope it's not
+      too noticeable.
+    </md>
+  </section>
+
+  <section id="Lab 1: Intro to serial">
+    <md>
+      [](https://itp.nyu.edu/physcomp/lab-intro-to-serial-communications/)
+    </md>
+
+    <section id="Reading a dump from the serial port">
+      <md>
+        Using `cat $PORT` as a serial monitor. `cat` is very robust and way less
+        finicky than Arduino IDE serial monitor.
+      </md>
+      <video
+        src="../files/2020-09-pcomp/week-6/1a_serial_read/Screen Recording 2020-10-20 at 10.33.06 PM.mov"
+      ></video>
+    </section>
+
+    <section id="Adding handshaking">
+      <md>
+        Unlike the previous program, this one prints out values only when a key
+        is pressed.
+        <!--  -->
+        💡 This took me way longer than expected to build. I managed to wire
+        many wires incorrectly, including having an off-by-one error with the
+        Arduino pinout, and forgetting to connect a wire for ground. It was not
+        a fun process. :(
+      </md>
+      <video
+        src="../files/2020-09-pcomp/week-6/1b_serial_wait_read/Screen Recording 2020-10-21 at 12.14.14 AM.mov"
+      ></video>
+    </section>
+  </section>
+
+  <section id="Lab 2: Serial input to P5.js">
+    <md>
+      [](https://itp.nyu.edu/physcomp/labs/labs-serial-communication/lab-serial-input-to-the-p5-js-ide/)
+    </md>
+
+    <section id="Reading sensor values in P5.js">
+      <md>
+        💡 I got very stuck doing this part. After about an hour of debugging, I
+        figured out that the issue turned out to be that I was using the wrong
+        port name. I was using `/dev/cu.usbmodem14201` (because the examples
+        used `cu` port names) but the correct port name is
+        `/dev/tty.usbmodem14201`.
+        <!--  -->
+        The `cat` exercise above worked with the `cu` port names! But here the
+        `cu` port doesn't work -- it doesn't cause `serial.on('data')` events to
+        be fired when data is written to the port for some reason.
+        <!--  -->
+        Conflating this issue was another issue -- the serial connection often
+        doesn't work unless programs are started in this order:
+        <!--  -->
+        1. Upload code to the Arduino.
+        <!--  -->
+        2. Restart the "p5.serialcontrol" app and open the port.
+        <!--  -->
+        3. Refresh the P5 sketch.
+      </md>
+      <video
+        src="../files/2020-09-pcomp/week-6/2b_pot_out/Screen Recording 2020-10-21 at 1.49.18 AM.mov"
+      ></video>
+      <md>
+        This is was first time using P5. I was impressed by how full-fledged the
+        web editor is, and the fact that it was easy for the web app to connect
+        to a physical device.
+      </md>
+    </section>
+
+    <section id="Making a graph">
+      <video
+        src="../files/2020-09-pcomp/week-6/2c_pot_graph/Screen Recording 2020-10-21 at 2.02.07 AM.mov"
+      ></video>
+    </section>
+
+    <section id="Making a graph, ASCII">
+      <md>
+        Same functionality as above, but here the devices are communicating
+        using ASCII instead of binary.
+      </md>
+      <video
+        src="../files/2020-09-pcomp/week-6/2d_pot_graph_readline/Screen Recording 2020-10-21 at 2.22.24 AM.mov"
+      ></video>
+    </section>
+  </section>
+
+  <section id="Lab 3: Serial output from P5.js">
+    <md>
+      [](https://itp.nyu.edu/physcomp/labs/labs-serial-communication/lab-serial-output-from-p5-js/)
+      <!--  -->
+      Having lived and learned through quite a few common mistakes earlier, I
+      found this lab fairly straightforward. Here are the results.
+    </md>
+
+    <section id="P5.js controls an LED, analog, binary">
+      <video
+        src="../files/2020-09-pcomp/week-6/3a_p5_to_led/Screen Recording 2020-10-21 at 3.14.26 AM.mov"
+      ></video>
+    </section>
+
+    <section id="P5.js controls an LED, digital, binary">
+      <video
+        src="../files/2020-09-pcomp/week-6/3b_p5_led_boolean/Screen Recording 2020-10-21 at 3.38.35 AM.mov"
+      ></video>
+    </section>
+
+    <section id="P5.js controls an LED, digital, ASCII">
+      <video
+        src="../files/2020-09-pcomp/week-6/3c_p5_led_boolean_ascii/Screen Recording 2020-10-21 at 4.02.13 AM.mov"
+      ></video>
+    </section>
+  </section>
+</section>

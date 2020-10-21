@@ -1,0 +1,301 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>PComp Labs Week 6</title>
+ </head>
+
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">PComp Labs Week 6</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Another week, another setup change</header>
+     <div class="section-content">
+      <p>Adjusting my setup is honestly my favorite part of each lab.</p>
+      <p>
+       Classes are remote, and I got tired of sitting almost the entire day
+       every day! This week, I adjusted my setup to make it just as comfortable
+       to sit or stand.
+      </p>
+
+      <figure>
+       <figcaption>
+        <p>
+         Having the TV at that angle makes it easier to do work involving more
+         precise control.
+        </p>
+       </figcaption>
+       <img src="../files/2020-09-pcomp/week-6/0_setup/DSC01138.JPG" />
+      </figure>
+      <p>
+       I also found some new tricks that allowed me to have a better
+       documentation setup:
+      </p>
+      <p>
+       For documentation labs for this class, I typically need to record both
+       the screen and the physical world simultaneously. I previously
+       accomplished this by taking camera pictures of the circuit juxtaposed
+       with a screen. The fidelity on these "screenshots" just isn't super
+       great.
+      </p>
+      <p>
+       This week, I going to take screen recordings instead. I am now able to
+       bring the real world into the screen using these two tricks:
+      </p>
+      <ul>
+       <li>
+        When I was reading the help manual for QuickTime Player (reading
+        documentation is, for some reason, something I do for fun), I found this
+        cool feature:
+       </li>
+      </ul>
+
+      <figure>
+       <figcaption>
+        <p>You can view a iPhone's screen by connecting it to a Mac.</p>
+       </figcaption>
+       <img
+        class="small"
+        src="../files/2020-09-pcomp/week-6/0_setup/Screen Shot 2020-10-21 at 4.25.46 AM.png"
+       />
+      </figure>
+      <ul>
+       <li>
+        I searched around for an iPhone app that displays just the camera, with
+        no decorations around the image. I finally found one called
+        <a
+         href="https://apps.apple.com/us/app/full-screen-camera/id1504011874"
+         target="_blank"
+         >Full Screen Camera</a
+        >
+        -- it looks like the developer created it specifically for this purpose.
+       </li>
+      </ul>
+      <p>
+       Putting all of this together, I could now capture both worlds in a single
+       screen recording. Here's what the setup looks like:
+      </p>
+
+      <figure>
+       <img src="../files/2020-09-pcomp/week-6/0_setup/DSC01139.JPG" />
+      </figure>
+      <p>
+       There is a slight lag with the phone screen mirroring, but I hope it's
+       not too noticeable.
+      </p>
+     </div>
+    </section>
+
+    <section class="section section-level-1">
+     <header class="section-header">Lab 1: Intro to serial</header>
+     <div class="section-content">
+      <p>
+       <a
+        href="https://itp.nyu.edu/physcomp/lab-intro-to-serial-communications/"
+        target="_blank"
+        >https://itp.nyu.edu/physcomp/lab-intro-to-serial-communications/</a
+       >
+      </p>
+
+      <section class="section section-level-2">
+       <header class="section-header">
+        Reading a dump from the serial port
+       </header>
+       <div class="section-content">
+        <p>
+         Using <code>cat $PORT</code> as a serial monitor. <code>cat</code> is
+         very robust and way less finicky than Arduino IDE serial monitor.
+        </p>
+
+        <figure>
+         <video
+          src="../files/2020-09-pcomp/week-6/1a_serial_read/Screen Recording 2020-10-20 at 10.33.06 PM.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+
+      <section class="section section-level-2">
+       <header class="section-header">Adding handshaking</header>
+       <div class="section-content">
+        <p>
+         Unlike the previous program, this one prints out values only when a key
+         is pressed.
+        </p>
+        <p>
+         💡 This took me way longer than expected to build. I managed to wire
+         many wires incorrectly, including having an off-by-one error with the
+         Arduino pinout, and forgetting to connect a wire for ground. It was not
+         a fun process. :(
+        </p>
+
+        <figure>
+         <video
+          src="../files/2020-09-pcomp/week-6/1b_serial_wait_read/Screen Recording 2020-10-21 at 12.14.14 AM.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+     </div>
+    </section>
+
+    <section class="section section-level-1">
+     <header class="section-header">Lab 2: Serial input to P5.js</header>
+     <div class="section-content">
+      <p>
+       <a
+        href="https://itp.nyu.edu/physcomp/labs/labs-serial-communication/lab-serial-input-to-the-p5-js-ide/"
+        target="_blank"
+        >https://itp.nyu.edu/physcomp/labs/labs-serial-communication/lab-serial-input-to-the-p5-js-ide/</a
+       >
+      </p>
+
+      <section class="section section-level-2">
+       <header class="section-header">Reading sensor values in P5.js</header>
+       <div class="section-content">
+        <p>
+         💡 I got very stuck doing this part. After about an hour of debugging,
+         I figured out that the issue turned out to be that I was using the
+         wrong port name. I was using
+         <code>/dev/cu.usbmodem14201</code> (because the examples used
+         <code>cu</code> port names) but the correct port name is
+         <code>/dev/tty.usbmodem14201</code>.
+        </p>
+        <p>
+         The <code>cat</code> exercise above worked with the
+         <code>cu</code> port names! But here the <code>cu</code> port doesn't
+         work -- it doesn't cause <code>serial.on('data')</code> events to be
+         fired when data is written to the port for some reason.
+        </p>
+        <p>
+         Conflating this issue was another issue -- the serial connection often
+         doesn't work unless programs are started in this order:
+        </p>
+        <ol>
+         <li>Upload code to the Arduino.</li>
+         <li>Restart the "p5.serialcontrol" app and open the port.</li>
+         <li>Refresh the P5 sketch.</li>
+        </ol>
+
+        <figure>
+         <video
+          src="../files/2020-09-pcomp/week-6/2b_pot_out/Screen Recording 2020-10-21 at 1.49.18 AM.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+        <p>
+         This is was first time using P5. I was impressed by how full-fledged
+         the web editor is, and the fact that it was easy for the web app to
+         connect to a physical device.
+        </p>
+       </div>
+      </section>
+
+      <section class="section section-level-2">
+       <header class="section-header">Making a graph</header>
+       <div class="section-content">
+        <figure>
+         <video
+          src="../files/2020-09-pcomp/week-6/2c_pot_graph/Screen Recording 2020-10-21 at 2.02.07 AM.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+
+      <section class="section section-level-2">
+       <header class="section-header">Making a graph, ASCII</header>
+       <div class="section-content">
+        <p>
+         Same functionality as above, but here the devices are communicating
+         using ASCII instead of binary.
+        </p>
+
+        <figure>
+         <video
+          src="../files/2020-09-pcomp/week-6/2d_pot_graph_readline/Screen Recording 2020-10-21 at 2.22.24 AM.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+     </div>
+    </section>
+
+    <section class="section section-level-1">
+     <header class="section-header">Lab 3: Serial output from P5.js</header>
+     <div class="section-content">
+      <p>
+       <a
+        href="https://itp.nyu.edu/physcomp/labs/labs-serial-communication/lab-serial-output-from-p5-js/"
+        target="_blank"
+        >https://itp.nyu.edu/physcomp/labs/labs-serial-communication/lab-serial-output-from-p5-js/</a
+       >
+      </p>
+      <p>
+       Having lived and learned through quite a few common mistakes earlier, I
+       found this lab fairly straightforward. Here are the results.
+      </p>
+
+      <section class="section section-level-2">
+       <header class="section-header">
+        P5.js controls an LED, analog, binary
+       </header>
+       <div class="section-content">
+        <figure>
+         <video
+          src="../files/2020-09-pcomp/week-6/3a_p5_to_led/Screen Recording 2020-10-21 at 3.14.26 AM.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+
+      <section class="section section-level-2">
+       <header class="section-header">
+        P5.js controls an LED, digital, binary
+       </header>
+       <div class="section-content">
+        <figure>
+         <video
+          src="../files/2020-09-pcomp/week-6/3b_p5_led_boolean/Screen Recording 2020-10-21 at 3.38.35 AM.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+
+      <section class="section section-level-2">
+       <header class="section-header">
+        P5.js controls an LED, digital, ASCII
+       </header>
+       <div class="section-content">
+        <figure>
+         <video
+          src="../files/2020-09-pcomp/week-6/3c_p5_led_boolean_ascii/Screen Recording 2020-10-21 at 4.02.13 AM.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
