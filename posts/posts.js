@@ -1,4 +1,4 @@
-window.addEventListener("load", function () {
+function hydrate() {
   for (let header of document.querySelectorAll("header")) {
     header.addEventListener("click", () => {
       header.parentNode.scrollIntoView({
@@ -9,16 +9,28 @@ window.addEventListener("load", function () {
     });
   }
 
-  for (let img of document.querySelectorAll("img, video")) {
-    img.addEventListener("dblclick", (e) => {
+  for (let media of document.querySelectorAll("img, video")) {
+    media.addEventListener("dblclick", (e) => {
       e.preventDefault();
 
       if (e.metaKey || e.ctrlKey || e.shiftKey) {
-        window.open(img.src);
+        window.open(media.src);
       } else {
-        location.href = img.src;
+        location.href = media.src;
       }
     });
-    img.title = "Double-click to view full size.";
+    media.title = "Double-click to view full size.";
   }
-});
+
+  for (let video of document.querySelectorAll("video")) {
+    video.addEventListener("mouseover", () => {
+      video.controls = true;
+    });
+    video.addEventListener("mouseleave", () => {
+      video.controls = false;
+    });
+    video.controls = false;
+  }
+}
+
+window.addEventListener("load", hydrate);

@@ -67,19 +67,19 @@ function countMatchingInAncestry(el, selector) {
   return count;
 }
 
-export default function reformatDoc(document) {
-  for (let md of document.querySelectorAll("md")) {
+export default function reformatDoc(document, root) {
+  for (let md of root.querySelectorAll("md")) {
     if (md.style) {
       md.style.whiteSpace = "pre-wrap";
     }
     md.outerHTML = markdownToHtml(undent(md.textContent));
   }
 
-  for (let p of document.querySelectorAll("li > p:only-child")) {
+  for (let p of root.querySelectorAll("li > p:only-child")) {
     unwrap(p);
   }
 
-  for (let section of document.querySelectorAll("section")) {
+  for (let section of root.querySelectorAll("section")) {
     let content = line(section, document.createElement("div"));
     content.classList.add("section-content");
 
@@ -93,21 +93,21 @@ export default function reformatDoc(document) {
     section.classList.add(section.tagName.toLowerCase());
   }
 
-  for (let section of document.querySelectorAll(".section")) {
+  for (let section of root.querySelectorAll(".section")) {
     let level = countMatchingInAncestry(section, ".section");
     section.classList.add(`section-level-${level}`);
   }
 
   {
-    let titleHeader = document.querySelector(".section-level-0 > header");
+    let titleHeader = root.querySelector(".section-level-0 > header");
     if (titleHeader) {
       let title = document.createElement("title");
       title.textContent = titleHeader.textContent;
-      document.head.append(title);
+      root.querySelector("head").append(title);
     }
   }
 
-  for (let table of document.querySelectorAll("table")) {
+  for (let table of root.querySelectorAll("table")) {
     let [a, b] = table.querySelectorAll("td");
     let [A, B] = table.querySelectorAll("img");
 
@@ -124,7 +124,7 @@ export default function reformatDoc(document) {
     console.error(gallery.outerHTML.replace(/></g, ">\n<"));
   }
 
-  for (let media of document.querySelectorAll("img, video")) {
+  for (let media of root.querySelectorAll("img, video")) {
     let fig = wrap(media, document.createElement("figure"));
 
     let figcaption = document.createElement("figcaption");
@@ -153,12 +153,12 @@ export default function reformatDoc(document) {
     }
   }
 
-  for (let video of document.querySelectorAll("video")) {
+  for (let video of root.querySelectorAll("video")) {
     video.preload = "metadata";
     video.controls = true;
   }
 
-  for (let pre of document.querySelectorAll("pre")) {
+  for (let pre of root.querySelectorAll("pre")) {
     pre.textContent = undent(pre.textContent).trim();
 
     if (pre.getAttribute("collapsed") != null) {
@@ -170,11 +170,11 @@ export default function reformatDoc(document) {
     }
   }
 
-  for (let a of document.querySelectorAll("a:empty")) {
+  for (let a of root.querySelectorAll("a:empty")) {
     a.textContent = a.href;
   }
 
-  for (let a of document.querySelectorAll("a")) {
+  for (let a of root.querySelectorAll("a")) {
     if (a.origin !== document.location.origin) {
       a.target = "_blank";
     }

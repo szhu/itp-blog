@@ -9,7 +9,7 @@ async function readHtmlFileAsDom(file: string) {
 
 async function formatPost(file: string) {
   let document = await readHtmlFileAsDom(file);
-  reformatDoc(document);
+  reformatDoc(document, document.documentElement);
   for (let script of document.querySelectorAll("script[dev-only]")) {
     script.remove();
   }
