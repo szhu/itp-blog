@@ -1,0 +1,68 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer src="posts.js"></script>
+  <script dev-only type="module" src="posts-dev.js"></script>
+</head>
+
+<section id="PComp Labs Week 7">
+  <section id="Workspace updates">
+    <md> TODO insert picture </md>
+    <img
+      caption="Having the TV at that angle makes it easier to do work involving more precise control."
+      src="../files/2020-09-pcomp/week-6/0_setup/DSC01138.JPG"
+    />
+  </section>
+
+  <section id="Lab: Duplex serial communication">
+    <md>
+      [](https://itp.nyu.edu/physcomp/labs/labs-serial-communication/two-way-duplex-serial-communication-using-p5js/)
+    </md>
+
+    <section id="Sending and displaying multiple serial data">
+      <md>
+        In this setup, the Arduino sends a message containing the readings from
+        the two analog potentiometers and the pushbutton switch, separated by
+        commas. The computer reads the serial input until the newline, and
+        parses it accordingly.
+        <!--  -->
+        The result is displayed as a circle on the screen, with its X and Y
+        position corresponding to the analog inputs and with the pushbutton
+        hiding the circle altogether.
+        <!--  -->
+        The given code is adapted for reading accelerometer input -- the
+        potentiometers have a different input range. So when I naively ran the
+        given code, the circle was out of the bounds of the screen almost all
+        the time:
+      </md>
+      <video
+        caption="Before adjusting the input range"
+        src="../files/2020-09-pcomp/week-7/1a_serial_ball/Screen Recording 2020-10-24 at 10.48.27 PM.mov"
+      ></video>
+      <md>
+        I added code to log the sensor readings -- you can see it in the console
+        in the screen recording. I then adjusted the `map()` input range to
+        match.
+      </md>
+      <video
+        caption="After adjusting the input range"
+        src="../files/2020-09-pcomp/week-7/1a_serial_ball/Screen Recording 2020-10-24 at 10.51.26 PM.mov"
+      ></video>
+    </section>
+
+    <section id="Adding handshaking">
+      <md>
+        This new code has the exact same end result, but the Arduino only sends
+        data to the computer when requested. Changed P5 code is highlighted in
+        the editor.
+      </md>
+      <video
+        src="../files/2020-09-pcomp/week-7/1b_serial_ball_handshake/Screen Recording 2020-10-25 at 12.56.34 AM.mov"
+      ></video>
+    </section>
+  </section>
+  <section id="Project 2 idea">
+    <md></md>
+  </section>
+</section>

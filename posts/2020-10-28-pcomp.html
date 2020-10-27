@@ -1,0 +1,119 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>PComp Labs Week 7</title>
+ </head>
+
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">PComp Labs Week 7</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Workspace updates</header>
+     <div class="section-content">
+      <p>TODO insert picture</p>
+
+      <figure>
+       <figcaption>
+        <p>
+         Having the TV at that angle makes it easier to do work involving more
+         precise control.
+        </p>
+       </figcaption>
+       <img src="../files/2020-09-pcomp/week-6/0_setup/DSC01138.JPG" />
+      </figure>
+     </div>
+    </section>
+
+    <section class="section section-level-1">
+     <header class="section-header">Lab: Duplex serial communication</header>
+     <div class="section-content">
+      <p>
+       <a
+        href="https://itp.nyu.edu/physcomp/labs/labs-serial-communication/two-way-duplex-serial-communication-using-p5js/"
+        target="_blank"
+        >https://itp.nyu.edu/physcomp/labs/labs-serial-communication/two-way-duplex-serial-communication-using-p5js/</a
+       >
+      </p>
+
+      <section class="section section-level-2">
+       <header class="section-header">
+        Sending and displaying multiple serial data
+       </header>
+       <div class="section-content">
+        <p>
+         In this setup, the Arduino sends a message containing the readings from
+         the two analog potentiometers and the pushbutton switch, separated by
+         commas. The computer reads the serial input until the newline, and
+         parses it accordingly.
+        </p>
+        <p>
+         The result is displayed as a circle on the screen, with its X and Y
+         position corresponding to the analog inputs and with the pushbutton
+         hiding the circle altogether.
+        </p>
+        <p>
+         The given code is adapted for reading accelerometer input -- the
+         potentiometers have a different input range. So when I naively ran the
+         given code, the circle was out of the bounds of the screen almost all
+         the time:
+        </p>
+
+        <figure>
+         <figcaption><p>Before adjusting the input range</p></figcaption>
+         <video
+          src="../files/2020-09-pcomp/week-7/1a_serial_ball/Screen Recording 2020-10-24 at 10.48.27 PM.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+        <p>
+         I added code to log the sensor readings -- you can see it in the
+         console in the screen recording. I then adjusted the
+         <code>map()</code> input range to match.
+        </p>
+
+        <figure>
+         <figcaption><p>After adjusting the input range</p></figcaption>
+         <video
+          src="../files/2020-09-pcomp/week-7/1a_serial_ball/Screen Recording 2020-10-24 at 10.51.26 PM.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+
+      <section class="section section-level-2">
+       <header class="section-header">Adding handshaking</header>
+       <div class="section-content">
+        <p>
+         This new code has the exact same end result, but the Arduino only sends
+         data to the computer when requested. Changed P5 code is highlighted in
+         the editor.
+        </p>
+
+        <figure>
+         <video
+          src="../files/2020-09-pcomp/week-7/1b_serial_ball_handshake/Screen Recording 2020-10-25 at 12.56.34 AM.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+     </div>
+    </section>
+    <section class="section section-level-1">
+     <header class="section-header">Project 2 idea</header>
+     <div class="section-content"></div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
