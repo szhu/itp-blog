@@ -8,11 +8,20 @@
 
 <section id="PComp Labs Week 7">
   <section id="Workspace updates">
-    <md> TODO insert picture </md>
-    <img
-      caption="Having the TV at that angle makes it easier to do work involving more precise control."
-      src="../files/2020-09-pcomp/week-6/0_setup/DSC01138.JPG"
-    />
+    <md>
+      No big workspace changes, but now I have a slightly better "camera mount"
+      such that doesn't get in the way of my hands:
+    </md>
+    <gallery>
+      <img
+        caption="Last week."
+        src="../files/2020-09-pcomp/week-6/0_setup/DSC01139.JPG"
+      />
+      <img
+        caption="This week."
+        src="../files/2020-09-pcomp/week-7/0_setup/DSC01146.JPG"
+      />
+    </gallery>
   </section>
 
   <section id="Lab: Duplex serial communication">
@@ -63,6 +72,76 @@
     </section>
   </section>
   <section id="Project 2 idea">
-    <md></md>
+    <md>
+      The project 2 prompt:
+      <!--  -->
+      > Come up with a device that allows a person to control media on a
+      personal computer using communication between a microcontroller and the
+      personal computer using asynchronous serial communication. It’s due in
+      week 10. Blog your idea for next week and come up with a prototype for
+      playtesting.
+    </md>
+
+    <section id="Initial thoughts">
+      <md>
+        Media controls... potentiometers... my immediate thought was to make a
+        device that uses potentiometers as knobs for controlling media. The idea
+        would be for the device to simulate radio-style controls but for the
+        media player on th computer. Like in a radio, one knob would control the
+        volume, but the "tuning" knob could, for example, cause the player to
+        change playlists.
+        <!--  -->
+        I had a lot of fun imagining this idea, but something held me back from
+        committing to it. I had some insightful brainstorming with Natalie and
+        Alan from class, and I realized that it was because neither re-creating
+        a retro idea nor manipulating audio are what I came to ITP for. From
+        this and further discussions about the kinds of sensors we could use, I
+        eventually came up with an idea that aligns more with my interests.
+        <!--  -->
+        The force-sensing resistor is a kind of sensor I hadn't seen before this
+        class. I was drawn to how it, even in its raw form, doesn't explicitly
+        require a human hand to manipulate it, in contrast to the pushbutton and
+        potentiometer. I realized that it could make a good weight sensor.
+        <!--  -->
+        This reminded me of an idea I've had for a while: a simple accessory for
+        a computer that automatically locks the computer when the user steps
+        away. There are three current solutions for locking computers when the
+        user is not present, each of which has drawbacks:
+        <!--  -->
+        - Locking after a timeout. (Drawback: Not sufficient)
+        <!--  -->
+        - Locking when connectivity to a device (e.g., a phone or watch) is
+        lost. (Drawback: Expensive. Also sometimes unreliable)
+        <!--  -->
+        - Locking when the camera stops detecting a face. (Drawback: Unreliable)
+        <!--  -->
+        I wanted to design a solution that has a low false positive and false
+        negative rate and a low cost. Could the force-sensing resistor be the
+        answer?
+      </md>
+    </section>
+    <section id="Final idea">
+      <md>
+        When I'm using my laptop computer, I'm generally always putting pressure
+        down onto it. Either I'm typing, or my palms are resting on the bottom,
+        to either side of the trackpad. The maximum time when I'm applying zero
+        force anywhere on the laptop is probably only a few seconds.
+        <!--  -->
+        Given this, my project idea is a device with a force-sensing resistor
+        that sits below the laptop, between the feet of the laptop and the
+        table. The device senses if the pressure changes. If a few seconds have
+        passed with no changes, it sense a message to the computer. An app on
+        the computer locks the computer when it receives the message. And it'll
+        pause the music too, hopefully that satisfies the "media" requirement.
+        🙂
+        <!--  -->
+        A possible progression of this project is for the device to use two
+        force-sensing resistors, one below either of the lower legs of the
+        laptop. No only will this make the sensing more reliable, but it can
+        make it easier for device to pick up user gestures involving force. (For
+        example, the user can lightly bang both fists on the computer twice to
+        skip the current track?)
+      </md>
+    </section>
   </section>
 </section>
