@@ -1,0 +1,41 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer src="posts.js"></script>
+  <script dev-only type="module" src="posts-dev.js"></script>
+</head>
+
+<section id="PComp Labs Week 8">
+  <section id="Lab: Communicating with I2C">
+    <md>
+      [](https://itp.nyu.edu/physcomp/labs/#Synchronous_Serial)
+      <!--  -->
+      It looks like the take-home lesson for the I2C labs is:
+      <!--  -->
+      - Here is how I2C works. You will not use this knowledge.
+      <!--  -->
+      - Instead, use a library to communicate with the sensor or choice.
+      <!--  -->
+      🤔
+      <!--  -->
+      Anyway... for this week's lab, the sensor I wanted to use is accelerometer
+      in the Arduino Nano 33 IoT's built-in Inertial Measurement Unit (IMU). I
+      was actually trying to get this set up last week, since the example in the
+      lab used an (external) accelerometer.
+      <!--  -->
+      I finally figured out why it didn't work:
+    </md>
+    <img
+      src="../files/2020-09-pcomp/week-8/1_serial_ball_accel/Screen Shot 2020-10-28 at 10.01.59 PM.png"
+    />
+    <md> After fixing the library import, the code worked! </md>
+    <video
+      src="../files/2020-09-pcomp/week-8/1_serial_ball_accel/Screen Recording 2020-10-28 at 10.34.55 AM.mov"
+    ></video>
+  </section>
+
+  <section id="Lab: Communicating with SPI">
+    <md>I don't have any SPI hardware, so I didn't do this lab. 😢</md>
+  </section>
+</section>

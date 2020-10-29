@@ -1,0 +1,66 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>PComp Labs Week 8</title>
+ </head>
+
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">PComp Labs Week 8</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Lab: Communicating with I2C</header>
+     <div class="section-content">
+      <p>
+       <a
+        href="https://itp.nyu.edu/physcomp/labs/#Synchronous_Serial"
+        target="_blank"
+        >https://itp.nyu.edu/physcomp/labs/#Synchronous_Serial</a
+       >
+      </p>
+      <p>It looks like the take-home lesson for the I2C labs is:</p>
+      <ul>
+       <li>Here is how I2C works. You will not use this knowledge.</li>
+       <li>Instead, use a library to communicate with the sensor or choice.</li>
+      </ul>
+      <p>🤔</p>
+      <p>
+       Anyway... for this week's lab, the sensor I wanted to use is
+       accelerometer in the Arduino Nano 33 IoT's built-in Inertial Measurement
+       Unit (IMU). I was actually trying to get this set up last week, since the
+       example in the lab used an (external) accelerometer.
+      </p>
+      <p>I recently figured out why it didn't work:</p>
+
+      <figure>
+       <img
+        src="../files/2020-09-pcomp/week-8/1_serial_ball_accel/Screen Shot 2020-10-28 at 10.01.59 PM.png"
+       />
+      </figure>
+      <p>After fixing the library import, the code worked!</p>
+
+      <figure>
+       <video
+        src="../files/2020-09-pcomp/week-8/1_serial_ball_accel/Screen Recording 2020-10-28 at 10.34.55 AM.mov"
+        preload="metadata"
+        controls=""
+       ></video>
+      </figure>
+     </div>
+    </section>
+
+    <section class="section section-level-1">
+     <header class="section-header">Lab: Communicating with SPI</header>
+     <div class="section-content">
+      <p>I don't have any SPI hardware, so I didn't do this lab. 😢</p>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
