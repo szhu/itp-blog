@@ -13,6 +13,31 @@
    <header class="section-header">PComp Labs Week 8</header>
    <div class="section-content">
     <section class="section section-level-1">
+     <header class="section-header">Workspace update: New tool!</header>
+     <div class="section-content">
+      <p>
+       Developing for Arduino is cool, but as far as tooling UI goes, I've been
+       pretty unsatisified with my Arduino development experience with both the
+       Arduino IDE and the Visual Studio Code Arduino extension.
+      </p>
+      <p>
+       This week, I found out that Arduino has a new IDE in the works! It's
+       based off of Eclipse Theia, which is a VSCode fork. I tried it out and
+       it's great. It has all the GUI features of the Arduino IDE -- menu items
+       and UI layout are pretty much identical -- but with the VSCode editing
+       experience. It's faster than the VSCode extension too!
+      </p>
+      <p>
+       App info:
+       <a href="https://www.arduino.cc/pro/arduino-pro-ide" target="_blank"
+        >https://www.arduino.cc/pro/arduino-pro-ide</a
+       >
+      </p>
+      <p>My Project 2 video below shows it in action.</p>
+     </div>
+    </section>
+
+    <section class="section section-level-1">
      <header class="section-header">Lab: Communicating with I2C</header>
      <div class="section-content">
       <p>
@@ -34,7 +59,7 @@
        Unit (IMU). I was actually trying to get this set up last week, since the
        example in the lab used an (external) accelerometer.
       </p>
-      <p>I recently figured out why it didn't work:</p>
+      <p>I finally figured out why it didn't work:</p>
 
       <figure>
        <img
@@ -57,6 +82,44 @@
      <header class="section-header">Lab: Communicating with SPI</header>
      <div class="section-content">
       <p>I don't have any SPI hardware, so I didn't do this lab. 😢</p>
+     </div>
+    </section>
+
+    <section class="section section-level-1">
+     <header class="section-header">Project 2</header>
+     <div class="section-content">
+      <p>
+       As mentioned
+       <a href="2020-10-28-pcomp.html" target="_blank">last week</a>, my project
+       will use force sensors to detect when I am actively using my computer.
+       This week I created a technical proof-of-concept, just to make sure that
+       it's possible to get the data we need to determine whether the user is
+       using the computer.
+      </p>
+      <p>
+       I put the two force-sensing resistors below the two bottom "feet" at the
+       computer, and created a program that logged the readings from these
+       sensors in a simple visual way:
+      </p>
+
+      <figure>
+       <video
+        src="../files/2020-09-pcomp/week-8/2_project_2/Screen Recording 2020-11-04 at 1.09.00 AM.mov"
+        preload="metadata"
+        controls=""
+       ></video>
+      </figure>
+      <p>
+       Even though the readings fluctuate slightly at rest, it looks like the
+       system is more than sensitive enough to differentiate between "hands on
+       computer" and "hands off computer."
+      </p>
+      <p>
+       A potential concern: Many people type very lightly and with their palms
+       completely off the computer, right? This setup might be able to figure
+       out whether those people are typing. But!! It's probably not an issue,
+       since we can just listen for keypresses in addition to pressure.
+      </p>
      </div>
     </section>
    </div>

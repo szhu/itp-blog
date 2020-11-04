@@ -7,6 +7,24 @@
 </head>
 
 <section id="PComp Labs Week 8">
+  <section id="Workspace update: New tool!">
+    <md>
+      Developing for Arduino is cool, but as far as tooling UI goes, I've been
+      pretty unsatisified with my Arduino development experience with both the
+      Arduino IDE and the Visual Studio Code Arduino extension.
+      <!--  -->
+      This week, I found out that Arduino has a new IDE in the works! It's based
+      off of Eclipse Theia, which is a VSCode fork. I tried it out and it's
+      great. It has all the GUI features of the Arduino IDE -- menu items and UI
+      layout are pretty much identical -- but with the VSCode editing
+      experience. It's faster than the VSCode extension too!
+      <!--  -->
+      App info: [](https://www.arduino.cc/pro/arduino-pro-ide)
+      <!--  -->
+      My Project 2 video below shows it in action.
+    </md>
+  </section>
+
   <section id="Lab: Communicating with I2C">
     <md>
       [](https://itp.nyu.edu/physcomp/labs/#Synchronous_Serial)
@@ -37,5 +55,32 @@
 
   <section id="Lab: Communicating with SPI">
     <md>I don't have any SPI hardware, so I didn't do this lab. 😢</md>
+  </section>
+
+  <section id="Project 2">
+    <md>
+      As mentioned [last week](2020-10-28-pcomp.html), my project will use force
+      sensors to detect when I am actively using my computer. This week I
+      created a technical proof-of-concept, just to make sure that it's possible
+      to get the data we need to determine whether the user is using the
+      computer.
+      <!--  -->
+      I put the two force-sensing resistors below the two bottom "feet" at the
+      computer, and created a program that logged the readings from these
+      sensors in a simple visual way:
+    </md>
+    <video
+      src="../files/2020-09-pcomp/week-8/2_project_2/Screen Recording 2020-11-04 at 1.09.00 AM.mov"
+    ></video>
+    <md>
+      Even though the readings fluctuate slightly at rest, it looks like the
+      system is more than sensitive enough to differentiate between "hands on
+      computer" and "hands off computer."
+      <!--  -->
+      A potential concern: Many people type very lightly and with their palms
+      completely off the computer, right? This setup might be able to figure out
+      whether those people are typing. But!! It's probably not an issue, since
+      we can just listen for keypresses in addition to pressure.
+    </md>
   </section>
 </section>
