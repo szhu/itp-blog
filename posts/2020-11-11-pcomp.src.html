@@ -1,0 +1,464 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer src="posts.js"></script>
+  <script dev-only type="module" src="posts-dev.js"></script>
+</head>
+
+<section id="PComp Labs Week 9">
+  <section id="Project 2: Autolock">
+    <md>
+      I built my Project 2 -- a pressure-sending autolocking mechanism for my
+      computer -- according to last week's plan, with basically no modifications
+      or extensions. It turns out that doing just the basics reliably was tough
+      enough.
+      <!--  -->
+      This project buildout was particularly long. Instead of organizing my
+      process and the challenges that came up entirely chronologically, I will
+      group parts together based on theme, for clarity.
+    </md>
+
+    <section id="App architecture">
+      <md>
+        - The computer code is written in TypeScript using
+        [Deno](https://deno.land/), which is basically like Node.js with a more
+        modern API and with TypeScript. I've been using Deno off and on for the
+        past year (Deno 1.0 was released in May 2020) and it has been very nice
+        to work with.
+        <!--  -->
+        - I made no modifications to the Arduino code! This was because (1) why
+        not and (2) I realized that having the "ASCII pressure meter" was an
+        incredibly useful debugging tool -- and it is used in some of the
+        pictures to follow. I instead wrote
+      </md>
+    </section>
+
+    <section id="Locking the screen reliably">
+      <md>
+        There are command-line commands on macOS to put the computer to sleep,
+        to shut it down, to restart it, to turn off the display. But for locking
+        the screen? Not so much. This is the most reliable method I could find:
+      </md>
+      <pre lang="applescript">
+        tell application id "com.apple.systemevents"
+          keystroke "q" using {control down, command down}
+        end
+      </pre>
+      <md>
+        I also noticed that in a naive implementation, we would be attempting to
+        lock the screen when the screen is already locked. How do we detect when
+        the user has unlocked the screen?
+        <!--  -->
+        First, I [found](https://stackoverflow.com/a/11511419) the following
+        script to directly show whether the screen is locked:
+      </md>
+      <pre lang="py">
+        import Quartz
+        cg_session = Quartz.CGSessionCopyCurrentDictionary()
+      </pre>
+      <md>
+        One problem -- it is in Python, and the `import Quartz` step takes a
+        long time! I decided to make this subscript a long-running process and
+        allow it to periodically send the results of the screen-lock query back
+        to the Deno process. Implementing **handshaking** allowed the Python
+        process to not use too much CPU!
+        <!--  -->
+        Something about the script was still not working. (Late note: I think
+        the problem might have been that I followed the first piece of code in
+        the answer without reading it all.) I added a second line of defense to
+        check whether we're ready to autolock again: we check whether the user
+        has interacted with the system. I
+        [found](https://stackoverflow.com/a/17966890) a script that prints out
+        the number of seconds since the user last interacted with the computer.
+      </md>
+      <pre lang="sh">
+        ioreg -c IOHIDSystem | awk '/HIDIdleTime/ {print $NF/1000000000; exit}'
+      </pre>
+    </section>
+
+    <section id="Detection algorithm">
+      <md>
+        Last week, it seemed easy enough to check whether the pressure sensors
+        underneath the computer indicate that we should lock the computer. Lots
+        of pressure = don't lock, little pressure = lock, and that's it, right?
+        In practice, getting this right was the trickest part of the build.
+        <!--  -->
+        I initially used a hardcoded pressure **threshold** to determine whether
+        we should lock, but (1) the input data was fairly noisy and (2) the
+        threshold kept changing depending on whether the laptop is placed.
+        <!--  -->
+        To address the first issue, I added a rolling average calculation -- the
+        program would only lock the computer if the average pressure over the
+        past 100 time periods dropped below the threshold.
+        <!--  -->
+        To combat the second issue, I added a **calibration** step -- when the
+        user starts the program, they are prompted to remove their hands from
+        the computer, so that the computer can sense what "hands off" "feels
+        like".
+      </md>
+      <gallery>
+        <img
+          src="../files/2020-09-pcomp/week-9/1_project_2/process/Screen Shot 2020-11-11 at 12.39.37 AM-edit.png"
+        />
+        <img
+          src="../files/2020-09-pcomp/week-9/1_project_2/process/Screen Shot 2020-11-11 at 1.07.32 AM-edit.png"
+        />
+      </gallery>
+      <md>
+        This got much better results, but there would still be false positives
+        when I was resting my hand on the computer but wasn't moving it around
+        much, and false negatives when the calibration period just happened to
+        be slightly less pressure-y than average.
+        <!--  -->
+        After many algorithm iterations, I realized that a better measure might
+        actually be that *standard deviation* of pressure over the past few time
+        periods. When a person has their hand on the computer, there will be
+        significantly more movement than there would be otherwise, almost
+        invariably leading to a higher pressure variance.
+        <!--  -->
+        The only exception occurred when the person was apply so much pressure
+        that it stabilized their stance. I added in a significantly scaled-down
+        average pressure to solve this problem.
+        <!--  -->
+        The final formula: `stdev(pressure) + 0.1 * avg(pressure)`. When this
+        "score" drops below the score from the calibration period, we should
+        lock the computer.
+      </md>
+    </section>
+
+    <section id="Hardware">
+      <section id="Circuit wiring">
+        <md>
+          I... kind of wanted to avoid soldering for this project. But I wanted
+          to avoid using the huge breadboard, and I wanted to create a solid
+          product. I found out that you can insert the wires into each other for
+          a reliable connection.
+        </md>
+        <gallery>
+          <img
+            src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01261.JPG"
+          />
+          <img
+            src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01264.JPG"
+          />
+          <img
+            src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01266.JPG"
+          />
+          <video
+            src="../files/2020-09-pcomp/week-9/1_project_2/process/Screen Recording 2020-11-11 at 2.59.06 AM.mov"
+          ></video>
+          <img
+            src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01269.JPG"
+          />
+          <video
+            src="../files/2020-09-pcomp/week-9/1_project_2/process/Screen Recording 2020-11-11 at 3.13.10 AM.mov"
+          ></video>
+          <img
+            src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01272.JPG"
+          />
+        </gallery>
+      </section>
+      <section id="Running sensor wires along computer underside">
+        <md>
+          I need to have two sensors on two sides of the computer, so for one of
+          the sensors, I would need to run wires from one side of the computer
+          to the other. My laptop has very little clearance below it -- having
+          wires below it would push it up. I realized that an elegant solution
+          would be to use **aluminum foil** as wires.
+        </md>
+        <img
+          src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01276.JPG"
+        />
+        <img
+          src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01279.JPG"
+        />
+        <img
+          src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01295.JPG"
+        />
+      </section>
+      <section id="Shell">
+        <md>
+          I looked around for good enclosing materials. I ended up using the
+          same piece of foam as the one I used in Project 1!
+        </md>
+        <img
+          src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01280.JPG"
+        />
+        <img
+          src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01281.JPG"
+        />
+        <img
+          src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01283.JPG"
+        />
+        <img
+          caption="Final setup"
+          src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01285.JPG"
+        />
+      </section>
+    </section>
+
+    <section id="It works!">
+      <video
+        caption="Making sure the sensors still work!"
+        src="../files/2020-09-pcomp/week-9/1_project_2/process/MAH01287.MP4"
+      ></video>
+      <video
+        src="../files/2020-09-pcomp/week-9/1_project_2/process/MAH01288.MP4"
+      ></video>
+      <img
+        src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01294.JPG"
+      />
+      <pre collapsed lang=ts>
+        import { readLines } from "https://deno.land/std@0.77.0/io/bufio.ts";
+
+        let textEncoder = new TextEncoder();
+        let textDecoder = new TextDecoder();
+
+        function sum(items: number[]) {
+          return items.reduce((acc, c) => acc + c, 0);
+        }
+
+        function average(items: number[]) {
+          return sum(items) / items.length;
+        }
+
+        async function writeFixedLine(line: string) {
+          await Deno.stdout.write(textEncoder.encode("\r\u001b[K" + line));
+        }
+
+        function stdev(array: number[]) {
+          const n = array.length;
+          const mean = array.reduce((a, b) => a + b) / n;
+          return Math.sqrt(
+            array.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n,
+          );
+        }
+
+        async function delay(ms: number) {
+          await new Promise((resolve) => setTimeout(resolve, ms));
+        }
+
+        async function osascript(script: string) {
+          let process = Deno.run({
+            cmd: ["osascript", "-e", script],
+            stdout: "null",
+          });
+          await process.status();
+        }
+
+        async function lockScreen() {
+          // Fake lock
+          await osascript(`
+            display dialog "Now we should lock!" buttons {"OK"} default button "OK"
+          `);
+          // Real lock
+          // await osascript(`
+          //   tell application id "com.apple.systemevents"
+          //     keystroke "q" using {control down, command down}
+          //   end
+          // `);
+        }
+
+        class IsScreenLockedCheck {
+          process: Deno.Process<{
+            cmd: [string, string];
+            stdin: "piped";
+            stdout: "piped";
+          }>;
+
+          constructor() {
+            this.process = Deno.run({
+              cmd: ["python", "check_if_screen_locked.py"],
+              stdin: "piped",
+              stdout: "piped",
+            });
+          }
+
+          async check() {
+            await this.process.stdin.write(textEncoder.encode("\n"));
+            for await (let line of readLines(this.process.stdout)) {
+              return line === "True";
+            }
+          }
+        }
+
+        async function getHidInactiveTime(): Promise&lt;number> {
+          // https://stackoverflow.com/a/17966890
+          let process = Deno.run({
+            cmd: [
+              "sh",
+              "-c",
+              "ioreg -c IOHIDSystem | awk '/HIDIdleTime/ {print $NF/1000000000; exit}'",
+            ],
+            stdout: "piped",
+          });
+          if (!(await process.status()).success) {
+            throw new Error();
+          }
+          for await (let line of readLines(process.stdout)) {
+            return Number(line);
+          }
+          throw new Error();
+        }
+
+        function serialProcess() {
+          return Deno.run({
+            cmd: ["bash", "-c", "cat /dev/cu.usbmodem*"],
+            stdout: "piped",
+          });
+        }
+
+        // https://stackoverflow.com/a/57364353
+        type Await<T> = T extends {
+          then(onfulfilled?: (value: infer U) => unknown): unknown;
+        } ? U
+          : T;
+
+        // type Process = Await<ReturnType<typeof serialProcess>>;
+
+        async function* readLevels(signal?: AbortSignal) {
+          let process = serialProcess();
+          if (signal) {
+            signal.onabort = () => {
+              process.kill(9);
+            };
+          }
+          for await (const line of readLines(process.stdout)) {
+            yield (line.match(/#/g) || []).length;
+          }
+        }
+
+        async function calibrate(
+          steps: number,
+        ): Promise&lt;number> {
+          console.log("Remove your hands from the computer.");
+          await delay(1000);
+
+          let score = undefined;
+
+          let recentLevels = [];
+          let controller = new AbortController();
+          for await (let level of readLevels(controller.signal)) {
+            recentLevels.push(level);
+
+            score = calculateScore(recentLevels);
+
+            await writeFixedLine(`Calibrating... ${score.toFixed(3)}...`);
+
+            if (recentLevels.length >= steps) {
+              controller.abort();
+              break;
+            }
+          }
+
+          console.log(" done!");
+          return score!;
+        }
+
+        function calculateScore(recentLevels: number[]) {
+          return Math.min(...recentLevels) * 0.1 + stdev(recentLevels);
+        }
+
+        async function* readLevelAndScore(steps: number, signal?: AbortSignal) {
+          let recentLevels: number[] = [];
+          for await (let level of readLevels(signal)) {
+            let isInitial = recentLevels.length < steps;
+            recentLevels.push(level);
+            if (!isInitial) {
+              recentLevels.shift();
+            }
+            let score = calculateScore(recentLevels);
+            yield [level, score, isInitial] as [number, number, boolean];
+          }
+        }
+
+        async function run(steps: number, threshold: number) {
+          console.log("Place your hands back on the computer.");
+
+          while (true) {
+            // console.log("Waiting for pressure.");
+            // for await (let level of readLevels(process)) {
+            //   if (level > threshold) break;
+            // }
+
+            console.log();
+            console.log("Starting autolock.");
+
+            let controller = new AbortController();
+            for await (
+              let [level, score, isInitial] of readLevelAndScore(
+                steps,
+                controller.signal,
+              )
+            ) {
+              let startingText = isInitial ? " still collecting initial data" : "";
+              await writeFixedLine(
+                `Listening... ` +
+                  `level: ${level}  ` +
+                  `score: ${score.toFixed(3)}${startingText}...`,
+              );
+
+              if (!isInitial && score < threshold) {
+                console.log();
+                console.log("Locking!");
+                console.log();
+                await delay(200);
+                await lockScreen();
+                controller.abort();
+                break;
+              }
+            }
+
+            await delay(1000);
+
+            while (await isScreenLockedCheck.check()) {
+              await delay(1000);
+            }
+            // Sometimes this is buggy, so we do a second check.
+            while ((await getHidInactiveTime()) > 1) {
+              await delay(500);
+            }
+
+            console.log("Screen unlocked.");
+          }
+        }
+
+        let isScreenLockedCheck = new IsScreenLockedCheck();
+        let threshold = await calibrate(100) + 0.05;
+        console.log(`Will sleep when score < ${threshold}`);
+        console.log();
+
+        run(100, threshold);
+      </pre>
+      <pre collapsed lang=py>
+        import Quartz
+        import sys
+
+        try:
+          while True:
+            raw_input()
+            # https://stackoverflow.com/a/11511419
+            cg_session = Quartz.CGSessionCopyCurrentDictionary()
+            print(cg_session.valueForKeyPath_("CGSSessionScreenIsLocked"))
+            sys.stdout.flush()
+
+        except KeyboardInterrupt:
+          pass
+      </pre>
+    </section>
+
+    <section id="Adjusting sensitivity">
+      <md>
+        Pressure sensors below an already fairly-heavy object were not as
+        sensitive as I imagined -- I remaining issue I had was the computer was
+        autolocking sometimes when I was using my trackpad with a single finger,
+        super lightly. I added a piece of foam below the computer for added
+        elasticity and this solved the problem.
+      </md>
+      <video
+        src="../files/2020-09-pcomp/week-9/1_project_2/process/MAH01289-edit.MP4"
+      ></video>
+    </section>
+  </section>
+</section>
