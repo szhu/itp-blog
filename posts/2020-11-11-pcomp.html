@@ -418,12 +418,12 @@ function serialProcess() {
 }
 
 // https://stackoverflow.com/a/57364353
-type Await = T extends {
+type Await&lt;T&gt; = T extends {
   then(onfulfilled?: (value: infer U) =&gt; unknown): unknown;
 } ? U
   : T;
 
-// type Process = Await&gt;;
+// type Process = Await&lt;ReturnType&lt;typeof serialProcess&gt;&gt;;
 
 async function* readLevels(signal?: AbortSignal) {
   let process = serialProcess();
@@ -537,7 +537,8 @@ let threshold = await calibrate(100) + 0.05;
 console.log(`Will sleep when score &lt; ${threshold}`);
 console.log();
 
-run(100, threshold);</pre
+run(100, threshold);
+]]&gt;</pre
          >
         </details>
         <details>
@@ -579,6 +580,36 @@ except KeyboardInterrupt:
           controls=""
          ></video>
         </figure>
+       </div>
+      </section>
+
+      <section class="section section-level-2">
+       <header class="section-header">Feedback from class</header>
+       <div class="section-content">
+        <ul>
+         <li>
+          <em>I feel like this has a ton of practical applications1 Love it</em>
+         </li>
+         <li>
+          <em
+           >Wow, I love how you used calculations instead of hard-coding
+           thresholds that allow for flexibility</em
+          >
+         </li>
+         <li>
+          <em
+           >I feel like this is pretty accessible which I like, but what happens
+           if someone is unable to put enough pressure? Is there a low threshold
+           that remaps to a different scale?</em
+          >
+         </li>
+         <li>
+          <em
+           >So cool how you made all your parts into such minimal style! Love
+           the idea!</em
+          >
+         </li>
+        </ul>
        </div>
       </section>
      </div>
