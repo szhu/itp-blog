@@ -1,5 +1,0 @@
-{
-  "board": "arduino:samd:nano_33_iot",
-  // Find it using: ls /dev/tty.*
-  "port": "/dev/tty..."
-}
