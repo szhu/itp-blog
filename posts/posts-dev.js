@@ -1,6 +1,6 @@
 import reformatDoc from "../meta/format-post-lib/reformatDoc.js";
 
-// reformatDoc(document, document.documentElement);
+reformatDoc(document, document.documentElement);
 
 async function reload(shouldReloadHead, signal) {
   let response = await fetch(location.href, { signal });

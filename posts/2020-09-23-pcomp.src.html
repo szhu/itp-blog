@@ -85,16 +85,16 @@
           This is the first exercise so far where the code isn't included.
           Here's the critical part of the code I wrote:
         </md>
-        <pre>
-int in = analogRead(A0);
+        <script type="ino">
+          int in = analogRead(A0);
 
-int out = 255 - map(in, 0, 10, 0, 255);
-if (out < 0) {
-  out = 0;
-}
+          int out = 255 - map(in, 0, 10, 0, 255);
+          if (out < 0) {
+            out = 0;
+          }
 
-analogWrite(ledPin, out);
-        </pre>
+          analogWrite(ledPin, out);
+        </script>
         <md>
           I had to experiment a bit to get a useful relationship between the
           input and output values. I chose to invert the relationship, turning

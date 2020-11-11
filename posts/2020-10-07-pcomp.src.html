@@ -97,10 +97,10 @@
         I changed the program slightly such that the leg would only move 30°
         instead of 180°.
       </md>
-      <pre lang="diff">
-      -   int servoAngle = map(analogValue, 0, 1023, 0, 179);
-      +   int servoAngle = map(analogValue, 0, 1023, 0, 30);
-      </pre>
+      <script type="diff">
+        -   int servoAngle = map(analogValue, 0, 1023, 0, 179);
+        +   int servoAngle = map(analogValue, 0, 1023, 0, 30);
+      </script>
       <video
         src="../files/2020-09-pcomp/week-4/walker/process/MAH05029-edit.MP4"
       ></video>

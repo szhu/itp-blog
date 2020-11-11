@@ -40,11 +40,11 @@
         to shut it down, to restart it, to turn off the display. But for locking
         the screen? Not so much. This is the most reliable method I could find:
       </md>
-      <pre lang="applescript">
+      <script type="applescript">
         tell application id "com.apple.systemevents"
           keystroke "q" using {control down, command down}
         end
-      </pre>
+      </script>
       <md>
         I also noticed that in a naive implementation, we would be attempting to
         lock the screen when the screen is already locked. How do we detect when
@@ -53,10 +53,10 @@
         First, I [found](https://stackoverflow.com/a/11511419) the following
         script to directly show whether the screen is locked:
       </md>
-      <pre lang="py">
+      <script type="py">
         import Quartz
         cg_session = Quartz.CGSessionCopyCurrentDictionary()
-      </pre>
+      </script>
       <md>
         One problem -- it is in Python, and the `import Quartz` step takes a
         long time! I decided to make this subscript a long-running process and
@@ -72,9 +72,9 @@
         [found](https://stackoverflow.com/a/17966890) a script that prints out
         the number of seconds since the user last interacted with the computer.
       </md>
-      <pre lang="sh">
+      <script type="sh">
         ioreg -c IOHIDSystem | awk '/HIDIdleTime/ {print $NF/1000000000; exit}'
-      </pre>
+      </script>
     </section>
 
     <section id="Detection algorithm">
@@ -209,7 +209,7 @@
       <img
         src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01294.JPG"
       />
-      <pre collapsed lang=ts>
+      <script collapsed type="ts">
         import { readLines } from "https://deno.land/std@0.77.0/io/bufio.ts";
 
         let textEncoder = new TextEncoder();
@@ -283,7 +283,7 @@
           }
         }
 
-        async function getHidInactiveTime(): Promise&lt;number> {
+        async function getHidInactiveTime(): Promise<number> {
           // https://stackoverflow.com/a/17966890
           let process = Deno.run({
             cmd: [
@@ -331,7 +331,7 @@
 
         async function calibrate(
           steps: number,
-        ): Promise&lt;number> {
+        ): Promise<number> {
           console.log("Remove your hands from the computer.");
           await delay(1000);
 
@@ -430,8 +430,9 @@
         console.log();
 
         run(100, threshold);
-      </pre>
-      <pre collapsed lang=py>
+        ]]>
+      </script>
+      <script collapsed type="py">
         import Quartz
         import sys
 
@@ -445,7 +446,7 @@
 
         except KeyboardInterrupt:
           pass
-      </pre>
+      </script>
     </section>
 
     <section id="Adjusting sensitivity">

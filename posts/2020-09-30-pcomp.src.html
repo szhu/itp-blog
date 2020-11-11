@@ -58,74 +58,74 @@
         src="../files/2020-09-pcomp/week-3/1a_pressure_tones/MAH04979.MP4"
       ></video>
 
-      <pre collapsed lang="ino">
-  void setup() {  //
-    // tone(8, 440, 10000);
-  }
+      <script collapsed type="ino">
+        void setup() {  //
+          // tone(8, 440, 10000);
+        }
 
-  void loop() {
-    // get a sensor reading:
-    int sensorReading = analogRead(A0);
-    debugInt(sensorReading, " ; ");
+        void loop() {
+          // get a sensor reading:
+          int sensorReading = analogRead(A0);
+          debugInt(sensorReading, " ; ");
 
-    // map the results from the sensor reading's range
-    // to the desired pitch range:
-    float frequency = map(sensorReading, 0, 950, 300, 800);
-    if (frequency < 0) frequency = 0;
-    debugInt(frequency, " ; ");
-    // change the pitch, play for 10 ms:
-    Serial.print("\n");
-    tone(8, frequency, 300);
-    delay(300);
-  }
-      </pre>
+          // map the results from the sensor reading's range
+          // to the desired pitch range:
+          float frequency = map(sensorReading, 0, 950, 300, 800);
+          if (frequency < 0) frequency = 0;
+          debugInt(frequency, " ; ");
+          // change the pitch, play for 10 ms:
+          Serial.print("\n");
+          tone(8, frequency, 300);
+          delay(300);
+        }
+      </script>
       <md>
         I found that using `Serial.println` to log multiple lines gets pretty
         hard to read because of the fast-scrolling input, so I created
         `debugInt` to help with that.
       </md>
 
-      <pre collapsed lang="ino">
-#define debugInt(varname, suffix) \
-    Serial.print(#varname);         \
-    Serial.print(" = ");            \
-    printLpad((varname), 3);        \
-    Serial.print((suffix));
+      <script collapsed type="ino">
+        #define debugInt(varname, suffix) \
+            Serial.print(#varname);         \
+            Serial.print(" = ");            \
+            printLpad((varname), 3);        \
+            Serial.print((suffix));
 
-  void printLpad(int x, int length) {
-    int digits = x == 0 ? 1 : floor(log10(abs(x))) + 1;
-    for (int i = digits; i < length; i++) {
-      Serial.print(" ");
-    }
-    Serial.print(x);
-  }
-      </pre>
+          void printLpad(int x, int length) {
+            int digits = x == 0 ? 1 : floor(log10(abs(x))) + 1;
+            for (int i = digits; i < length; i++) {
+              Serial.print(" ");
+            }
+            Serial.print(x);
+          }
+      </script>
 
       <md>How it's used:</md>
-      <pre lang="ino">
-void loop() {
-  int sensorReading = ...
-  debugInt(sensorReading, " ; ");
+      <script type="ino">
+        void loop() {
+          int sensorReading = ...
+          debugInt(sensorReading, " ; ");
 
-  int frequency = ...;
-  debugInt(frequency, "\n");
-}
-      </pre>
+          int frequency = ...;
+          debugInt(frequency, "\n");
+        }
+      </script>
 
       <md>The output looks like:</md>
-      <pre lang="out">
-  sensorReading =   0; frequency = 300
-  sensorReading = 603; frequency = 617
-  sensorReading = 877; frequency = 761
-  sensorReading = 923; frequency = 785
-  sensorReading = 159; frequency = 383
-  sensorReading =  35; frequency = 318
-  sensorReading = 773; frequency = 706
-  sensorReading = 914; frequency = 781
-  sensorReading =   5; frequency = 302
-  sensorReading = 720; frequency = 678
-  sensorReading = 916; frequency = 782
-      </pre>
+      <script type="out">
+        sensorReading =   0; frequency = 300
+        sensorReading = 603; frequency = 617
+        sensorReading = 877; frequency = 761
+        sensorReading = 923; frequency = 785
+        sensorReading = 159; frequency = 383
+        sensorReading =  35; frequency = 318
+        sensorReading = 773; frequency = 706
+        sensorReading = 914; frequency = 781
+        sensorReading =   5; frequency = 302
+        sensorReading = 720; frequency = 678
+        sensorReading = 916; frequency = 782
+      </script>
 
       <md>Super aligned and easy-to-read!</md>
     </section>
@@ -136,32 +136,32 @@ void loop() {
         src="../files/2020-09-pcomp/week-3/1b_melody/MAH04977.MP4"
       ></video>
 
-      <pre collapsed lang="ino">
-#include "pitches.h"
+      <script collapsed type="ino">
+        #include "pitches.h"
 
-  // notes in the melody:
-  int melody[] = {NOTE_C4, NOTE_G3, NOTE_G3, NOTE_GS3,
-                  NOTE_G3, 0,       NOTE_B3, NOTE_C4};
+          // notes in the melody:
+          int melody[] = {NOTE_C4, NOTE_G3, NOTE_G3, NOTE_GS3,
+                          NOTE_G3, 0,       NOTE_B3, NOTE_C4};
 
-  // note durations: 4 = quarter note, 8 = eighth note, etc.:
-  int noteDurations[] = {4, 8, 8, 4, 4, 4, 4, 4};
+          // note durations: 4 = quarter note, 8 = eighth note, etc.:
+          int noteDurations[] = {4, 8, 8, 4, 4, 4, 4, 4};
 
-  void setup() {}
+          void setup() {}
 
-  void loop() {
-    // iterate over the notes of the melody:
-    for (int thisNote = 0; thisNote < 8; thisNote++) {
-      // to calculate the note duration, take one second
-      // divided by the note type.
-      // e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-      int noteDuration = 1000 / noteDurations[thisNote];
-      tone(8, melody[thisNote], noteDuration);
+          void loop() {
+            // iterate over the notes of the melody:
+            for (int thisNote = 0; thisNote < 8; thisNote++) {
+              // to calculate the note duration, take one second
+              // divided by the note type.
+              // e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+              int noteDuration = 1000 / noteDurations[thisNote];
+              tone(8, melody[thisNote], noteDuration);
 
-      // pause for the note's duration plus 30 ms:
-      delay(noteDuration + 30);
-    }
-  }
-      </pre>
+              // pause for the note's duration plus 30 ms:
+              delay(noteDuration + 30);
+            }
+          }
+      </script>
 
       <p>Modifications from the given code: none.</p>
     </section>
@@ -172,33 +172,33 @@ void loop() {
         src="../files/2020-09-pcomp/week-3/1c_instrument/MAH04980.MP4"
       ></video>
 
-      <pre collapsed lang="ino">
-  #include "pitches.h"
+      <script collapsed type="ino">
+        #include "pitches.h"
 
-  // minimum reading of the sensors that generates a note
-  const int threshold = 100;
-  const int speakerPin = 8;      // pin number for the speaker
-  const int noteDuration = 300;  // play notes for 20 ms
+        // minimum reading of the sensors that generates a note
+        const int threshold = 100;
+        const int speakerPin = 8;      // pin number for the speaker
+        const int noteDuration = 300;  // play notes for 20 ms
 
-  // notes to play, corresponding to the 3 sensors:
-  int notes[] = {NOTE_A4, NOTE_B4, NOTE_C5};
+        // notes to play, corresponding to the 3 sensors:
+        int notes[] = {NOTE_A4, NOTE_B4, NOTE_C5};
 
-  void setup() {}
+        void setup() {}
 
-  void loop() {
-    for (int thisSensor = 0; thisSensor < 3; thisSensor++) {
-      // get a sensor reading:
-      int sensorReading = analogRead(thisSensor);
+        void loop() {
+          for (int thisSensor = 0; thisSensor < 3; thisSensor++) {
+            // get a sensor reading:
+            int sensorReading = analogRead(thisSensor);
 
-      // if the sensor is pressed hard enough:
-      if (sensorReading > threshold) {
-        // play the note corresponding to this sensor:
-        tone(speakerPin, notes[thisSensor], noteDuration);
-      }
-    }
-    delay(noteDuration);
-  }
-      </pre>
+            // if the sensor is pressed hard enough:
+            if (sensorReading > threshold) {
+              // play the note corresponding to this sensor:
+              tone(speakerPin, notes[thisSensor], noteDuration);
+            }
+          }
+          delay(noteDuration);
+        }
+      </script>
 
       <md>
         Modifications from the given code:
@@ -225,29 +225,29 @@ void loop() {
 
     <img src="../files/2020-09-pcomp/week-3/2_servo/DSC04986-ANIMATION.gif" />
 
-    <pre collapsed lang="ino">
-#include "Servo.h"  // include the servo library
+    <script collapsed type="ino">
+      #include "Servo.h"  // include the servo library
 
-Servo servoMotor;  // creates an instance of the servo object to control a servo
-int servoPin = 3;  // Control pin for servo motor
+      Servo servoMotor;  // creates an instance of the servo object to control a servo
+      int servoPin = 3;  // Control pin for servo motor
 
-void setup() {
-  Serial.begin(9600);  // initialize serial communications
-  // attaches the servo on pin 3 to the servo object
-  servoMotor.attach(servoPin);
-}
+      void setup() {
+        Serial.begin(9600);  // initialize serial communications
+        // attaches the servo on pin 3 to the servo object
+        servoMotor.attach(servoPin);
+      }
 
-void loop() {
-  int analogValue = analogRead(A0);  // read the analog input
-  Serial.println(analogValue);       // print it
+      void loop() {
+        int analogValue = analogRead(A0);  // read the analog input
+        Serial.println(analogValue);       // print it
 
-  // if your sensor's range is less than 0 to 1023, you'll need to
-  // modify the map() function to use the values you discovered:
-  int servoAngle = map(analogValue, 0, 1023, 0, 179);
+        // if your sensor's range is less than 0 to 1023, you'll need to
+        // modify the map() function to use the values you discovered:
+        int servoAngle = map(analogValue, 0, 1023, 0, 179);
 
-  // move the servo using the angle from the sensor:
-  servoMotor.write(servoAngle);
-  }
-    </pre>
+        // move the servo using the angle from the sensor:
+        servoMotor.write(servoAngle);
+        }
+    </script>
   </section>
 </section>

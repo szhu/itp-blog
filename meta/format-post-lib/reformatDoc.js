@@ -158,7 +158,13 @@ export default function reformatDoc(document, root) {
     video.controls = true;
   }
 
-  for (let pre of root.querySelectorAll("pre")) {
+  for (let pre of root.querySelectorAll("pre, body script[type]")) {
+    if (pre.tagName !== "PRE") {
+      pre = changeEl(pre, document.createElement("pre"));
+      let lang = pre.getAttribute("type");
+      pre.removeAttribute("type");
+      pre.setAttribute("lang", lang);
+    }
     pre.textContent = undent(pre.textContent).trim();
 
     if (pre.getAttribute("collapsed") != null) {
