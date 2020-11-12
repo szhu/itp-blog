@@ -28,9 +28,65 @@
       </p>
 
       <section class="section section-level-2">
+       <header class="section-header">How it started</header>
+       <div class="section-content">
+        <p>
+         First, I'd like to give a shoutout to my friends at Affinity, my former
+         employer, for inspiring me to take computer security more seriously, in
+         possibly the most fun way possible:
+        </p>
+
+        <figure>
+         <img
+          src="../files/2020-09-pcomp/week-9/1_project_2/inspiration/125179876_4126503817365183_269283905149620529_n.png"
+         />
+        </figure>
+        <p>
+         After this happened, I created an open offer for anyone to challenge my
+         security practices. This eventually spread throughout the office, with
+         various people offering other prizes, with the most common one being
+         donuts. (We called it getting "donutted.")
+        </p>
+
+        <figure>
+         <img
+          src="../files/2020-09-pcomp/week-9/1_project_2/inspiration/124424515_373597600566463_373186250449372582_n.png"
+         />
+        </figure>
+        <p>
+         Was this challenge fun? Yes! Did it make me better at keeping my
+         computer locked all the time? Well, maybe not. I got "donutted" fairly
+         frequently, even more than a year later:
+        </p>
+
+        <figure>
+         <img
+          class="small"
+          src="../files/2020-09-pcomp/week-9/1_project_2/inspiration/124298280_703843870545056_2098261979532053490_n.png"
+         />
+        </figure>
+        <p>
+         This experience has made me think more about computer security, but I'd
+         say that it hasn't actually made me better at it. That's why I've been
+         especially excited to create a device that can help me with it.
+        </p>
+       </div>
+      </section>
+
+      <p>Now, as for <strong>how it's going</strong>...</p>
+
+      <section class="section section-level-2">
        <header class="section-header">App architecture</header>
        <div class="section-content">
         <ul>
+         <li>
+          I made no modifications to the Arduino code! This was because (1) why
+          not! and (2) I realized that having the "ASCII pressure meter" was an
+          incredibly useful debugging tool -- and it is used in some of the
+          pictures to follow. I instead wrote JS code to parse the this pressure
+          meter -- simply by counting the number of <code>#</code> characters
+          that were shown in each line of the readout.
+         </li>
          <li>
           The computer code is written in TypeScript using
           <a href="https://deno.land/" target="_blank">Deno</a>, which is
@@ -39,23 +95,27 @@
           released in May 2020) and it has been very nice to work with.
          </li>
          <li>
-          I made no modifications to the Arduino code! This was because (1) why
-          not and (2) I realized that having the "ASCII pressure meter" was an
-          incredibly useful debugging tool -- and it is used in some of the
-          pictures to follow. I instead wrote
+          There are some operating system functions that are done outside of JS:
+          locking the screen, querying whether the screen is locked, and
+          querying time since last HID interaction. Deno makes it easy to call
+          and communicate with external commands. Even reading serial output
+          from the Arduino is done using <code>cat</code> because it was so
+          easy!
          </li>
         </ul>
        </div>
       </section>
 
       <section class="section section-level-2">
-       <header class="section-header">Locking the screen reliably</header>
+       <header class="section-header">
+        Locking the screen reliably and only when necessary
+       </header>
        <div class="section-content">
         <p>
          There are command-line commands on macOS to put the computer to sleep,
          to shut it down, to restart it, to turn off the display. But for
-         locking the screen? Not so much. This is the most reliable method I
-         could find:
+         locking the screen? Not so much. The most reliable method I could find
+         was simply invoking the appropriate keyboard shortcut:
         </p>
 
         <pre lang="applescript">
@@ -64,8 +124,8 @@ tell application id "com.apple.systemevents"
 end</pre
         >
         <p>
-         I also noticed that in a naive implementation, we would be attempting
-         to lock the screen when the screen is already locked. How do we detect
+         I noticed that in a naive implementation, we would be attempting to
+         lock the screen when the screen is already locked. How do we detect
          when the user has unlocked the screen?
         </p>
         <p>
