@@ -26,9 +26,16 @@ function hydrate() {
       // Not sure why it's attached to click and not dblclick.
       e.preventDefault();
     });
-    video.addEventListener("mouseover", () => {
+    video.addEventListener("mouseenter", () => {
       video.controls = true;
-      video.play();
+      try {
+        video.play();
+      } catch (e) {
+        // It might be this error: DOMException: play() failed because the user
+        // didn't interact with the document first.
+        video.muted = true;
+        video.play();
+      }
     });
     video.addEventListener("mouseleave", () => {
       video.controls = false;
