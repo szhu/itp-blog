@@ -1,0 +1,295 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>PComp Labs Week 11</title>
+ </head>
+
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">PComp Labs Week 11</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Project 3 (Final Project)</header>
+     <div class="section-content">
+      <section class="section section-level-2">
+       <header class="section-header">Idea</header>
+       <div class="section-content">
+        <section class="section section-level-3">
+         <header class="section-header">Origins part 1</header>
+         <div class="section-content">
+          <p>
+           The first half of the idea for my final project comes what I
+           considered at the time a minor detail in the buildout of my Project
+           2.
+          </p>
+          <p>Here it is:</p>
+
+          <gallery>
+           <figure>
+            <img
+             src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01276.JPG"
+            />
+           </figure>
+           <figure>
+            <img
+             src="../files/2020-09-pcomp/week-9/1_project_2/process/DSC01295.JPG"
+            />
+           </figure>
+          </gallery>
+          <p>
+           I used aluminum foil to make "wires" that wouldn't stick out when run
+           along the underside of my laptop. It worked great for my project, and
+           over the past few weeks, I left the foil attached to the underside of
+           my computer, just because. In fact, they're still stuck underneath as
+           I'm typing this.
+          </p>
+          <p>
+           I noticed a great property of these flat, sticky wires -- they're
+           super durable, and they're unobtrusively pleasant. Maybe I can find
+           more applications for this?
+          </p>
+         </div>
+        </section>
+        <section class="section section-level-3">
+         <header class="section-header">Origins part 2</header>
+         <div class="section-content">
+          <p>The second half of the idea came from two observations:</p>
+          <ul>
+           <li>Many analog input devices are implemented as a resistor.</li>
+           <li>
+            When doing some of the earlier labs, I was annoyed that sometimes
+            when taking voltage or resistance measurements with a multimeter, my
+            fingers would inadvertently cause variation in the reading.
+           </li>
+          </ul>
+          <p>
+           So then I thought... use fingers to manipulate a resistor, when my
+           fingers could <em>be</em> the resistor?
+          </p>
+         </div>
+        </section>
+        <section class="section section-level-3">
+         <header class="section-header">Concept</header>
+         <div class="section-content">
+          <p>
+           My Project 2 concept: A kind of input device that consists of two (or
+           more) metal strips running in parallel. The user can press in the
+           space between the two strips, and their finger will connect the
+           strips (albeit with some resistance), in a way that can be sensed.
+          </p>
+          <p>
+           I will try to apply this sensor to the following use case: By running
+           this sensor along the an entire wall, it should be possible for
+           people to activate the sensor at almost any part of the room. This
+           allows the entire device to be used as a remote control, except one
+           that's much less complicated than normal remote controls, since it
+           doesn't rely on wireless technologies.
+          </p>
+          <p>
+           I am particularly happy to work on this application. I have a current
+           opinion that much of the technology we use today is overpowered, "too
+           smart" for the applications we actually use it for. By using simpler
+           technologies to achieve the same effect, we can make technology more
+           secure, predictable, and accessible.
+          </p>
+         </div>
+        </section>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Proof of concept</header>
+       <div class="section-content">
+        <p>Okay, enough talk. Let's build it!</p>
+        <p>
+         First, I am happy to announce that I was able to continue my trend of
+         not changing the Arduino code at all. I need the Arduino to effectively
+         measure two resistances, just like in my previous project.
+        </p>
+
+        <figure>
+         <video
+          src="../files/2020-09-pcomp/week-11/1_project_3/process/Screen Recording 2020-11-25 at 3.55.53 AM.m4v"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+
+        <section class="section section-level-3">
+         <header class="section-header">Obtaining metal tape</header>
+         <div class="section-content">
+          <p>
+           In my head, I imagined that I wouldn't need to change that much from
+           how I made the strips in Project 2. However, I found two differences
+           in requirement:
+          </p>
+          <ul>
+           <li>
+            I needed these metal strips to be exposed at the surface; otherwise
+            nothing will happen if the user presses on it.
+           </li>
+           <li>
+            To have enough to wrap around an entire room, I'd need to figure out
+            how to make a lot of it quickly.
+           </li>
+          </ul>
+          <p>
+           A few hours of thinking and researching later, I figured out that:
+          </p>
+          <ol>
+           <li>
+            The ideal kind of product would be a form of metal tape, with metal
+            on one side and adhesive on the other.
+           </li>
+           <li>
+            This is already a product that people make and that I could buy.
+           </li>
+           <li>
+            In fact, I had already bought some of it at the beginning of the
+            semester, and it had been sitting in my room the entire time!
+           </li>
+          </ol>
+
+          <gallery>
+           <figure>
+            <figcaption>
+             <p>
+              All I had to do was open this box, which I had not opened since
+              the beginning of the semester.
+             </p>
+            </figcaption>
+            <img
+             src="../files/2020-09-pcomp/week-11/1_project_3/process/IMG_8545.jpg"
+            />
+           </figure>
+           <figure>
+            <figcaption>
+             <p>
+              Copper tape. Amazing that I don't have to make this myself
+              anymore.
+             </p>
+            </figcaption>
+            <img
+             src="../files/2020-09-pcomp/week-11/1_project_3/process/IMG_8606.jpg"
+            />
+           </figure>
+          </gallery>
+         </div>
+        </section>
+
+        <section class="section section-level-3">
+         <header class="section-header">Taping it up</header>
+         <div class="section-content">
+          <figure>
+           <video
+            src="../files/2020-09-pcomp/week-11/1_project_3/process/IMG_8608_8611.m4v"
+            preload="metadata"
+            controls=""
+           ></video>
+          </figure>
+          <p>
+           Sidenote: Video compression is very efficient. Can you believe this
+           entire video is the size of a large-ish photo (1.4 MB)?
+          </p>
+          <p>
+           It took me some thinking to figure out how to attach the strips on
+           the wall to the Arduino. I knew it was going to involve alligator
+           clips -- coincidentally, I needed to use 3 alligator wires together,
+           and I already had 3 of them twist-tied together from Project 1.
+          </p>
+          <p>
+           I realized that I couldn't alligator-clip it to the wall, because it
+           would pull the tape off. So I used more copper tape to connect the
+           wall strips to a fixed mounting point on the table. (I had a wall
+           plug adapter lying around, so I decied to use use it.)
+          </p>
+          <p>Some detail shots:</p>
+
+          <gallery>
+           <figure>
+            <img
+             src="../files/2020-09-pcomp/week-11/1_project_3/process/IMG_8617.jpg"
+            />
+           </figure>
+           <figure>
+            <img
+             src="../files/2020-09-pcomp/week-11/1_project_3/process/IMG_8616.jpg"
+            />
+           </figure>
+          </gallery>
+         </div>
+        </section>
+
+        <section class="section section-level-3">
+         <header class="section-header">Does it work?</header>
+         <div class="section-content">
+          <p>
+           It did! And then I tried to record a video, and it didn't the second
+           time around. What happened?
+          </p>
+          <p>
+           Note the part where I stuck some copper tape more copper tape. My
+           suspicision is that the adhesive was slightly moist before
+           application and conducted water, but became less conductive as it
+           tried. I fixed this in a hacky way -- I curled the top strip over
+           itself slightly, so that the tops of the strips would touch.
+          </p>
+          <p>And then it worked once again!</p>
+
+          <figure>
+           <video
+            src="../files/2020-09-pcomp/week-11/1_project_3/process/Screen Recording 2020-11-25 at 4.10.02 AM.m4v"
+            preload="metadata"
+            controls=""
+           ></video>
+          </figure>
+          <p>
+           Even with the finger touching, the measured voltage is quite low. I
+           tested whether licking my finger would help lower the resistance and
+           make for a more significant reading. It did :)
+          </p>
+         </div>
+        </section>
+       </div>
+      </section>
+
+      <section class="section section-level-2">
+       <header class="section-header">Next steps</header>
+       <div class="section-content">
+        <ul>
+         <li>Wrap the strips around my room a little more.</li>
+         <li>
+          I kind of liked the aesthetic of aluminum more. I wonder if I can buy
+          aluminum strips...
+         </li>
+         <li>
+          Do something when the sensor is activated! My current plan is to use
+          to adjust the volume on my music -- this is probably the most common
+          task I'd want to do. Maybe pressing both sensors at once can
+          play/pause the music as well. Or perhaps it can toggle my room light?
+         </li>
+         <li>
+          Make the sensor as accurate and as free from interference as possible.
+         </li>
+         <li>
+          Investivate whether my Arduino can be used to directly control my
+          computer using keyboard input. (I don't think the Arduino Nano 33 IoT
+          can do this, but I need to double-check.)
+         </li>
+         <li>
+          Come up with a better wiring plan for connecting wall to computer. I
+          wonder if I can repurpose some USB cables for the wiring?
+         </li>
+        </ul>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
