@@ -2,6 +2,8 @@
 
 ## Recent posts
 
+- 2020-11-25: [PComp Labs Week 13](https://szhu.github.io/itp-blog/posts/2020-12-09-pcomp.html)
+- 2020-10-14: PComp Labs Week 12 -- no post!
 - 2020-11-25: [PComp Labs Week 11](https://szhu.github.io/itp-blog/posts/2020-11-25-pcomp.html)
 - 2020-11-18: PComp Labs Week 10 -- no post! I didn't have the materials :(
 - 2020-11-11: [PComp Labs Week 9](https://szhu.github.io/itp-blog/posts/2020-11-11-pcomp.html)

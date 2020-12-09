@@ -1,0 +1,183 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer src="posts.js"></script>
+  <script dev-only type="module" src="posts-dev.js"></script>
+</head>
+
+<section id="PComp Labs Week 13">
+  <section id="Project 3 (Final Project)">
+    <md>Full blog post to come. For now please enjoy the demo!</md>
+
+    <video
+      src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9117.opt.mp4"
+    ></video>
+
+    <md> Code: </md>
+
+    <md>Arduino</md>
+
+    <script type="ino" collapsed>
+      void setup() {}
+
+      #define N_LAST_SEEN 10
+
+      class RollingWindow {
+      public:
+        int lastValues[N_LAST_SEEN] = {
+            //
+            -1, -1, -1, -1, -1,
+            //
+            -1, -1, -1, -1, -1,
+            //
+        };
+        int j = 0;
+
+        void add(int value) {
+          lastValues[j] = value;
+          j++;
+          j %= N_LAST_SEEN;
+        }
+
+        int last2() {
+          return (lastValues[(j - 1 + N_LAST_SEEN) % N_LAST_SEEN] +
+                  lastValues[(j - 2 + N_LAST_SEEN) % N_LAST_SEEN]) /
+                 2;
+        }
+      };
+
+      RollingWindow a0RollingWindow = RollingWindow();
+      RollingWindow a2RollingWindow = RollingWindow();
+
+      class RunningAvg {
+      public:
+        int total = 0;
+        int n = 0;
+
+        int add(int value) {
+          total += value;
+          n++;
+        }
+
+        int getAvg() { return total / n; }
+      };
+
+      int sinceLastA0Press = 0;
+      int sinceLastA2Press = 0;
+
+      void loop() {
+        analogWrite(A1, 0);
+
+        RunningAvg a0Avg = RunningAvg();
+        RunningAvg a2Avg = RunningAvg();
+        for (int i = 0; i < 20; i++) {
+          a0Avg.add(analogRead(A0));
+          a2Avg.add(analogRead(A2));
+        }
+
+        int a0Reading = a0Avg.getAvg();
+        a0RollingWindow.add(a0Reading);
+
+        int a0Base = 150;
+        int a0Diff = a0RollingWindow.last2() - a0Base;
+        if (a0Diff > 45) {
+          Serial.println(a0Diff);
+        }
+        int a0Pressed = a0Diff > 60;
+        if (a0Pressed && sinceLastA0Press > N_LAST_SEEN) {
+          Serial.print(a0Diff);
+          Serial.print(" (");
+          Serial.print(a0Base);
+          Serial.print(" -> ");
+          Serial.print(a0RollingWindow.last2());
+          Serial.print(") ");
+          Serial.print("sinceLastA0Press = ");
+          Serial.print(sinceLastA0Press);
+          if (sinceLastA0Press < N_LAST_SEEN + 5) {
+            Serial.print(" Held and");
+          }
+          Serial.println(" Pressed A0!!");
+          sinceLastA0Press = 0;
+        }
+        sinceLastA0Press++;
+
+        analogWrite(A1, 1000);
+        delay(2);
+      }
+    </script>
+
+    <md>Computer (TypeScript/Deno)</md>
+
+    <script type="ts" collapsed>
+      import { readLines } from "https://deno.land/std@0.77.0/io/bufio.ts";
+
+      let textEncoder = new TextEncoder();
+      let textDecoder = new TextDecoder();
+
+      function fixedLine(line: string) {
+        return "\r\u001b[K" + line;
+      }
+
+      async function osascript(script: string) {
+        let process = Deno.run({
+          cmd: ["osascript", "-e", script],
+          stdout: "null",
+        });
+        await process.status();
+      }
+
+      function serialProcess() {
+        return Deno.run({
+          cmd: ["bash", "-c", "cat /dev/cu.usbmodem*"],
+          stdout: "piped",
+        });
+      }
+
+      let ignore = false;
+
+      async function run() {
+        let process = serialProcess();
+        for await (let line of readLines(process.stdout)) {
+          if (ignore) continue;
+          console.log(line);
+          if (line.match(/Held and Pressed/)) {
+            await osascript(`
+              tell app "Spotify" to pause
+              do shell script "brightness 0"
+              quit app "Backdrop"
+              -- activate app "ScreenSaverEngine"
+            `);
+            ignore = true;
+            setTimeout(() => ignore = false, 2000);
+          } else if (line.match(/Pressed/)) {
+            osascript(`
+              beep
+              do shell script "brightness 0.7"
+              activate app "Backdrop"
+              tell app "Spotify" to playpause
+            `);
+          }
+        }
+      }
+
+      run();
+    </script>
+
+    <md>Progress pictures, presented with no context:</md>
+    <gallery>
+      <img
+        src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9106.jpg"
+      />
+      <img
+        src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9107.jpg"
+      />
+      <img
+        src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9113.jpg"
+      />
+      <img
+        src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9114.jpg"
+      />
+    </gallery>
+  </section>
+</section>
