@@ -15,23 +15,53 @@
     <section class="section section-level-1">
      <header class="section-header">Project 3 (Final Project)</header>
      <div class="section-content">
-      <p>Full blog post to come. For now please enjoy the demo!</p>
+      <p>I finished up my final project!</p>
 
-      <figure>
-       <video
-        src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9117.opt.mp4"
-        preload="metadata"
-        controls=""
-       ></video>
-      </figure>
+      <section class="section section-level-2">
+       <header class="section-header">Demo</header>
+       <div class="section-content">
+        <p>Here's a short demo of it in action:</p>
 
-      <p>Code:</p>
+        <figure>
+         <video
+          src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9117.opt.mp4"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
 
-      <p>Arduino</p>
+        <p>
+         As a recap, this project is a single capacitative sensor that is
+         special in these ways:
+        </p>
+        <ul>
+         <li>
+          The sensor is large -- so large that you can hit it without looking!
+          It's a piece of copper tape that runs down the length of one of the
+          walls of my room. I also attached a piece of aluminum foil to a
+          section of it, to make it even easier to press. Hypothetically, the
+          sensor can be a significant portion of the wall, if not all of it!
+         </li>
+         <li>
+          Pressing the sensor controls my computer, which is across the room.
+          Currently, a single press pauses the music, and a press-and-hold turns
+          on and off the lighting of my room. Hypothetically, this can be
+          extended to more home automation/IoT-like applications. The advantage
+          of this of common IoT applications is that no wireless connectivity or
+          internet connection is required.
+         </li>
+        </ul>
+       </div>
+      </section>
 
-      <details>
-       <summary>Code</summary>
-       <pre collapsed="" lang="ino">
+      <section class="section section-level-2">
+       <header class="section-header">Code</header>
+       <div class="section-content">
+        <p>Arduino</p>
+
+        <details>
+         <summary>Code</summary>
+         <pre collapsed="" lang="ino">
 void setup() {}
 
 #define N_LAST_SEEN 10
@@ -118,14 +148,14 @@ void loop() {
   analogWrite(A1, 1000);
   delay(2);
 }</pre
-       >
-      </details>
+         >
+        </details>
 
-      <p>Computer (TypeScript/Deno)</p>
+        <p>Computer (TypeScript/Deno)</p>
 
-      <details>
-       <summary>Code</summary>
-       <pre collapsed="" lang="ts">
+        <details>
+         <summary>Code</summary>
+         <pre collapsed="" lang="ts">
 import { readLines } from "https://deno.land/std@0.77.0/io/bufio.ts";
 
 let textEncoder = new TextEncoder();
@@ -178,33 +208,246 @@ async function run() {
 }
 
 run();</pre
-       >
-      </details>
+         >
+        </details>
+       </div>
+      </section>
 
-      <p>Progress pictures, presented with no context:</p>
+      <section class="section section-level-2">
+       <header class="section-header">Process</header>
+       <div class="section-content">
+        <p>
+         Here are the main changes made to the build since
+         <a href="2020-11-25-pcomp.html" target="_blank">the last blog post</a>:
+        </p>
 
-      <gallery>
-       <figure>
-        <img
-         src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9106.jpg"
-        />
-       </figure>
-       <figure>
-        <img
-         src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9107.jpg"
-        />
-       </figure>
-       <figure>
-        <img
-         src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9113.jpg"
-        />
-       </figure>
-       <figure>
-        <img
-         src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9114.jpg"
-        />
-       </figure>
-      </gallery>
+        <section class="section section-level-3">
+         <header class="section-header">Contact point changes</header>
+         <div class="section-content">
+          <p>
+           Previously, I had three copper lines running down the length of the
+           wall. The idea was that the user could either adjacent pair join
+           together, given them two "buttons" that could be pressed.
+          </p>
+          <p>
+           After a lot of testing over the past few weeks, I noticed that it was
+           incredibly hard to hit a particular particular wire, or even to hit
+           any of the three wires. Because of this, I removed all but one
+           "button", and made the tap target even larger by extending it with
+           aluminum foil. The result was a lot easier to use!
+          </p>
+         </div>
+        </section>
+
+        <section class="section section-level-3">
+         <header class="section-header">Building a capacitative switch</header>
+         <div class="section-content">
+          <p>
+           I changed the sensor from a resistive switch to a capacitative
+           switch. As Prof. Daniel Rozin advised, the conductivity of hands is
+           unreliable -- our skin isn't very conductive unless we've been
+           sweating a little. Where as capacitative sensing is fairly reliable.
+           Also, it doesn't require two wires, and pressing anywhere is fine!
+          </p>
+          <p>
+           I tried using
+           <a
+            href="https://playground.arduino.cc/Main/CapacitiveSensor/"
+            target="_blank"
+            >the Arduino CapacitativeSensor library</a
+           >. It didn't work, and I looked into why.
+          </p>
+          <p>
+           My main problem was more or less self-inflicted. The capacitative
+           circuit required a 10MΩ resistor, and I didn't have one. So I first
+           tried to fix this by chaining together all the 10kΩ resistors that I
+           had:
+          </p>
+
+          <gallery>
+           <figure>
+            <figcaption>
+             <p>Finally used pliers for the first time!</p>
+            </figcaption>
+            <img
+             src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9114.jpg"
+            />
+           </figure>
+           <figure>
+            <figcaption><p>Looks quite nice, actually?</p></figcaption>
+            <img
+             src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9113.jpg"
+            />
+           </figure>
+          </gallery>
+          <p>
+           Alas, the combined 100kΩ resistance was not enough. The time it takes
+           a capacitor to charge to some significant degree is defined by τ =
+           RC. Wikipedia says human body capacitance is "typically in the tens
+           to low hundreds of picofarads".
+          </p>
+          <p>τ = RC = 100kΩ × 100pF = 10μs, or 1/100000 of a second</p>
+          <p>
+           The code I wrote ran much fewer than 100000 loops per second, which
+           meant that any delays in voltage change would have appear
+           instantanous to the code. A larger resistor would be required.
+          </p>
+          <p>
+           I confirmed this in practice as well, by logging the voltage reading
+           at every loop as I turned the voltage source on and off. The signal
+           was very noisy, but there was generally no indication that it was
+           taking time to rise and fall.
+          </p>
+          <p>
+           So I ended up making my own resistor! I tried a few strategies before
+           finding one that worked reliably.
+          </p>
+          <ul>
+           <li>
+            I first tried using a force-sensing resistor, but it was too hard to
+            press it so that it would have the right resistance.
+           </li>
+           <li>
+            I then tried to make resistor our of pencil lead, which actually
+            worked quite well when testing with a multimeter. But it was hard to
+            attach to the circuit, as pencil lead rubs off very easily and it
+            was hard to maintain a constant connection.
+           </li>
+           <li>
+            I tried using a binder clip to fasten the pencil lead resistor to
+            the wire, and accidentally discovered, to my surprise, that the
+            resistance of the binder clip itself was perfect!
+           </li>
+          </ul>
+
+          <figure>
+           <figcaption><p>Pencil lead resistor.</p></figcaption>
+           <img
+            class="small"
+            src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9106.jpg"
+           />
+          </figure>
+          <figure>
+           <figcaption><p>Binder clip resistor.</p></figcaption>
+           <img
+            src="../files/2020-09-pcomp/week-13/1_project_3/process/IMG_9107.jpg"
+           />
+          </figure>
+          <p>
+           Doing all of this took so much time. Here's a snapshot of the tabs I
+           ended up with:
+          </p>
+
+          <figure>
+           <img
+            src="../files/2020-09-pcomp/week-13/1_project_3/process/Screen Shot 2020-12-09 at 5.51.04 AM.png"
+           />
+          </figure>
+          <p>
+           The true moral of the story is to order parts so that they arrive on
+           time.
+          </p>
+         </div>
+        </section>
+
+        <section class="section section-level-3">
+         <header class="section-header">
+          Writing capacitance-sensing code
+         </header>
+         <div class="section-content">
+          <p>
+           I never ended up figuring out if
+           <a
+            href="https://playground.arduino.cc/Main/CapacitiveSensor/"
+            target="_blank"
+            >CapacitativeSensor</a
+           >
+           worked; I ended up writing my own code based on the code I used to
+           log the voltage.
+          </p>
+          <p>
+           The code quickly alternates the input voltage between 3V and 0V, and
+           takes the average voltage reading for the next few loops. If a
+           capacitor (me) is attached to the circuit, then voltage reading would
+           be closer to the middle rather than the edges, as the capacitor would
+           still be charging or discharging.
+          </p>
+          <p>
+           The sensing code wasn't perfect, and still registers phantom presses
+           sometimes. Maybe I'll try using the CapacitiveSensor library at some
+           point.
+          </p>
+         </div>
+        </section>
+       </div>
+      </section>
+
+      <section class="section section-level-2">
+       <header class="section-header">Feedback</header>
+       <div class="section-content">
+        <p>Here's the feedback I received in class:</p>
+        <ul>
+         <li>
+          <em
+           >This project can be made easier to deploy. It can be made to better
+           blend in better with the decor, or it can be made to be part of the
+           decor.</em
+          >
+         </li>
+         <li>
+          <em
+           >Normally we are "taken hostage" by how we interact with the
+           computer, using only a mouse and computer, but this takes is in a new
+           direction, letting us interact in a way that is more integrated into
+           our lives.</em
+          >
+         </li>
+        </ul>
+        <p>
+         A few people expressed that this is something they'd like to use
+         themselves, commenting on the practicality:
+        </p>
+        <ul>
+         <li>
+          <em>"This demo is amazing. I need this -please!!"</em>
+         </li>
+         <li>
+          <em
+           >"Want to set one up for me? So I don’t have to get up? Could really
+           use this."</em
+          >
+         </li>
+         <li>
+          <em
+           >"YES I want one as well. How much is it????? Let's get funding for
+           it I’ll take two please, thank you."</em
+          >
+         </li>
+         <li>
+          <em>"I love this! I also want to pre-order."</em>
+         </li>
+        </ul>
+        <p>
+         Someone commented on the nature of the projects I've made for class so
+         far:
+        </p>
+        <ul>
+         <li>
+          <em
+           >"The idea is super unique, I could see you are really into this
+           direction of combining 2 different things (coding and daily
+           life)"</em
+          >
+         </li>
+        </ul>
+        <p>
+         Thank you for the support friends, I'll let you know when this is live
+         on Kickstarter 🙃 (jk) (unless…?)
+        </p>
+
+        <pre lang="txt"></pre>
+       </div>
+      </section>
      </div>
     </section>
    </div>

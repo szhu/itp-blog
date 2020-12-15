@@ -15,10 +15,18 @@ function undent(s) {
 }
 
 function markdownToHtml(markdown) {
+  // Prettier strips leading whitespace, but we don't have a way to show
+  // indented list items without leading whitespace. So we invent one: we use
+  // the length of the list marker dash to indicate nesting. Below, we Replace
+  // "--" with an indented "  -". We are careful to not only do it if it follows
+  // a blank line, to make sure that "--" inside a paragraph does not get
+  // interpreted as a list marker.
   markdown = markdown.replace(
-    /^(-+)([^-])/gm,
-    (_match, dashes, rest) => "  ".repeat(dashes.length - 1) + "-" + rest
+    /^(\s*\n\s*)(-+)([^-])/gm,
+    (_match, white, dashes, rest) =>
+      white + "  ".repeat(dashes.length - 1) + "-" + rest
   );
+  markdown = markdown.replace(/\\\n\n/g, "\\\n");
   let parsed = reader.parse(markdown);
   return writer.render(parsed);
 }
