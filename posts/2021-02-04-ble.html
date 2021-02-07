@@ -1,0 +1,171 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>BLE Week 1</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">BLE Week 1</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">BLE discovery</header>
+     <div class="section-content">
+      <p>Scan available services at home</p>
+      <ul>
+       <li>
+        Scan available BLE services at home, find out connectable services and
+        services from known devices
+       </li>
+      </ul>
+      <ul>
+       <li>
+        Take screenshots on your phone and post them on your blog, together with
+        your notes
+       </li>
+      </ul>
+      <figure style="float: right;">
+       <figcaption><p>List of scanned devices.</p></figcaption>
+       <img
+        src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/xuKngm6if-hjg8bS9gwNJ-Se.png"
+        width="562"
+        style=""
+        class="small"
+       />
+      </figure>
+      <p>
+       Here is the list of scanned devices. Most of the Unnamed devices did not
+       connect after tapping Unnamed.
+      </p>
+      <hr />
+      <figure style="float: right;">
+       <img
+        src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/0arVdW9F-OkK1H0qmShdVv0e.png"
+        width="562"
+        style=""
+        class="small"
+       />
+      </figure>
+      <p>This is my laptop.</p>
+      <p><b>Services:</b></p>
+      <p>
+       <code>D0611E78-BBB4-4591-A5F8-487910AE4366</code><br />Apple Continuity
+       Service
+      </p>
+      <p><code>9FA480E0-4967-4542-9390-D343DC5D04AE</code><br />???</p>
+      <hr />
+      <figure style="float: right;">
+       <img
+        src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/380H-4NDXoEibSyYMLEJ8DzD.png"
+        width="562"
+        style=""
+        class="small"
+       />
+      </figure>
+      <p>This is my old phone, which I use as a webcam.</p>
+      <p><b>Services:</b></p>
+      <p>
+       <code>D0611E78-BBB4-4591-A5F8-487910AE4366</code><br />Apple Continuity
+       Service
+      </p>
+      <p><code>9FA480E0-4967-4542-9390-D343DC5D04AE</code><br />???</p>
+      <p>
+       <code>180F</code><br />Battery Service<br />For getting the battery level
+       of the device.
+      </p>
+      <p>
+       <code>1805</code><br />Current Time Service<br />For getting the current
+       time. It has two characteristics, Current Time, which seems to have the
+       current UNIX time with millisecond accuracy, and Local Time Information,
+       which seems to contain the time zone, since it is a value that never
+       changes: <code>0xE000</code>.
+      </p>
+      <p><code>180A</code><br />Device Information</p>
+      <hr />
+      <figure style="float: right;">
+       <img
+        src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/meYQxtMZsJ9lpywDg-FXW4_B.png"
+        width="562"
+        style=""
+        class="small"
+       />
+      </figure>
+      <p>Not my device! Maybe a neighbor's?</p>
+      <p><b>Services:</b></p>
+      <p><code>FEBE</code><br />???</p>
+      <hr />
+     </div>
+    </section>
+    <section class="section section-level-1">
+     <header class="section-header">Product discovery</header>
+     <div class="section-content">
+      <p>
+       Choose three products that are using wireless communication protocols
+       (BLE, Bluetooth Classic, Wifi, NFC, etc)
+      </p>
+      <ul>
+       <li>List out your assumption of what protocols they are using</li>
+      </ul>
+      <ul>
+       <li>
+        Read their product description and compare them with your assumptions
+       </li>
+      </ul>
+      <ul>
+       <li>Post your discovery on your blog</li>
+      </ul>
+      <p>Devices:</p>
+      <ul>
+       <li>AirPods</li>
+       <ul>
+        <li>My assumption: Bluetooth Classic.</li>
+        <li>
+         Actual: <b>BLE + Bluetooth Classic</b>, probably? "I think AirPods are
+         a Bluetooth 4.1-compatible device: Apple has implemented Bluetooth LE
+         support in the W1 chip to streamline device discovery and pairing." [<a
+          href="https://medium.com/@cbowns/airpods-and-improving-bluetooth-both-sides-of-a-handshake-6da305dd55c9#:~:text=Pairing%20%E2%9C%A8%20Magic%20%E2%9C%A8,streamline%20device%20discovery%20and%20pairing.&amp;text=For%20audio%20streaming%2C%20the%20AirPods,device%20using%20an%20AAC%20codec."
+          target="_blank"
+          >source</a
+         >]
+        </li>
+       </ul>
+      </ul>
+      <ul>
+       <li>Apple Pay</li>
+       <ul>
+        <li>My assumption: NFC</li>
+        <li>
+         Actual: <b>NFC</b>. Apple Pay uses Near Field Communication (NFC)
+         technology between your device and the payment terminal. [<a
+          href="https://support.apple.com/en-us/HT203027"
+          target="_blank"
+          >source</a
+         >]
+        </li>
+       </ul>
+      </ul>
+      <ul>
+       <li>Apple Airdrop</li>
+       <ul>
+        <li>My assumption: Bluetooth Classic + Wifi</li>
+        <li>
+         Actual: <b>BLE + WiFi</b>. "AirDrop in OS X Yosemite now uses the same
+         technology as AirDrop on iOS. Discovery is handled via Bluetooth LE for
+         minimal battery consumption" [<a
+          href="https://www.iphonehacks.com/2014/06/ios-8-and-os-x-yosemite-airdrop.html"
+          target="_blank"
+          >source</a
+         >]
+        </li>
+       </ul>
+      </ul>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
