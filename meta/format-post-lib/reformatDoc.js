@@ -137,6 +137,13 @@ export default function reformatDoc(document, root) {
 
     let figcaption = document.createElement("figcaption");
 
+    let float = media.style.float;
+    if (float) {
+      media.style.float = "";
+      media.classList.add("small");
+      fig.style.float = float;
+    }
+
     let caption = media.getAttribute("caption");
     if (caption) {
       media.removeAttribute("caption");

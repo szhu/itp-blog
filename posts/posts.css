@@ -106,6 +106,10 @@ pre {
   border-radius: var(--border-radius);
 }
 
+hr {
+  clear: both;
+}
+
 /** MEDIA **/
 
 figure {
@@ -146,7 +150,8 @@ video {
 
 img.small,
 video.small {
-  width: 300px;
+  max-width: 300px;
+  max-height: 50vh;
 }
 
 figcaption + img {
