@@ -2,5 +2,6 @@
 
 deno run \
   --allow-read \
+  --allow-net \
   "meta/format-post-lib/main.ts" \
   "$@"

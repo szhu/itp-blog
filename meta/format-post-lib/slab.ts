@@ -1,8 +1,21 @@
 import { JSDOM } from "https://jspm.dev/jsdom@16.4.0";
-import prettify from "./prettify.ts";
+import prettify from "./prettier.ts";
+import shallowEqualObjects from "https://raw.githubusercontent.com/moroshko/shallow-equal/master/src/objects.js";
 
-{
-  let r = await fetch("https://___.slab.com/graphql", {
+if (import.meta.main) {
+  let document = await postDocumentFromSlab(Deno.args[0], Deno.args[1]);
+  console.log(prettify(document.documentElement.outerHTML));
+}
+
+export async function postDocumentFromSlab(subdomain: string, id: string) {
+  let ops = await opsFromSlab(subdomain, id);
+  // console.log(JSON.stringify(ops, undefined, 2))
+  // console.log(blocksToMd(opsToBlocks(ops)))
+  return blocksToDocument(opsToBlocks(ops));
+}
+
+async function opsFromSlab(subdomain: string, id: string) {
+  let r = await fetch(`https://${subdomain}.slab.com/graphql`, {
     headers: {
       "content-type": "application/json",
     },
@@ -10,7 +23,7 @@ import prettify from "./prettify.ts";
       {
         operationName: "publicPostOrTopic",
         variables: {
-          id: "____",
+          id: id,
         },
         query: `
         query publicPostOrTopic($id: ID!) {
@@ -76,10 +89,7 @@ import prettify from "./prettify.ts";
   let json = await r.json();
   let content = json[0].payload.data.post.content;
   let ops = JSON.parse(content) as Op[];
-
-  // console.log(JSON.stringify(ops, undefined, 2))
-  // console.log(blocksToMd(opsToBlocks(ops)))
-  console.log(blocksToHtml(opsToBlocks(ops)));
+  return ops;
 }
 
 interface Attributes {
@@ -90,6 +100,7 @@ interface Attributes {
   "code-block"?: "plain";
   link?: string;
   list?: "bullet" | "number";
+  soft?: true;
 }
 
 interface Op {
@@ -104,13 +115,74 @@ interface Block {
 
 function newBlock(): Block {
   return {
+    attributes: undefined,
     ops: [],
   };
 }
 
+class BlockBuilder {
+  blocks: Block[] = [newBlock()];
+
+  get(index: number) {
+    if (index < 0) {
+      index = this.blocks.length + index;
+    }
+
+    return this.blocks[index];
+  }
+
+  current() {
+    return this.get(-1)!;
+  }
+
+  previous() {
+    return this.get(-2);
+  }
+
+  mergeLastTwo(opsToInsert: Op[]) {
+    let current = this.blocks.pop()!;
+    let previous = this.blocks.pop();
+    if (!previous) {
+      this.blocks.push(current);
+      return;
+    }
+
+    this.blocks.push({
+      attributes: previous.attributes,
+      ops: [...previous.ops, ...opsToInsert, ...current.ops],
+    });
+    this.startNewBlock();
+  }
+
+  doLastTwoHaveEqualAttributes() {
+    let current = this.current();
+    let previous = this.previous();
+    if (!previous) return false;
+
+    return shallowEqualObjects(current.attributes, previous.attributes);
+  }
+
+  startNewBlock() {
+    if (this.current().ops.length === 0) return;
+
+    this.blocks.push(newBlock());
+  }
+
+  trimmed() {
+    let blocks = [...this.blocks];
+    if (this.current().ops.length === 0) {
+      blocks.pop();
+    }
+    return blocks;
+  }
+}
+
 function opsToBlocks(ops: Op[]) {
-  let blocks: Block[] = [];
-  let block: Block = newBlock();
+  let bb = new BlockBuilder();
+  // let blocks: Block[] = [];
+  // let block: Block = newBlock();
+
+  console.error(ops);
 
   let newOps: Op[] = [];
   for (let op of ops) {
@@ -139,30 +211,54 @@ function opsToBlocks(ops: Op[]) {
   }
 
   for (let op of newOps) {
+    console.error(op);
+
     if (typeof op.insert !== "string") {
-      blocks.push(block);
-      block = newBlock();
-      block.ops.push(op);
-      blocks.push(block);
-      block = newBlock();
+      bb.startNewBlock();
+      // if (block.ops.length > 0) blocks.push(block);
+      // block = newBlock();
+      bb.current().ops.push(op);
+      // block.ops.push(op);
+      bb.startNewBlock();
+      // if (block.ops.length > 0) blocks.push(block);
+      // block = newBlock();
     } else if (op.insert === "\n") {
-      block.attributes = op.attributes;
-      let lastBlock = blocks[blocks.length - 1];
-      if (
-        block.attributes?.["code-block"] &&
-        block.attributes?.["code-block"] ===
-          lastBlock?.attributes?.["code-block"]
+      console.error("NEW BLOCK!!!!");
+      console.error(op);
+
+      bb.current().attributes = op.attributes;
+      // block.attributes = op.attributes;
+      // let lastBlock = blocks[blocks.length - 1];
+      if (op.attributes?.soft) {
+        bb.mergeLastTwo([{ insert: "\n" }]);
+        // lastBlock.ops = [...lastBlock.ops, { insert: "\n" }, ...block.ops];
+      } else if (
+        bb.current().attributes?.["code-block"] &&
+        bb.doLastTwoHaveEqualAttributes()
+        // block.attributes?.["code-block"] &&
+        // block.attributes?.["code-block"] ===
+        //   lastBlock?.attributes?.["code-block"]
       ) {
-        lastBlock.ops = [...lastBlock.ops, { insert: "\n" }, ...block.ops];
+        bb.mergeLastTwo([{ insert: "\n" }]);
+        // lastBlock.ops = [...lastBlock.ops, { insert: "\n" }, ...block.ops];
       } else {
-        blocks.push(block);
+        bb.startNewBlock();
+        // if (block.ops.length > 0) blocks.push(block);
       }
-      block = newBlock();
+      // block = newBlock();
     } else {
-      block.ops.push(op);
+      if (op.attributes || op.insert) {
+        bb.current().ops.push(op);
+      }
+      // block.ops.push(op);
     }
   }
 
+  // if (block.ops.length > 0) blocks.push(block);
+
+  let blocks = bb.trimmed();
+
+  console.error("---------------------");
   console.error(blocks);
 
   return blocks;
@@ -202,7 +298,7 @@ function blocksToMd(blocks: Block[]) {
 
 // function inlineOpsToHtml()
 
-function blocksToHtml(blocks: Block[]) {
+function blocksToDocument(blocks: Block[]) {
   let dom = new JSDOM();
   let document = dom.window.document;
 
@@ -276,5 +372,13 @@ function blocksToHtml(blocks: Block[]) {
     }
   }
 
-  console.log(prettify(document.documentElement.outerHTML));
+  document.head.innerHTML = `
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer src="posts.js"></script>
+  <script dev-only type="module" src="posts-dev.js"></script>
+`;
+
+  return document;
 }
