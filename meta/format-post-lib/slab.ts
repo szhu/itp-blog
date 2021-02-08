@@ -2,17 +2,22 @@ import { JSDOM } from "https://jspm.dev/jsdom@16.4.0";
 import prettify from "./prettier.ts";
 import shallowEqualObjects from "https://raw.githubusercontent.com/moroshko/shallow-equal/master/src/objects.js";
 import JSON5 from "https://deno.land/x/json5@v1.0.0/mod.ts";
+import { join } from "https://deno.land/std@0.86.0/path/mod.ts";
 
 if (import.meta.main) {
-  let document = await postDocumentFromSlab(Deno.args[0], Deno.args[1]);
+  let document = await postDocumentFromSlab(Deno.args[0], Deno.args[1], ".");
   console.log(prettify(document.documentElement.outerHTML));
 }
 
-export async function postDocumentFromSlab(subdomain: string, id: string) {
+export async function postDocumentFromSlab(
+  subdomain: string,
+  id: string,
+  pathPrefix: string
+) {
   let ops = await opsFromSlab(subdomain, id);
   // console.log(JSON.stringify(ops, undefined, 2))
   // console.log(blocksToMd(opsToBlocks(ops)))
-  return blocksToDocument(opsToBlocks(ops));
+  return blocksToDocument(opsToBlocks(ops), pathPrefix);
 }
 
 async function opsFromSlab(subdomain: string, id: string) {
@@ -295,7 +300,9 @@ function opsToFragment(ops: Op[], document: any) {
     let el = document.createTextNode(op.insert);
     if (op.attributes?.link) {
       let a = document.createElement("a");
-      a.href = op.attributes.link;
+      a.href = op.attributes.link
+        .replace(/https:\/\/\//, "/")
+        .replace(/https:\/\/\./, ".");
       a.append(el);
       el = a;
     }
@@ -319,7 +326,7 @@ function opsToFragment(ops: Op[], document: any) {
   return fragment;
 }
 
-function blocksToDocument(blocks: Block[]) {
+function blocksToDocument(blocks: Block[], pathPrefix: string) {
   let dom = new JSDOM();
   let document = dom.window.document;
 
@@ -393,7 +400,10 @@ function blocksToDocument(blocks: Block[]) {
       }
 
       while (currentSectionLevel > targetParentSectionLevel) {
-        currentSection = currentSection.parentElement;
+        // This allows the top-level headers to be either h1 or h2.
+        if (currentSection.parentElement.tagName === "SECTION") {
+          currentSection = currentSection.parentElement;
+        }
         currentSectionLevel--;
       }
 
@@ -461,9 +471,9 @@ function blocksToDocument(blocks: Block[]) {
   document.head.innerHTML = `
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no" />
-    <link rel="stylesheet" href="posts.css" />
-    <script defer src="posts.js"></script>
-    <script dev-only type="module" src="posts-dev.js"></script>
+    <link rel="stylesheet" href="${join(pathPrefix, "posts.css")}" />
+    <script defer src="${join(pathPrefix, "posts.js")}"></script>
+
   `;
 
   return document;
