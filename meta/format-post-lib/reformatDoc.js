@@ -141,7 +141,8 @@ export default function reformatDoc(document, root) {
     if (float) {
       media.style.float = "";
       media.classList.add("small");
-      fig.style.float = float;
+      fig.classList.add("float");
+      fig.classList.add(`float-${float}`);
     }
 
     let caption = media.getAttribute("caption");

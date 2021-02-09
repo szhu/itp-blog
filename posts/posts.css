@@ -13,7 +13,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-light-bg: #333;
+    --color-light-bg: #222;
     --color-light-fg: white;
     --color-dark-bg: black;
     --color-dark-fg: white;
@@ -118,7 +118,9 @@ pre {
 }
 
 hr {
-  clear: both;
+  border: none;
+  border-top: thin dashed var(--color-light-fg);
+  background: none;
 }
 
 /** MEDIA **/
@@ -132,6 +134,30 @@ figure {
   background: var(--color-dark-bg);
   padding: 10px;
   text-align: center;
+}
+
+@media (min-width: 550px) {
+  figure.float {
+    margin-bottom: 0.5rem;
+  }
+  figure.float-left {
+    float: right;
+    margin-right: 2vw;
+  }
+  figure.float-right {
+    float: right;
+    margin-left: 2vw;
+  }
+}
+
+section:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+hr {
+  clear: both;
 }
 
 gallery {
@@ -157,11 +183,13 @@ video {
   max-width: 100%;
   max-height: 100%;
   border-radius: var(--border-radius);
+  box-shadow: 0px 0px 5px #ffffff88;
 }
 
 img.small,
 video.small {
-  max-width: 300px;
+  width: 300px;
+  max-width: 50vw;
   max-height: 50vh;
 }
 
