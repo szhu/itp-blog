@@ -7,6 +7,17 @@
   --color-light-fg: black;
   --color-dark-bg: #222;
   --color-dark-fg: white;
+
+  color: var(--color-light-fg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-light-bg: #333;
+    --color-light-fg: white;
+    --color-dark-bg: black;
+    --color-dark-fg: white;
+  }
 }
 
 @media (max-width: 800px) {
