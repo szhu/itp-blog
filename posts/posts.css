@@ -79,12 +79,25 @@ body {
 
 blockquote,
 dl,
-ol,
 p,
 pre,
-table,
-ul {
-  margin: 1em 0;
+table {
+  margin: 1rem 0;
+}
+
+p:first-child {
+  margin-top: 0;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+header,
+ol,
+ul,
+li {
+  margin: 0.5rem 0;
 }
 
 blockquote {
@@ -205,9 +218,8 @@ figcaption + img {
 
 .section {
   margin: 12px 0;
-  padding-top: 8px;
   border-left: 5px solid var(--section-color);
-  scroll-margin-top: calc(var(--section-level) * (1.25em + 0.1em));
+  scroll-margin-top: calc(var(--section-level) * (1.25 * 1.5rem));
 }
 
 .section-level-0 {

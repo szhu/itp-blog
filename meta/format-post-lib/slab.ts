@@ -426,7 +426,7 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
       // );
 
       // Level 0
-      if (!currentList || targetListLevel === 0) {
+      if (!currentList) {
         // console.error("> level 0");
 
         currentList = currentSection;
