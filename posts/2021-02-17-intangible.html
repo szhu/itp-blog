@@ -1,0 +1,137 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>Intangible Interactions Week 2</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">Intangible Interactions Week 2</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Project 1, Part 2</header>
+     <div class="section-content">
+      <section class="section section-level-2">
+       <header class="section-header">Credits</header>
+       <div class="section-content">
+        <p>
+         This project was created by
+         <a href="https://halr.github.io/" target="_blank">Hal Rodriguez</a> and
+         Sean Zhu, based off a previous project by Hal, for the class Intangible
+         Interactions. We collaborated virtually on the idea and code. Hal built
+         the physical device, and Sean wrote this blog post.
+        </p>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">The Idea</header>
+       <div class="section-content">
+        <p>
+         In this project, we combine an intangible sensor with a previous
+         project of Hal's, the Color Mixing project.
+        </p>
+        <p>
+         <b>Prior art.</b> In his Project 1 Part 1 write-up, Hal describes the
+         Color Mixing project, an interactive exhibit that allows young users to
+         explore how primary light colors mix together. The project's main
+         drawback was that users did not understand that that they could
+         interact with the system by bring their hands close to the capacitive
+         sensors without touching them.
+        </p>
+        <p>
+         <b>Modifications.</b> In our Project 1, we swap out the capacitive
+         sensor with a longer-range distance sensor and add cues that allow
+         users to more easily understand the proper mode of interaction so that
+         they can mix colors effectively. The sensor we're using is the
+         <a
+          href="https://learn.adafruit.com/adafruit-vl6180x-time-of-flight-micro-lidar-distance-sensor-breakout/overview"
+          target="_blank"
+          >Adafruit VL6180X Time of Flight Micro-LIDAR Distance Sensor
+          Breakout</a
+         >, which uses a light beam to sense objects perpendicular to the sensor
+         between 5mm and 200mm away.
+        </p>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">The Build</header>
+       <div class="section-content">
+        <figure>
+         <video
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/attachments/vXhrFyuADRP_yE2PZWhnVgfu.mp4"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+        <p>
+         The build was fairly straightforward. We had a STEMMA (?) connector
+         that could directly connect the sensor board to the main board, with no
+         soldering or breadboard needed. The main board also included its own
+         LEDs. But a few things needed to be adjusted.
+        </p>
+        <p>
+         <b>Using a single sensor.</b> The original Color Mixing project had 3
+         capacitive sensors, one for each primary color, and was designed for a
+         different person to operate each sensor, simultaneously. Not only do we
+         have one sensor to work with, but the pandemic has made multi-person
+         interactions impractical. So for demonstration purposes, we decided to
+         build this project with only one variable primary color, and have the
+         other colors be of fixed intensities, as if the sensors were held in
+         place by someone else.
+        </p>
+        <p>
+         <b>Color choice.</b> We originally decided to leave the blue value
+         variable, set the red value to 100%, and set the green value to 0%, so
+         that the overall color would transition from red to violet as the
+         user's hand moved closer to or further from the sensor. In practice,
+         this color change was hard to perceive in person, and even harder to
+         perceive over our Zoom video call, as the camera kept adjusting the
+         color balance in response to the light's color. In the future, we can
+         change the color combination such that the color would change from
+         green to yellow.
+        </p>
+        <p>
+         <b>Error handling.</b> Another issue we ran into was in relation to
+         error codes. While the sensor would usually emit proper range readings,
+         sometimes it would emit error codes. Sometimes it emitted
+         <code>ERROR_RANGEIGNORE</code> (sensor reading outside of the allowed
+         range), which was to be expected with users' hands moving every which
+         way, but it also emitted some other errors, including
+         <code>ERROR_ECEFAIL</code> and <code>ERROR_SNR</code> (too much noise).
+         We discovered that the sensor was just giving fairly low-level
+         readings, and it was safe to ignore the errors.
+        </p>
+        <p>
+         <b>Adding cues and feedback.</b> The purpose of using the LiDAR sensor
+         instead of the capacitance sensor so that the system would start to
+         sense the user's hand even when they were fairly far away, but that
+         should not be a substitute for clear messaging and affordances that
+         show the user how the system should be interacted with before the user
+         even begins to interact with the system. We decided to add a ring of
+         LEDs that clearly indicates where the hand should be placed, oriented
+         the output "color meter" to be in the same direction as the direction
+         of the users' hands, and added sound feedback to make the response to
+         the user more explicit. Some other ideas that we considered, that could
+         be helpful in future iterations, are having a printed sign in front of
+         or below the system with hand-placement guidelines, and a laser that
+         illuminates the proper axis of motion for the user's hand.
+        </p>
+        <figure>
+         <video
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/attachments/uALXf2NIDT2uK4M3Gqp2z84a.mov"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
