@@ -121,9 +121,15 @@ interface Attributes {
   width?: number;
 }
 
+interface Attachment {
+  name: string;
+  size: number;
+  source: string;
+}
+
 interface Op {
   attributes?: Attributes;
-  insert: string | { image?: string; hr?: true };
+  insert: string | { image?: string; hr?: true; attachment?: Attachment[] };
 }
 
 interface Block {
@@ -363,6 +369,13 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
       if (block.ops[0].insert.hr) {
         let el = document.createElement("hr");
         currentSection.append(el);
+      }
+      if (block.ops[0].insert.attachment) {
+        for (let attachment of block.ops[0].insert.attachment) {
+          let el = document.createElement("video");
+          el.src = attachment.source;
+          currentSection.append(el);
+        }
       }
       continue;
     }
