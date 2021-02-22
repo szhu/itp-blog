@@ -118,6 +118,7 @@ interface Attributes {
   // Media attributes
   caption?: string;
   float?: "left" | "right";
+  span?: "half";
   width?: number;
 }
 
@@ -345,13 +346,22 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
   for (let block of blocks) {
     if (block.ops.length === 1 && typeof block.ops[0].insert === "object") {
       if (block.ops[0].insert.image) {
+        let src = block.ops[0].insert.image;
+        let attributes = block.ops[0].attributes ?? {};
+
         let el = document.createElement("img");
-        el.src = block.ops[0].insert.image;
-        el.width = block.ops[0].attributes?.width;
-        if (block.ops[0].attributes?.float) {
-          el.style.float = block.ops[0].attributes?.float;
+        el.src = src;
+
+        if (attributes.width) {
+          el.width = attributes.width;
         }
-        let caption = block.ops[0].attributes?.caption;
+        if (attributes.float) {
+          el.style.float = attributes.float;
+        }
+        if (attributes.span === "half") {
+          el.classList.add("small");
+        }
+        let caption = attributes.caption;
         if (caption) {
           let m = caption.match(/(\{.*\})\s*(.*)/);
           if (m) {
