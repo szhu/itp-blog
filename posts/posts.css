@@ -226,6 +226,12 @@ figcaption + img {
   margin-right: var(--padding-h);
 }
 
+.section-level-0:before {
+  content: "";
+  display: block;
+  height: 0.1em;
+}
+
 .section-header {
   cursor: pointer;
   font-weight: 600;
