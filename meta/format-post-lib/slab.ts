@@ -296,10 +296,10 @@ function blocksToMd(blocks: Block[]) {
   return md;
 }
 
-function opsToFragment(ops: Op[], document: any) {
+function opsToFragment(ops: Op[], document: any, tagName: string) {
   let fragment = document.createDocumentFragment();
   for (let op of ops) {
-    if (op.insert === "\n") {
+    if (tagName !== "pre" && op.insert === "\n") {
       fragment.append(document.createElement("br"));
       continue;
     }
@@ -391,7 +391,8 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
     }
 
     let contentsAsText = block.ops.map((op) => op.insert).join("");
-    let contentsAsFragment = opsToFragment(block.ops, document);
+    let preContentsAsFragment = opsToFragment(block.ops, document, "pre");
+    let contentsAsFragment = opsToFragment(block.ops, document, "div");
 
     if (first) {
       first = false;
@@ -411,7 +412,8 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
 
     if (attributes["code-block"]) {
       let el = document.createElement("pre");
-      el.append(contentsAsFragment);
+      el.setAttribute("collapsed", "");
+      el.append(preContentsAsFragment);
       currentSection.append(el);
     } else if (attributes.header) {
       let targetParentSectionLevel = attributes.header - 1;
