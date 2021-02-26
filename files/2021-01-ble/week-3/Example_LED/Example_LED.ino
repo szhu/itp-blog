@@ -63,6 +63,16 @@ void setup() {
   Serial.println("BLE LED Peripheral");
 }
 
+int value = 0;
+
+void updateValue() {
+  if (switchCharacteristic.written()) {
+    value = switchCharacteristic.value();
+    Serial.print("New value: ");
+    Serial.println(value);
+  }
+}
+
 void loop() {
   // listen for BLE peripherals to connect:
   BLEDevice central = BLE.central();
@@ -75,17 +85,13 @@ void loop() {
 
     // while the central is still connected to peripheral:
     while (central.connected()) {
-      // if the remote device wrote to the characteristic,
-      // use the value to control the LED:
-      if (switchCharacteristic.written()) {
-        if (switchCharacteristic.value()) { // any value other than 0
-          Serial.println("LED on");
-          digitalWrite(ledPin, HIGH); // will turn the LED on
-        } else {                      // a 0 value
-          Serial.println(F("LED off"));
-          digitalWrite(ledPin, LOW); // will turn the LED off
-        }
-      }
+      updateValue();
+      delay(value * 100);
+      analogWrite(A0, 255);
+
+      updateValue();
+      delay(value * 100);
+      analogWrite(A0, 0);
     }
 
     // when the central disconnects, print it out:

@@ -2,6 +2,7 @@
 const serviceUuid = "19b10000-e8f2-537e-4f6c-d104768a1214";
 let myCharacteristic;
 let input;
+let slider;
 let myBLE;
 
 function setup() {
@@ -11,12 +12,14 @@ function setup() {
   const connectButton = createButton("Connect");
   connectButton.mousePressed(connectToBle);
 
-  // Create a text input
-  input = createInput();
+  createButton("Strobe speed:");
+  createButton("0ms");
 
-  // Create a 'Write' button
-  const writeButton = createButton("Write");
-  writeButton.mousePressed(writeToBle);
+  // Create slider
+  slider = createSlider(0, 10, 5);
+  slider.input(writeToBle);
+
+  createButton("1000ms");
 }
 
 function connectToBle() {
@@ -32,7 +35,7 @@ function gotCharacteristics(error, characteristics) {
 }
 
 function writeToBle() {
-  const inputValue = input.value();
+  const inputValue = slider.value();
   // Write the value of the input to the myCharacteristic
   myBLE.write(myCharacteristic, inputValue);
 }
