@@ -2,6 +2,19 @@ void setup() {}
 
 #define N_LAST_SEEN 10
 
+class RunningAvg {
+public:
+  int total = 0;
+  int n = 0;
+
+  int add(int value) {
+    total += value;
+    n++;
+  }
+
+  int getAvg() { return total / n; }
+};
+
 class RollingWindow {
 public:
   int lastValues[N_LAST_SEEN] = {
@@ -19,6 +32,14 @@ public:
     j %= N_LAST_SEEN;
   }
 
+  int getAvg() {
+    RunningAvg runningAvg = RunningAvg();
+    for (int i = 0; i < N_LAST_SEEN; i++) {
+      runningAvg.add(lastValues[i]);
+    }
+    return runningAvg.getAvg();
+  }
+
   int last2() {
     return (lastValues[(j - 1 + N_LAST_SEEN) % N_LAST_SEEN] +
             lastValues[(j - 2 + N_LAST_SEEN) % N_LAST_SEEN]) /
@@ -28,19 +49,6 @@ public:
 
 RollingWindow a0RollingWindow = RollingWindow();
 RollingWindow a2RollingWindow = RollingWindow();
-
-class RunningAvg {
-public:
-  int total = 0;
-  int n = 0;
-
-  int add(int value) {
-    total += value;
-    n++;
-  }
-
-  int getAvg() { return total / n; }
-};
 
 int sinceLastA0Press = 0;
 int sinceLastA2Press = 0;
@@ -58,12 +66,13 @@ void loop() {
   int a0Reading = a0Avg.getAvg();
   a0RollingWindow.add(a0Reading);
 
-  int a0Base = 150;
+  // int a0Base = 150;
+  int a0Base = a0RollingWindow.getAvg();
   int a0Diff = a0RollingWindow.last2() - a0Base;
-  if (a0Diff > 45) {
+  if (a0Diff > 15) {
     Serial.println(a0Diff);
   }
-  int a0Pressed = a0Diff > 60;
+  int a0Pressed = a0Diff > 25;
   if (a0Pressed && sinceLastA0Press > N_LAST_SEEN) {
     Serial.print(a0Diff);
     Serial.print(" (");
@@ -73,7 +82,7 @@ void loop() {
     Serial.print(") ");
     Serial.print("sinceLastA0Press = ");
     Serial.print(sinceLastA0Press);
-    if (sinceLastA0Press < N_LAST_SEEN + 5) {
+    if (sinceLastA0Press < N_LAST_SEEN + 30) {
       Serial.print(" Held and");
     }
     Serial.println(" Pressed A0!!");

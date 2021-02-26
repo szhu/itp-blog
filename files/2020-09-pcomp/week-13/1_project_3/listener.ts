@@ -22,27 +22,33 @@ function serialProcess() {
   });
 }
 
+async function isScreenSaverRunning() {
+  let process = Deno.run({ cmd: ["pgrep", "ScreenSaverEngine"] });
+  let status = await process.status();
+  return status.success;
+}
+
 let ignore = false;
 
 async function run() {
+  console.log("Started!");
+
   let process = serialProcess();
   for await (let line of readLines(process.stdout)) {
     if (ignore) continue;
     console.log(line);
     if (line.match(/Held and Pressed/)) {
-      await osascript(`
-        tell app "Spotify" to pause
-        do shell script "brightness 0"
-        quit app "Backdrop"
-        -- activate app "ScreenSaverEngine"
-      `);
+      if (await isScreenSaverRunning()) {
+        osascript(`quit app "ScreenSaverEngine"`);
+      } else {
+        Deno.run({ cmd: ["open", "-a", "ScreenSaverEngine"] });
+      }
       ignore = true;
       setTimeout(() => ignore = false, 2000);
-    } else if (line.match(/Pressed/)) {
+    }
+    if (line.match(/Pressed/)) {
       osascript(`
         beep
-        do shell script "brightness 0.7"
-        activate app "Backdrop"
         tell app "Spotify" to playpause
       `);
     }
