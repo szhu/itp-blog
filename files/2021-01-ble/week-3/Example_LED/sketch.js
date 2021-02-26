@@ -8,14 +8,14 @@ function setup() {
   myBLE = new p5ble();
 
   // Create a 'Connect' button
-  const connectButton = createButton('Connect')
+  const connectButton = createButton("Connect");
   connectButton.mousePressed(connectToBle);
 
   // Create a text input
   input = createInput();
 
   // Create a 'Write' button
-  const writeButton = createButton('Write');
+  const writeButton = createButton("Write");
   writeButton.mousePressed(writeToBle);
 }
 
@@ -25,8 +25,8 @@ function connectToBle() {
 }
 
 function gotCharacteristics(error, characteristics) {
-  if (error) console.log('error: ', error);
-  console.log('characteristics: ', characteristics);
+  if (error) console.log("error: ", error);
+  console.log("characteristics: ", characteristics);
   // Set the first characteristic as myCharacteristic
   myCharacteristic = characteristics[0];
 }
