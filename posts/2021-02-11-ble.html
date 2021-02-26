@@ -1,0 +1,61 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>BLE Week 2</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">BLE Week 2</header>
+   <div class="section-content">
+    <p>Last week, realized that my Arduino broke 😢</p>
+    <figure>
+     <img
+      src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/1DLZu1JCowoCLLDLSA1xrLDR.png"
+      width="1512"
+      class="small"
+     />
+    </figure>
+    <p>
+     I couldn't figure out how to re-solder the micro-USB port back on, so I
+     ordered a new one. It finally arrived today, due to some mix-up in the
+     mail. So I had to figure out how to do this week's assignment really
+     quickly!
+    </p>
+    <section class="section section-level-1">
+     <header class="section-header">
+      Assignment: BLE device with characteristics
+     </header>
+     <div class="section-content">
+      <p>
+       Use sensors and actuators of your choice. Build a BLE&nbsp;service with
+       characteristics with read, write and notify properties.
+      </p>
+      <p>
+       The ability for a BLE device to "notify" intrigued me, and I decided a
+       create a simple "alarm" use case — a countdown timer!
+      </p>
+      <p>
+       I programmed the Arduino with a characteristic whose value acts as the
+       current countdown time in seconds. When the countdown is adjusted to be
+       larger than zero, the device will start counting down, notifying the
+       central device at every second (including when the timer runs out).
+      </p>
+      <p>Live demo from class:</p>
+      <figure>
+       <video
+        src="https://static.slab.com/prod/uploads/xrfkaonr/posts/attachments/H1ggQg0WT0QyGB0HCH4bkbqo.mp4"
+        preload="metadata"
+        controls=""
+       ></video>
+      </figure>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
