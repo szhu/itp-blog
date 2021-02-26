@@ -11,16 +11,58 @@
   <section class="section section-level-0">
    <header class="section-header">BLE Week 3</header>
    <div class="section-content">
-    <p>
-     I modified the code from the LED example to create a variable strobe light!
-    </p>
-    <figure>
-     <video
-      src="https://static.slab.com/prod/uploads/xrfkaonr/posts/attachments/kdpkbq2mMjVovAJnHC_QfcxC.mp4"
-      preload="metadata"
-      controls=""
-     ></video>
-    </figure>
+    <section class="section section-level-1">
+     <header class="section-header">BLE p5 web app</header>
+     <div class="section-content">
+      <p>
+       I used the Arduino BLE LED example as a starting point for this week's
+       assignment. The example allows the user to turn a LED on and off from the
+       p5 app.
+      </p>
+      <figure>
+       <img
+        src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/ye72Sm0-vdHYOtKHkZ2bqbRu.png"
+        width="273"
+        class="small"
+       />
+      </figure>
+      <p>
+       I modified the code from the LED example to create a strobe light. The
+       user drags a slider to control how fast the strobe light is:
+      </p>
+      <figure>
+       <img
+        src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/CIyky2uQ9HujF8UsrgxuymPk.png"
+        width="404"
+        class="small"
+       />
+      </figure>
+      <p>Demo video:</p>
+      <figure>
+       <video
+        src="https://static.slab.com/prod/uploads/xrfkaonr/posts/attachments/hrg4uqhCQjdrfz6wiQ6zq7Lr.mp4"
+        preload="metadata"
+        controls=""
+       ></video>
+      </figure>
+      <p>Thoughts:</p>
+      <ul>
+       <li>
+        The example code, and thus this app, doesn't handle any of the edge
+        cases related to connectivity. Specifically, there should be UI states
+        for before a device is connected and before the device's characteristics
+        have been retrieved.
+       </li>
+       <li>
+        Dragging the slider results in the error: "DOMException: GATT operation
+        already in progress." This error can be mostly prevented by debouncing
+        the slider handler (sending on the trailing edge, to make sure the
+        latest value is sent) and by checking whether the previous BLE command
+        has finished before sending a new one.
+       </li>
+      </ul>
+     </div>
+    </section>
    </div>
   </section>
  </body>
