@@ -344,6 +344,13 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
 
   let first = true;
   for (let block of blocks) {
+    let attributes: Attributes = block.attributes ?? {};
+
+    if (!attributes.list && currentList) {
+      currentList = undefined;
+      currentListLevel = -1;
+    }
+
     if (block.ops.length === 1 && typeof block.ops[0].insert === "object") {
       if (block.ops[0].insert.image) {
         let src = block.ops[0].insert.image;
@@ -401,13 +408,6 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
       document.body.append(currentSection);
       currentSectionLevel = 1;
       continue;
-    }
-
-    let attributes: Attributes = block.attributes ?? {};
-
-    if (!attributes.list && currentList) {
-      currentList = undefined;
-      currentListLevel = -1;
     }
 
     if (attributes["code-block"]) {

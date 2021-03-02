@@ -1,0 +1,132 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>Intangible Interactions Week 4</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">Intangible Interactions Week 4</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Curious Cube project proposal</header>
+     <div class="section-content">
+      <section class="section section-level-2">
+       <header class="section-header">Idea</header>
+       <div class="section-content">
+        <p>
+         A "cube room", an approximately 1-foot cube with faces on the side that
+         show the live interior of a real room. A performer or audience member
+         would be in the real room and would be able to interact with the
+         audience members in front of the cube.
+        </p>
+        <figure>
+         <img
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/RRg1ayHJ9JWmKVQS6vXOdVxR.png"
+         />
+        </figure>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Inspiration</header>
+       <div class="section-content">
+        <p>
+         <a
+          href="https://wp.nyu.edu/tischschoolofthearts-donnan/2021/02/17/133/"
+          target="_blank"
+          >DonNan</a
+         >
+         and I collaborated during the brainstorming phase, and so our ideas
+         have many shared elements. Some key fragments:
+        </p>
+        <ul>
+         <li>
+          <a href="https://www.instagram.com/p/CEmQolQHG8S/" target="_blank"
+           >This piece</a
+          >
+          that DonNan found, a cube with a simulated interior that responds to
+          gestures on the surface of the cube.
+         </li>
+        </ul>
+        <figure>
+         <img
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/IELDuqPuvNJoCGwQEd6nW0dn.png"
+          width="685"
+          class="small"
+         />
+        </figure>
+        <ul>
+         <li>
+          The phone game Monument Valley, in which the player manipulates a
+          character moving about many miniature scenes dominated by right
+          angles. (I've played the game before, but the actual reason why it
+          came to mind was because DonNan had her Zoom virtual background set to
+          a graphic from the game.)
+         </li>
+        </ul>
+        <figure>
+         <img
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/ubOov9NTcl2ZwZLgxtuhO1B2.png"
+         />
+        </figure>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Bill of materials</header>
+       <div class="section-content">
+        <ul>
+         <li>2 cameras, for capturing live video in the real room</li>
+         <li>Equipment for mounting the cameras onto walls in the room</li>
+         <li>
+          A lidar distance sensor, for detecting how far the closest audience
+          member is from the cube
+         </li>
+         <li>
+          A computer, for playing feedback from the distance sensor and for
+          processing the video data, in the real room
+         </li>
+         <li>
+          Stretch goal: A white cardboard cube, and a projector that projects
+          the output image onto the cube. Otherwise, the cube would be simulated
+          in VR.
+         </li>
+        </ul>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Design and process</header>
+       <div class="section-content">
+        <ul>
+         <li>
+          An "input" web app runs on each camera input device. (Each camera is
+          either a webcam plugged into a computer, or a phone; it doesn't
+          matter.)
+         </li>
+         <li>
+          The "input" web app uses the MediaDevices and WebSockets APIs to
+          capture camera input and send it over the local network to a computer
+          running an "output" web app.
+         </li>
+         <li>
+          The "output" web app collects the video input and generates the cube,
+          either in VR, or projection-maps it onto the physical cube.
+         </li>
+        </ul>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Deliverable</header>
+       <div class="section-content">
+        <p>Projection-mapped cube, or a virtual simulation of a cube</p>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
