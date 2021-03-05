@@ -109,7 +109,7 @@ interface Attributes {
   header?: number;
   hint?: "success";
   "code-block"?: "plain";
-  list?: "bullet" | "number";
+  list?: "bullet" | "ordered";
   indent?: number;
 
   // Line break attributes
@@ -438,6 +438,9 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
       currentSection = newSection;
       currentSectionLevel++;
     } else if (attributes.list) {
+      // TODO: Handle the case where adjacent list items are of different kinds.
+      // Currently, all of them will be treated as part of the same list.
+
       let targetListLevel = attributes.indent ?? 0;
 
       if (targetListLevel - 1 > currentListLevel) {
@@ -470,7 +473,12 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
       if (targetListLevel - currentListLevel === 1) {
         // console.error("> go in");
 
-        let newList = document.createElement("ul");
+        let newList;
+        if (attributes.list === "ordered") {
+          newList = document.createElement("ol");
+        } else {
+          newList = document.createElement("ul");
+        }
         currentList.append(newList);
         currentList = newList;
         currentListLevel++;
