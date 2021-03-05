@@ -15,9 +15,13 @@
      <header class="section-header">Assignment: BLE p5 web app</header>
      <div class="section-content">
       <p>
-       I used the Arduino BLE LED example as a starting point for this week's
-       assignment. The example allows the user to turn a LED on and off from the
-       p5 app.
+       I used the LED example (Examples » ArduinoBLE » Peripheral » LED +
+       <a
+        href="https://editor.p5js.org/jingwen_zhu/sketches/7LS7PcdoM"
+        target="_blank"
+        >BLE-Week3-LED</a
+       >) as a starting point for this week's assignment. The example allows the
+       user to turn a LED on and off from the p5 app.
       </p>
       <figure>
        <img
@@ -45,6 +49,70 @@
         controls=""
        ></video>
       </figure>
+      <p>Code:</p>
+      <p>Modified Arduino code:</p>
+      <details>
+       <summary>Code</summary>
+       <pre collapsed="">
+// while the central is still connected to peripheral:
+while (central.connected()) {
+  updateValue();
+  delay(value * 100);
+  analogWrite(A0, 255);
+
+  updateValue();
+  delay(value * 100);
+  analogWrite(A0, 0);
+}</pre
+       >
+      </details>
+      <p>p5 sketch:</p>
+      <details>
+       <summary>Code</summary>
+       <pre collapsed="">
+// The serviceUuid must match the serviceUuid of the device you would like to connect
+const serviceUuid = "19b10000-e8f2-537e-4f6c-d104768a1214";
+let myCharacteristic;
+let input;
+let slider;
+let myBLE;
+
+function setup() {
+  myBLE = new p5ble();
+
+  // Create a 'Connect' button
+  const connectButton = createButton("Connect");
+  connectButton.mousePressed(connectToBle);
+
+  createButton("Strobe speed:");
+  createButton("0ms");
+
+  // Create slider
+  slider = createSlider(0, 10, 5);
+  slider.input(writeToBle);
+
+  createButton("1000ms");
+}
+
+function connectToBle() {
+  // Connect to a device by passing the service UUID
+  myBLE.connect(serviceUuid, gotCharacteristics);
+}
+
+function gotCharacteristics(error, characteristics) {
+  if (error) console.log("error: ", error);
+  console.log("characteristics: ", characteristics);
+  // Set the first characteristic as myCharacteristic
+  myCharacteristic = characteristics[0];
+}
+
+function writeToBle() {
+  const inputValue = slider.value();
+  // Write the value of the input to the myCharacteristic
+  myBLE.write(myCharacteristic, inputValue);
+}</pre
+       >
+      </details>
       <p>Thoughts:</p>
       <ul>
        <li>
@@ -59,6 +127,29 @@
         the slider handler (sending on the trailing edge, to make sure the
         latest value is sent) and by checking whether the previous BLE command
         has finished before sending a new one.
+       </li>
+      </ul>
+      <figure>
+       <img
+        src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/q57c5s_5kGWhIqnsaNw3lVJc.png"
+        width="465"
+        class="small"
+       />
+      </figure>
+      <p>Some helpful feedback I received after presenting this:</p>
+      <ul>
+       <li>
+        <i
+         >Adding a timeout can prevent the characteristic from being modified
+         too often.</i
+        >
+       </li>
+       <li>
+        Is there a way to detect whether there's GATT in progress?
+        <i
+         >Yes, in the Web Bluetooth API, a callback is fired when the GATT
+         operation completes.</i
+        >
        </li>
       </ul>
      </div>
