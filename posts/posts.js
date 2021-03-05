@@ -1,5 +1,7 @@
+const linkPreviewsByUrl = {};
+
 function hydrate() {
-  for (let header of document.querySelectorAll("header")) {
+  for (let header of document.querySelectorAll(".section-header")) {
     header.addEventListener("click", () => {
       header.parentNode.scrollIntoView({
         behavior: "smooth",
@@ -7,6 +9,7 @@ function hydrate() {
         inline: "nearest",
       });
     });
+    header.classList.add("section-header-interactive");
   }
 
   for (let media of document.querySelectorAll("img, video")) {
@@ -42,6 +45,73 @@ function hydrate() {
       video.pause();
     });
     video.controls = false;
+  }
+
+  // Show link previews only if a mouse is available. Link previews can
+  // interfere with scrolling if the pointer is coarse.
+  if (window.matchMedia("(any-pointer: fine)").matches) {
+    for (let a of Array.from(document.getElementsByTagName("a"))) {
+      if (a.origin !== location.origin) continue;
+
+      a.addEventListener(
+        "mousemove",
+        (e) => {
+          let iframe = linkPreviewsByUrl[a.href];
+
+          for (let someIframe of Array.from(
+            document.querySelectorAll(".link-preview-visible")
+          )) {
+            if (iframe === someIframe) continue;
+            someIframe.classList.remove("link-preview-visible");
+          }
+
+          if (!iframe) {
+            iframe = document.createElement("iframe");
+            linkPreviewsByUrl[a.href] = iframe;
+
+            iframe.src = a.href;
+            iframe.classList.add("link-preview", "link-preview-loading");
+            iframe.addEventListener("load", () => {
+              iframe.classList.remove("link-preview-loading");
+            });
+
+            document.body.append(iframe);
+          }
+
+          let transform = `translate(${e.clientX - 20}px, ${e.clientY + 20}px)`;
+          iframe.style.transform = transform;
+
+          iframe.classList.add("link-preview-visible");
+        },
+        { passive: true }
+      );
+
+      a.addEventListener(
+        "mouseleave",
+        (e) => {
+          for (let someIframe of Array.from(
+            document.querySelectorAll(".link-preview-visible")
+          )) {
+            someIframe.classList.remove("link-preview-visible");
+          }
+        },
+        { passive: true }
+      );
+
+      a.classList.add("link-preview-enabled");
+    }
+
+    window.addEventListener(
+      "scroll",
+      (e) => {
+        for (let someIframe of Array.from(
+          document.querySelectorAll(".link-preview-visible")
+        )) {
+          someIframe.classList.remove("link-preview-visible");
+        }
+      },
+      { passive: true }
+    );
   }
 }
 

@@ -227,6 +227,36 @@ figcaption + img {
   margin-top: 7px;
 }
 
+/* LINK PREVIEWS */
+
+.link-preview {
+  background: var(--color-text-bg);
+  border: 1px solid var(--color-text-fg);
+  border-radius: var(--border-radius);
+  box-shadow: 1px 2px 9px 0px var(--color-dim);
+  pointer-events: none;
+  z-index: 11;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  height: 300px;
+  max-height: 50vmin;
+  width: 400px;
+  max-width: 70vmin;
+
+  visibility: hidden;
+}
+
+.link-preview-visible {
+  visibility: visible;
+}
+
+.link-preview-loading {
+  visibility: hidden;
+}
+
 /* SECTIONS */
 
 .section {
@@ -236,7 +266,8 @@ figcaption + img {
 }
 
 .section-level-0 {
-  margin-right: var(--padding-h);
+  margin: 0;
+  padding-right: var(--padding-h);
 }
 
 .section-level-0:before {
@@ -246,7 +277,6 @@ figcaption + img {
 }
 
 .section-header {
-  cursor: pointer;
   font-weight: 600;
   line-height: 1.25;
   background: var(--color-text-bg);
@@ -265,8 +295,12 @@ figcaption + img {
   z-index: var(--section-z-index); /* Display above video controls */
 }
 
-.section-header:hover,
-.section-header:focus {
+.section-header-interactive {
+  cursor: pointer;
+}
+
+.section-header-interactive:hover,
+.section-header-interactive:focus {
   text-decoration: underline;
 }
 
