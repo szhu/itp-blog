@@ -5,22 +5,25 @@ import JSON5 from "https://deno.land/x/json5@v1.0.0/mod.ts";
 import { join } from "https://deno.land/std@0.86.0/path/mod.ts";
 
 if (import.meta.main) {
-  let document = await postDocumentFromSlab(Deno.args[0], Deno.args[1], ".");
+  let ops = await slabToOps(Deno.args[0], Deno.args[1]);
+  // console.log(JSON.stringify(ops, undefined, 2))
+  // console.log(blocksToMd(opsToBlocks(ops)))
+  let document = await opsToDocument(ops, ".");
   console.log(prettify(document.documentElement.outerHTML));
 }
 
-export async function postDocumentFromSlab(
-  subdomain: string,
-  id: string,
-  pathPrefix: string
-) {
-  let ops = await opsFromSlab(subdomain, id);
-  // console.log(JSON.stringify(ops, undefined, 2))
-  // console.log(blocksToMd(opsToBlocks(ops)))
-  return blocksToDocument(opsToBlocks(ops), pathPrefix);
+export async function opsToJson(ops: Op[]) {
+  return JSON.stringify(ops);
 }
 
-async function opsFromSlab(subdomain: string, id: string) {
+export async function opsToDocument(ops: Op[], pathPrefix: string) {
+  let blocks = opsToBlocks(ops);
+  let document = blocksToDocument(blocks, pathPrefix);
+  return document;
+}
+
+export async function slabToOps(subdomain: string, id: string) {
+  console.log("Fetching");
   let r = await fetch(`https://${subdomain}.slab.com/graphql`, {
     headers: {
       "content-type": "application/json",

@@ -1,11 +1,15 @@
 import { JSDOM } from "https://jspm.dev/jsdom@16.4.0";
 import reformatDoc from "./reformatDoc.js";
 import prettify from "./prettier.ts";
-import { postDocumentFromSlab } from "./slab.ts";
+import {
+  opsToDocument as opsToDocument,
+  opsToJson,
+  slabToOps,
+} from "./slab.ts";
 import { Command } from "https://deno.land/x/cmd@v1.2.0/mod.ts";
 import { relative } from "https://deno.land/std@0.86.0/path/mod.ts";
 
-async function readHtmlFileAsDom(file: string) {
+async function htmlFileToDocument(file: string) {
   let html;
   try {
     html = await Deno.readTextFile(file);
@@ -16,28 +20,13 @@ async function readHtmlFileAsDom(file: string) {
   return new JSDOM(html).window.document;
 }
 
-async function formatPostDocument(document: any) {
+async function documentToHtml(document: any) {
   reformatDoc(document, document.documentElement);
   for (let script of document.querySelectorAll("script[dev-only]")) {
     script.remove();
   }
   let html = document.documentElement.outerHTML;
   return prettify(html);
-}
-
-async function formatPostFile(file: string) {
-  return await formatPostDocument(await readHtmlFileAsDom(file));
-}
-
-async function formatPostFromSlab(
-  subdomain: string,
-  id: string,
-  outFile: string
-) {
-  let prefix = outFile ? relative(`${outFile}/..`, "posts") : "";
-  return await formatPostDocument(
-    await postDocumentFromSlab(subdomain, id, prefix)
-  );
 }
 
 async function writeOrOutput(content: string, outFile?: string) {
@@ -59,16 +48,25 @@ if (import.meta.main) {
   program
     //
     .command("html <srcfile>")
-    .action(async (srcfile) => {
-      let content = await formatPostFile(srcfile);
-      await writeOrOutput(content, program.out);
+    .action(async (inFile) => {
+      let document = await htmlFileToDocument(inFile);
+      let html = await documentToHtml(document);
+      await writeOrOutput(html, program.out);
     });
   program
     //
     .command("slab <subdomain> <id>")
     .action(async (subdomain, id) => {
-      let content = await formatPostFromSlab(subdomain, id, program.out);
-      await writeOrOutput(content, program.out);
+      let prefix = program.out ? relative(`${program.out}/..`, "posts") : "";
+      let jsonOutFile = program.out.replace(/(\.html)?$/, ".src.json");
+
+      let ops = await slabToOps(subdomain, id);
+      let json = await opsToJson(ops);
+      await writeOrOutput(json, jsonOutFile);
+
+      let document = await opsToDocument(ops, prefix);
+      let html = await documentToHtml(document);
+      await writeOrOutput(html, program.out);
     });
 
   await program.parseAsync(Deno.args);
