@@ -1,7 +1,9 @@
 const linkPreviewsByUrl = {};
 
 function hydrate() {
-  for (let header of document.querySelectorAll(".section-header")) {
+  let $ = (selector) => document.querySelectorAll(selector);
+
+  for (let header of $(".section-header")) {
     header.addEventListener("click", () => {
       header.parentNode.scrollIntoView({
         behavior: "smooth",
@@ -12,7 +14,7 @@ function hydrate() {
     header.classList.add("section-header-interactive");
   }
 
-  for (let summary of document.querySelectorAll("summary")) {
+  for (let summary of $("summary")) {
     // Prevent double-clicking on summary elements from selecting text.
     summary.addEventListener("mousedown", (e) => {
       if (e.detail > 1) {
@@ -24,7 +26,7 @@ function hydrate() {
       if (e.detail === 2) {
         let initialOpen = e.target.parentNode.open;
         e.target.parentNode.open = !initialOpen;
-        for (let details of document.querySelectorAll("details")) {
+        for (let details of $("details")) {
           if (details === e.target.parentNode) continue;
           details.open = initialOpen;
         }
@@ -34,27 +36,24 @@ function hydrate() {
   }
 
   function saveDetailsState() {
-    let detailsState = Array
-      //
-      .from(document.querySelectorAll("details"))
-      .map((details) => details.open);
+    let detailsState = Array.from($("details")).map((details) => details.open);
     history.replaceState({ detailsState }, "");
   }
 
   function loadDetailsState() {
     if (history.state && history.state.detailsState) {
-      Array.from(document.querySelectorAll("details")).forEach((details, i) => {
+      Array.from($("details")).forEach((details, i) => {
         details.open = history.state.detailsState[i];
       });
     }
   }
 
-  for (let details of document.querySelectorAll("details")) {
+  for (let details of $("details")) {
     details.addEventListener("toggle", saveDetailsState);
   }
   loadDetailsState();
 
-  for (let media of document.querySelectorAll("img, video")) {
+  for (let media of $("img, video")) {
     media.addEventListener("dblclick", (e) => {
       if (e.metaKey || e.ctrlKey || e.shiftKey) {
         window.open(media.src);
@@ -65,7 +64,7 @@ function hydrate() {
     media.title = "Double-click to view full size.";
   }
 
-  for (let video of document.querySelectorAll("video")) {
+  for (let video of $("video")) {
     video.addEventListener("click", (e) => {
       if (e.detail > 1) {
         // Prevents double-click to fullscreen.
@@ -95,7 +94,7 @@ function hydrate() {
   // Show link previews only if a mouse is available. Link previews can
   // interfere with scrolling if the pointer is coarse.
   if (window.matchMedia("(any-pointer: fine)").matches) {
-    for (let a of Array.from(document.getElementsByTagName("a"))) {
+    for (let a of $("a")) {
       if (a.origin !== location.origin) continue;
 
       a.addEventListener(
@@ -103,9 +102,7 @@ function hydrate() {
         (e) => {
           let iframe = linkPreviewsByUrl[a.href];
 
-          for (let someIframe of Array.from(
-            document.querySelectorAll(".link-preview-visible")
-          )) {
+          for (let someIframe of $(".link-preview-visible")) {
             if (iframe === someIframe) continue;
             someIframe.classList.remove("link-preview-visible");
           }
@@ -133,11 +130,9 @@ function hydrate() {
 
       a.addEventListener(
         "mouseleave",
-        (e) => {
-          for (let someIframe of Array.from(
-            document.querySelectorAll(".link-preview-visible")
-          )) {
-            someIframe.classList.remove("link-preview-visible");
+        () => {
+          for (let iframe of $(".link-preview-visible")) {
+            iframe.classList.remove("link-preview-visible");
           }
         },
         { passive: true }
@@ -148,11 +143,9 @@ function hydrate() {
 
     window.addEventListener(
       "scroll",
-      (e) => {
-        for (let someIframe of Array.from(
-          document.querySelectorAll(".link-preview-visible")
-        )) {
-          someIframe.classList.remove("link-preview-visible");
+      () => {
+        for (let iframe of $(".link-preview-visible")) {
+          iframe.classList.remove("link-preview-visible");
         }
       },
       { passive: true }
