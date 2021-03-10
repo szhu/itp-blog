@@ -33,6 +33,27 @@ function hydrate() {
     summary.title = "Double-click to toggle all collapsible items.";
   }
 
+  function saveDetailsState() {
+    let detailsState = Array
+      //
+      .from(document.querySelectorAll("details"))
+      .map((details) => details.open);
+    history.replaceState({ detailsState }, "");
+  }
+
+  function loadDetailsState() {
+    if (history.state && history.state.detailsState) {
+      Array.from(document.querySelectorAll("details")).forEach((details, i) => {
+        details.open = history.state.detailsState[i];
+      });
+    }
+  }
+
+  for (let details of document.querySelectorAll("details")) {
+    details.addEventListener("toggle", saveDetailsState);
+  }
+  loadDetailsState();
+
   for (let media of document.querySelectorAll("img, video")) {
     media.addEventListener("dblclick", (e) => {
       if (e.metaKey || e.ctrlKey || e.shiftKey) {
@@ -139,4 +160,4 @@ function hydrate() {
   }
 }
 
-window.addEventListener("load", hydrate);
+window.addEventListener("DOMContentLoaded", hydrate);
