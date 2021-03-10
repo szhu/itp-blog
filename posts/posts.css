@@ -85,7 +85,7 @@ dl,
 p,
 pre,
 table {
-  margin: 1rem 0;
+  margin: 1rem 0 0.5rem;
 }
 
 p:first-child {
@@ -111,11 +111,12 @@ blockquote {
 
 details {
   margin: 12px 0;
-  border: 1px solid black;
+  border: 1px solid var(--color-dim);
   border-radius: var(--border-radius);
 }
 
 summary {
+  cursor: pointer;
   padding: 0 4px;
 }
 
@@ -129,7 +130,10 @@ a:not(:hover) {
   border-color: var(--color-dim);
 }
 
-ol,
+ol {
+  padding-left: 1.7em;
+}
+
 ul {
   padding-left: 1.3em;
 }
@@ -255,6 +259,25 @@ figcaption + img {
 
 .link-preview-loading {
   visibility: hidden;
+}
+
+/* DETAIL/SUMMARY */
+
+@keyframes details-contents {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: unset;
+  }
+}
+
+details[open] > * {
+  animation: details-contents 0.2s ease-out;
+}
+
+details[open] > summary {
+  animation: none;
 }
 
 /* SECTIONS */

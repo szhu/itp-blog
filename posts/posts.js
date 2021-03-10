@@ -12,6 +12,27 @@ function hydrate() {
     header.classList.add("section-header-interactive");
   }
 
+  for (let summary of document.querySelectorAll("summary")) {
+    // Prevent double-clicking on summary elements from selecting text.
+    summary.addEventListener("mousedown", (e) => {
+      if (e.detail > 1) {
+        e.preventDefault();
+      }
+    });
+
+    summary.addEventListener("click", (e) => {
+      if (e.detail === 2) {
+        let initialOpen = e.target.parentNode.open;
+        e.target.parentNode.open = !initialOpen;
+        for (let details of document.querySelectorAll("details")) {
+          if (details === e.target.parentNode) continue;
+          details.open = initialOpen;
+        }
+      }
+    });
+    summary.title = "Double-click to toggle all collapsible items.";
+  }
+
   for (let media of document.querySelectorAll("img, video")) {
     media.addEventListener("dblclick", (e) => {
       if (e.metaKey || e.ctrlKey || e.shiftKey) {
@@ -25,10 +46,13 @@ function hydrate() {
 
   for (let video of document.querySelectorAll("video")) {
     video.addEventListener("click", (e) => {
-      // Prevents double-click to fullscreen.
-      // Not sure why it's attached to click and not dblclick.
-      e.preventDefault();
+      if (e.detail > 1) {
+        // Prevents double-click to fullscreen.
+        // Not sure why it's attached to click and not dblclick.
+        e.preventDefault();
+      }
     });
+
     video.addEventListener("mouseenter", () => {
       video.controls = true;
       try {
@@ -75,7 +99,7 @@ function hydrate() {
               iframe.classList.remove("link-preview-loading");
             });
 
-            document.body.append(iframe);
+            a.append(iframe);
           }
 
           let transform = `translate(${e.clientX - 20}px, ${e.clientY + 20}px)`;

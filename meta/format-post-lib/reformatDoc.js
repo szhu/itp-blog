@@ -43,8 +43,13 @@ function changeEl(el, newEl) {
   return newEl;
 }
 
+function insertPreviousSibling(elToInsert, refEl) {
+  refEl.parentNode.insertBefore(elToInsert, refEl);
+  return elToInsert;
+}
+
 function wrap(el, wrapper) {
-  el.parentNode.insertBefore(wrapper, el);
+  insertPreviousSibling(wrapper, el);
   wrapper.append(el);
   return wrapper;
 }
@@ -189,6 +194,18 @@ export default function reformatDoc(document, root) {
       let summary = document.createElement("summary");
       summary.textContent = "Code";
       details.prepend(summary);
+    }
+  }
+
+  // Home page
+  for (let p of document.querySelectorAll("p")) {
+    let m = p.textContent.match(/^\{(.*)\}$/);
+    let maybeUl = p.nextElementSibling;
+    if (m && maybeUl?.tagName === "UL") {
+      let details = wrap(p, document.createElement("details"));
+      p.textContent = m[1];
+      changeEl(p, document.createElement("summary"));
+      details.append(maybeUl);
     }
   }
 

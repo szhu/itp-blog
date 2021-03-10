@@ -1,6 +1,6 @@
 #!/bin/bash
 
-open http://localhost:4507/posts/
+open http://localhost:4507/
 
 deno run \
   --allow-net \
