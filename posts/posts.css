@@ -8,6 +8,7 @@
   --color-media-bg: #222;
   --color-media-fg: white;
   --color-dim: #00000033;
+  --color-vdim: #00000005;
 
   color: var(--color-text-fg);
   font-variant-numeric: tabular-nums;
@@ -20,6 +21,7 @@
     --color-media-bg: black;
     --color-media-fg: white;
     --color-dim: #ffffff33;
+    --color-vdim: #ffffff05;
   }
 }
 
@@ -96,6 +98,10 @@ p:last-child {
   margin-bottom: 0;
 }
 
+summary + pre {
+  margin-top: 0;
+}
+
 header,
 ol,
 ul,
@@ -110,14 +116,26 @@ blockquote {
 }
 
 details {
-  margin: 12px 0;
-  border: 1px solid var(--color-dim);
+  margin: 12px -0.3em;
+  padding: 2px 0.3em;
   border-radius: var(--border-radius);
+  background: var(--color-vdim);
 }
 
 summary {
   cursor: pointer;
   padding: 0 4px;
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary:hover,
+summary:focus {
+  text-decoration: underline;
+  outline: none;
 }
 
 a {
@@ -138,8 +156,8 @@ ul {
   padding-left: 1.3em;
 }
 
-ul > li::marker {
-  content: "— ";
+ul > li {
+  list-style-type: "— ";
 }
 
 pre {
@@ -147,7 +165,7 @@ pre {
   overflow: auto;
   font-size: 85%;
   line-height: 1.45;
-  /* background-color: #f6f8fa; */
+  /* background-color: var(--color-vdim); */
   border-radius: var(--border-radius);
 }
 
