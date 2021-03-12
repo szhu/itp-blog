@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.sound.min.js"></script>
+    <script
+      src="https://unpkg.com/p5ble@0.0.4/dist/p5.ble.js"
+      type="text/javascript"
+    ></script>
+  </head>
+  <body>
+    <fieldset>
+      <legend>Connect</legend>
+      <button id="connect">Connect</button>
+    </fieldset>
+    <fieldset>
+      <legend>Vote</legend>
+      <ul>
+        <li>
+          <button class="vote" disabled data-value="0">
+            Vote for candidate 0
+          </button>
+        </li>
+        <li>
+          <button class="vote" disabled data-value="1">
+            Vote for candidate 1
+          </button>
+        </li>
+        <li>
+          <button class="vote" disabled data-value="2">
+            Vote for candidate 2
+          </button>
+        </li>
+        <li>
+          <button class="vote" disabled data-value="3">
+            Vote for candidate 3
+          </button>
+        </li>
+        <li>
+          <button class="vote" disabled data-value="4">
+            Vote for candidate 4
+          </button>
+        </li>
+      </ul>
+    </fieldset>
+    <script src="sketch.js"></script>
+  </body>
+</html>

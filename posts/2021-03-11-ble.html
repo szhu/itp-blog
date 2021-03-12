@@ -1,0 +1,327 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>BLE Week 5</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">BLE Week 5</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Final project progress</header>
+     <div class="section-content">
+      <p>
+       The chosen idea, from <a href="./2021-03-04-ble.html">last week</a>:
+      </p>
+      <blockquote>
+       A box that can be used to drop off messages for a physical office, event,
+       etc. It be like an anonymous feedback box or like leaving flyers on a
+       fridge. Content moderation, access, and security are a lot easier if
+       using Bluetooth or NFC instead of having messages be submitted online,
+       because we know that anyone who is leaving messages necessarily has
+       physical proximity to the box. This can potentially be also used for
+       voting ("tap here to take a ballot so you can cast it later") and line
+       queueing ("tap here to take a ticket").
+      </blockquote>
+      <p>
+       I made a small proof of concept for a BLE device that can collect votes —
+       nearby users can vote on their computers or phones!
+      </p>
+      <section class="section section-level-2">
+       <header class="section-header">Demo</header>
+       <div class="section-content">
+        <figure>
+         <video
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/attachments/y0C9g9UO5ErhCMSNTbxg3ASM.mp4"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Code</header>
+       <div class="section-content">
+        <p><code>poll.ino</code>:</p>
+        <details>
+         <summary>Code</summary>
+         <pre collapsed="">
+/*
+  LED
+
+  This example creates a BLE peripheral with service that contains a
+  characteristic to control an LED.
+
+  The circuit:
+  - Arduino MKR WiFi 1010, Arduino Uno WiFi Rev2 board, Arduino Nano 33 IoT,
+    Arduino Nano 33 BLE, or Arduino Nano 33 BLE Sense board.
+
+  You can use a generic BLE central app, like LightBlue (iOS and Android) or
+  nRF Connect (Android), to interact with the services and characteristics
+  created in this sketch.
+
+  This example code is in the public domain.
+*/
+
+#include &lt;ArduinoBLE.h&gt;
+
+BLEService
+    ledService("19B10000-E8F2-537E-4F6C-D104768A1214"); // BLE LED Service
+
+// BLE LED Switch Characteristic - custom 128-bit UUID, read and writable by
+// central
+BLEByteCharacteristic
+    switchCharacteristic("19B10001-E8F2-537E-4F6C-D104768A1214",
+                         BLERead | BLEWrite);
+
+const int ledPin = LED_BUILTIN; // pin to use for the LED
+
+#define N_CANDIDATES 5
+int votes[N_CANDIDATES] = {0, 0, 0, 0, 0};
+
+void setup() {
+  Serial.begin(9600);
+  while (!Serial)
+    ;
+
+  // set LED pin to output mode
+  pinMode(ledPin, OUTPUT);
+
+  // begin initialization
+  if (!BLE.begin()) {
+    Serial.println("starting BLE failed!");
+
+    while (1)
+      ;
+  }
+
+  // set advertised local name and service UUID:
+  BLE.setLocalName("Voting Booth");
+  BLE.setAdvertisedService(ledService);
+
+  // add the characteristic to the service
+  ledService.addCharacteristic(switchCharacteristic);
+
+  // add service
+  BLE.addService(ledService);
+
+  // set the initial value for the characeristic:
+  switchCharacteristic.writeValue(0);
+
+  // start advertising
+  BLE.advertise();
+
+  Serial.println("Voting Booth");
+}
+
+int value = 0;
+
+void updateValue() {
+  if (switchCharacteristic.written()) {
+    value = switchCharacteristic.value();
+    votes[value]++;
+    Serial.print("New vote: ");
+    Serial.print(value);
+    Serial.println();
+
+    Serial.print("Current votes: ");
+    Serial.println();
+    for (int i = 0; i &lt; N_CANDIDATES; i++) {
+      Serial.print("  Candidate ");
+      Serial.print(i);
+      Serial.print(" has ");
+      Serial.print(votes[i]);
+      Serial.print(" votes");
+      Serial.println();
+    }
+    Serial.println();
+  }
+}
+
+void loop() {
+  // listen for BLE peripherals to connect:
+  BLEDevice central = BLE.central();
+
+  // if a central is connected to peripheral:
+  if (central) {
+    Serial.print("Connected to central: ");
+    // print the central's MAC address:
+    Serial.println(central.address());
+
+    // while the central is still connected to peripheral:
+    while (central.connected()) {
+      updateValue();
+      delay(value * 100);
+      analogWrite(A0, 255);
+
+      updateValue();
+      delay(value * 100);
+      analogWrite(A0, 0);
+    }
+
+    // when the central disconnects, print it out:
+    Serial.print(F("Disconnected from central: "));
+    Serial.println(central.address());
+  }
+}</pre
+         >
+        </details>
+        <p><code>index.html</code>:</p>
+        <details>
+         <summary>Code</summary>
+         <pre collapsed="">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.js"&gt;&lt;/script&gt;
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.dom.min.js"&gt;&lt;/script&gt;
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.sound.min.js"&gt;&lt;/script&gt;
+    &lt;script
+      src="https://unpkg.com/p5ble@0.0.4/dist/p5.ble.js"
+      type="text/javascript"
+    &gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;fieldset&gt;
+      &lt;legend&gt;Connect&lt;/legend&gt;
+      &lt;button id="connect"&gt;Connect&lt;/button&gt;
+    &lt;/fieldset&gt;
+    &lt;fieldset&gt;
+      &lt;legend&gt;Vote&lt;/legend&gt;
+      &lt;ul&gt;
+        &lt;li&gt;
+          &lt;button class="vote" disabled data-value="0"&gt;
+            Vote for candidate 0
+          &lt;/button&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+          &lt;button class="vote" disabled data-value="1"&gt;
+            Vote for candidate 1
+          &lt;/button&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+          &lt;button class="vote" disabled data-value="2"&gt;
+            Vote for candidate 2
+          &lt;/button&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+          &lt;button class="vote" disabled data-value="3"&gt;
+            Vote for candidate 3
+          &lt;/button&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+          &lt;button class="vote" disabled data-value="4"&gt;
+            Vote for candidate 4
+          &lt;/button&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/fieldset&gt;
+    &lt;script src="sketch.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre
+         >
+        </details>
+        <p><code>sketch.js</code>:</p>
+        <details>
+         <summary>Code</summary>
+         <pre collapsed="">
+// The serviceUuid must match the serviceUuid of the device you would like to connect
+const serviceUuid = "19b10000-e8f2-537e-4f6c-d104768a1214";
+
+let myBLE;
+let myCharacteristic;
+
+const $id = (id) =&gt; document.getElementById(id);
+const $ = (el) =&gt; document.querySelectorAll(el);
+
+function setup() {
+  myBLE = new p5ble();
+
+  $id("connect").addEventListener("click", connectToBle);
+
+  for (let button of $("button.vote")) {
+    button.addEventListener("click", (e) =&gt;
+      sendValueToBle(e.target.getAttribute("data-value"))
+    );
+  }
+}
+
+function connectToBle() {
+  $id("connect").innerText = "Connecting";
+  // Connect to a device by passing the service UUID
+  myBLE.connect(serviceUuid, gotCharacteristics);
+}
+
+function gotCharacteristics(error, characteristics) {
+  if (error) console.log("error: ", error);
+  console.log("characteristics: ", characteristics);
+  // Set the first characteristic as myCharacteristic
+  myCharacteristic = characteristics[0];
+
+  $id("connect").innerText = "Connected";
+  for (let button of $("button.vote")) {
+    button.disabled = false;
+  }
+}
+
+function sendValueToBle(value) {
+  // Write the value of the input to the myCharacteristic
+  myBLE.write(myCharacteristic, parseInt(value));
+}</pre
+         >
+        </details>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">What's left:</header>
+       <div class="section-content">
+        <p>
+         I'm still figuring out what the application of the final project should
+         be. It could be:
+        </p>
+        <ul>
+         <li>A voting booth, which is what I've currently prototyped,</li>
+         <li>
+          An anonymous comment drop box (contents are intended to be private) or
+          a virtual bulletin board (contents are intended to be public), or
+         </li>
+         <li>A ticket-queueing system.</li>
+        </ul>
+        <p>
+         Here are some observations I've made, based on the prototype, that
+         could help me decide which idea to work on:
+        </p>
+        <ul>
+         <li>
+          There is an obvious flaw in the proof of concept, which is that there
+          is no way to prevent someone from voting multiple times, even by
+          accident! Having such a system designed is critical to make the voting
+          booth idea seem realistic.
+         </li>
+         <li>
+          I haven't tried sending strings or other variable-length data over
+          Bluetooth yet. If doing this proves to be hard, it might make the
+          comment box idea less feasible. I'm also not sure how well Arduinos
+          can handle storing sizeable amounts of data, so I'm also investigating
+          how to make a computer act as a peripheral device.
+         </li>
+         <li>
+          The ticket queuing system also requires storing a variable amount of
+          data, although of a quantity that can probably fit in Arduino memory,
+          at least for a demo.
+         </li>
+        </ul>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
