@@ -1,0 +1,66 @@
+<html>
+  <style>
+    html {
+      background-size: cover;
+      background-position: center;
+      transition: background-image 0.1s linear;
+    }
+    html[data-brightness="0"] {
+      background-image: url("https://i.imgur.com/BtVEOTW.jpg");
+    }
+    html[data-brightness="1"] {
+      background-image: url("https://i.imgur.com/bHNnHLG.jpg");
+    }
+    html[data-brightness="2"] {
+      background-image: url("https://i.imgur.com/SqwcxPb.jpg");
+    }
+    html[data-brightness="3"] {
+      background-image: url("https://i.imgur.com/ug6ygWM.jpg");
+    }
+    html[data-brightness="4"] {
+      background-image: url("https://i.imgur.com/yrcBhE3.jpg");
+    }
+    /*
+     * "https://i.imgur.com/BtVEOTW.jpg",
+     * "https://i.imgur.com/bHNnHLG.jpg",
+     * "https://i.imgur.com/SqwcxPb.jpg",
+     * "https://i.imgur.com/ug6ygWM.jpg",
+     * "https://i.imgur.com/yrcBhE3.jpg",
+     * "https://i.imgur.com/T73kW7u.jpg",
+     * "https://i.imgur.com/T0cv4Pw.jpg",
+     * "https://i.imgur.com/BUzah8v.jpg",
+     * "https://i.imgur.com/4lnL4KP.jpg",
+     * "https://i.imgur.com/DK1RcjA.jpg",
+     * "https://i.imgur.com/bKNslxS.jpg",
+     * "https://i.imgur.com/tdmYEwc.jpg",
+     * "https://i.imgur.com/QuHITfl.jpg",
+     * "https://i.imgur.com/iMd0ey0.jpg",
+     * "https://i.imgur.com/C8b6IMU.jpg",
+     * "https://i.imgur.com/5Xq4Yun.jpg",
+     */
+  </style>
+  <script>
+    // Preload background images
+    // https://stackoverflow.com/a/1374936/782045
+    for (let img of [
+      "https://i.imgur.com/BtVEOTW.jpg",
+      "https://i.imgur.com/bHNnHLG.jpg",
+      "https://i.imgur.com/SqwcxPb.jpg",
+      "https://i.imgur.com/ug6ygWM.jpg",
+      "https://i.imgur.com/yrcBhE3.jpg",
+    ]) {
+      new Image().src = img;
+    }
+
+    setInterval(async () => {
+      let response = await fetch("/");
+      let brightness = response.headers.get("brightness");
+      let index = Math.max(0, Math.min(4, Math.floor(brightness / 40 - 1)));
+      document.documentElement.setAttribute("data-brightness", index);
+    }, 100);
+  </script>
+  <body>
+    <title>Fiat Lux</title>
+    <img />
+  </body>
+</html>

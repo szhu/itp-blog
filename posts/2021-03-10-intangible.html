@@ -1,0 +1,241 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>Intangible Interactions Week 5</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">Intangible Interactions Week 5</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Project 2 Curious Cube progress</header>
+     <div class="section-content">
+      <p>
+       My previous idea for Curious Cube primarily involved projected a
+       full-sized room into a desk-sized room. This week, thought about, in
+       particular, the feedback I received about fleshing out the interaction
+       part of the project.
+      </p>
+      <p>
+       I decided to change the project slightly to focus on the interaction
+       part. The new idea is a model room that can control a real room when the
+       user interacts with it — a "voodoo doll room" of sorts, but my project
+       will support just a single case of this, to keep things simple.
+      </p>
+      <p>
+       I revisited
+       <a href="./2021-02-24-intangible.html"
+        >my original, original Curious Cube idea</a
+       >
+       and realized that I can make something similar, albeit with the two rooms
+       analogy. My project will dim and brighten the real room based on the
+       brightness of the small, cube room. The cube room be a (now
+       statically-decorated) cube with a light sensor, and the real room's
+       brightness will be controlled using a smart home light, controlled from
+       the Arduino via Bluetooth.
+      </p>
+      <p>
+       This week, I made a proof of concept of this. There is no cube, but I am
+       testing the sensor that cube will use. There is no output in the real
+       room yet, while I figure out which smart light bulb to purchase and while
+       I wait for it to arrive, so we simulate the lighting of the room on a
+       computer screen.
+      </p>
+      <p>Here's what it looks like so far:</p>
+      <figure>
+       <video
+        src="https://static.slab.com/prod/uploads/xrfkaonr/posts/attachments/K87MXv32XedKlcZevauaaylr.mp4"
+        preload="metadata"
+        controls=""
+       ></video>
+      </figure>
+      <section class="section section-level-2">
+       <header class="section-header">Code</header>
+       <div class="section-content">
+        <p><code>index.html</code>:</p>
+        <details>
+         <summary>Code</summary>
+         <pre collapsed="">
+&lt;html&gt;
+  &lt;style&gt;
+    html {
+      background-size: cover;
+      background-position: center;
+      transition: background-image 0.1s linear;
+    }
+    html[data-brightness="0"] {
+      background-image: url("https://i.imgur.com/BtVEOTW.jpg");
+    }
+    html[data-brightness="1"] {
+      background-image: url("https://i.imgur.com/bHNnHLG.jpg");
+    }
+    html[data-brightness="2"] {
+      background-image: url("https://i.imgur.com/SqwcxPb.jpg");
+    }
+    html[data-brightness="3"] {
+      background-image: url("https://i.imgur.com/ug6ygWM.jpg");
+    }
+    html[data-brightness="4"] {
+      background-image: url("https://i.imgur.com/yrcBhE3.jpg");
+    }
+    /*
+     * "https://i.imgur.com/BtVEOTW.jpg",
+     * "https://i.imgur.com/bHNnHLG.jpg",
+     * "https://i.imgur.com/SqwcxPb.jpg",
+     * "https://i.imgur.com/ug6ygWM.jpg",
+     * "https://i.imgur.com/yrcBhE3.jpg",
+     * "https://i.imgur.com/T73kW7u.jpg",
+     * "https://i.imgur.com/T0cv4Pw.jpg",
+     * "https://i.imgur.com/BUzah8v.jpg",
+     * "https://i.imgur.com/4lnL4KP.jpg",
+     * "https://i.imgur.com/DK1RcjA.jpg",
+     * "https://i.imgur.com/bKNslxS.jpg",
+     * "https://i.imgur.com/tdmYEwc.jpg",
+     * "https://i.imgur.com/QuHITfl.jpg",
+     * "https://i.imgur.com/iMd0ey0.jpg",
+     * "https://i.imgur.com/C8b6IMU.jpg",
+     * "https://i.imgur.com/5Xq4Yun.jpg",
+     */
+  &lt;/style&gt;
+  &lt;script&gt;
+    // Preload background images
+    // https://stackoverflow.com/a/1374936/782045
+    for (let img of [
+      "https://i.imgur.com/BtVEOTW.jpg",
+      "https://i.imgur.com/bHNnHLG.jpg",
+      "https://i.imgur.com/SqwcxPb.jpg",
+      "https://i.imgur.com/ug6ygWM.jpg",
+      "https://i.imgur.com/yrcBhE3.jpg",
+    ]) {
+      new Image().src = img;
+    }
+
+    setInterval(async () =&gt; {
+      let response = await fetch("/");
+      let brightness = response.headers.get("brightness");
+      let index = Math.max(0, Math.min(4, Math.floor(brightness / 40 - 1)));
+      document.documentElement.setAttribute("data-brightness", index);
+    }, 100);
+  &lt;/script&gt;
+  &lt;body&gt;
+    &lt;title&gt;Fiat Lux&lt;/title&gt;
+    &lt;img /&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre
+         >
+        </details>
+        <p><code>main.ts</code>:</p>
+        <details>
+         <summary>Code</summary>
+         <pre collapsed="">
+import mergeRace from "https://jspm.dev/@async-generator/merge-race@1.0.3";
+import { readLines } from "https://deno.land/std@0.77.0/io/bufio.ts";
+import { serve } from "https://deno.land/std@0.89.0/http/server.ts";
+
+const server = serve({ hostname: "0.0.0.0", port: 8080 });
+console.log(`HTTP webserver running.  Access it at:  http://localhost:8080/`);
+let bodyContent = await Deno.readTextFile("index.html");
+
+let brightness = 0;
+
+if (import.meta.main) {
+  let serialProcess = Deno.run({
+    cmd: ["make", "monitor"],
+    stdout: "piped",
+  });
+
+  for await (let item of (mergeRace as any)(
+    readLines(serialProcess.stdout),
+    server
+  )) {
+    if (typeof item === "string") {
+      // From readLines
+      let line = item;
+
+      let m = line.match(/(\d+),(\d+),(\d+),(\d+)/);
+      if (m) {
+        let [_, sr, sg, sb, sc] = m;
+        let [r, g, b, c] = [sr, sg, sb, sc].map(parseFloat);
+        brightness = c;
+        console.log(brightness);
+      } else {
+        console.log(line);
+      }
+    } else {
+      // From server
+      let request = item;
+
+      request.respond({
+        status: 200,
+        headers: new Headers([
+          ["content-type", "text/html"],
+          ["brightness", `${brightness}`],
+        ]),
+        body: bodyContent,
+      });
+    }
+  }
+}</pre
+         >
+        </details>
+        <p><code>project-2.ino</code>:</p>
+        <details>
+         <summary>Code</summary>
+         <pre collapsed="">
+#include "Arduino_APDS9960.h"
+
+void setup() {
+  Serial.begin(9600);
+  // wait for Serial Monitor to open:
+  while (!Serial)
+    ;
+
+  Serial.println("hi");
+
+  // if the sensor doesn't initialize, let the user know:
+  while (!APDS.begin()) {
+    Serial.println("APDS9960 sensor not working. Check your wiring.");
+
+    delay(1000);
+  }
+
+  Serial.println("Sensor is working");
+}
+
+void loop() {
+  // red, green, blue, clear channels:
+  int r, g, b, c;
+
+  // if the sensor has a reading:
+  if (APDS.colorAvailable()) {
+
+    // read the color
+    APDS.readColor(r, g, b, c);
+
+    // print the values
+    Serial.print(r);
+    Serial.print(",");
+    Serial.print(g);
+    Serial.print(",");
+    Serial.print(b);
+    Serial.print(",");
+    Serial.println(c);
+
+    delay(100);
+  }
+}</pre
+         >
+        </details>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
