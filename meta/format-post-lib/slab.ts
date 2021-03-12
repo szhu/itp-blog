@@ -109,6 +109,7 @@ interface Attributes {
   link?: string;
 
   // Block attributes
+  blockquote?: true;
   header?: number;
   hint?: "success";
   "code-block"?: "plain";
@@ -497,6 +498,10 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
       let el = document.createElement("li");
       el.append(contentsAsFragment);
       currentList.append(el);
+    } else if (attributes.blockquote) {
+      let el = document.createElement("blockquote");
+      el.append(contentsAsFragment);
+      currentSection.append(el);
     } else {
       let el = document.createElement("p");
       el.append(contentsAsFragment);

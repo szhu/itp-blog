@@ -110,9 +110,9 @@ li {
 }
 
 blockquote {
-  border-left: 5px solid gainsboro;
+  border-left: 5px solid var(--color-dim);
   padding-left: var(--padding-h);
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 details {
