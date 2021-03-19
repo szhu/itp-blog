@@ -1,0 +1,164 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>BLE Week 6</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">BLE Week 6</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Final project</header>
+     <div class="section-content">
+      <section class="section section-level-2">
+       <header class="section-header">No-go ideas</header>
+       <div class="section-content">
+        <p>
+         I was really excited about the variety of voting applications that BLE
+         could help make easier. However, as I explored each idea, I found the
+         following issues:
+        </p>
+        <ul>
+         <li>
+          Real-time voting applications in rooms with many people (like
+          classrooms, conferences) are not feasible, since most BLE peripheral
+          devices don't allow simultaneous connections. Also, since these
+          applications are low-security, there are not many advantages over
+          using the Internet.
+         </li>
+         <li>
+          To make a secure voting booths, fraud prevention would be hard. The
+          range of Bluetooth is large enough that there would still need to be
+          defenses against fraudulent voting. The most secure idea I could come
+          up with is a two-booth solution, where the first booth outputs a
+          cryptographically-signed "ballot signature" that the user receives.
+          The user then walks to the second booth to submit a ballot with that
+          signature. The act of walking from the first booth to the second can
+          then be regulated using traditional means (security camera, physical
+          barriers, etc.). This is a solution, which potentially feasible, both
+          requires more security review and offers little advantage over paper
+          ballots, so I decide to not go with this idea.
+         </li>
+        </ul>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Final project description</header>
+       <div class="section-content">
+        <p>
+         Social Thermometer is a room that marks the sentiment of a room based
+         on its recent occupants. It is meant to be installed in common areas
+         with no permanent occupants, like break rooms and lounges.
+        </p>
+        <p></p>
+        <figure>
+         <img
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/kaPC_bmBLK09Bu6uXRMZnwI_.jpg"
+         />
+        </figure>
+        <p>
+         Why: Sometimes the people who need the most support around us are the
+         quietest. In spaces with many different people, small common areas tend
+         to only serve those with the most energy. This is a simple device that
+         allows occupants to sense the energy of those around them.
+        </p>
+        <p>
+         To use Social Thermometer, users use their phones to scan the QR code
+         on the box, which takes them to an app (or website, once Bluetooth APIs
+         for mobile web becomes available). Then, users would tap the sentiment
+         (sad, meh, happy) that matches their current mood. The process is
+         anonymous, and there is no mechanism to prevent users from submitting
+         multiple votes; however, the device will only accept one vote every
+         minute (and the app will indicate whether the device is currently
+         accepting votes).
+        </p>
+        <p>
+         Over time, the 3 LEDs on the device change to represent the relative
+         occurrence of mood of the room. The device will discard older
+         submissions, so the current reading will reflect only recent
+         submissions. To preserve anonymity, the device wait for a random
+         duration (1-10 minutes) before updating the reading to reflect the
+         latest submission.
+        </p>
+        <p>
+         Social Thermometer is a good application of BLE, as the entire set of
+         interactions that we would like to allow only involve users within
+         Bluetooth range. Compared to an online voting system, this solution is
+         much more scalable. The only web component — the page the QR code links
+         to — can be a static page and would be easy for people to host their
+         own copies of. Moreover, the submitted data is not stored on the
+         Internet, providing some inherent privacy.
+        </p>
+        <p></p>
+        <figure>
+         <video
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/attachments/eITHrJD64lbJAgsufJN1jzS3.mp4"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Diagrams</header>
+       <div class="section-content">
+        <figure>
+         <figcaption><p>System diagram.</p></figcaption>
+         <img
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/qhEXeX2aswsgGtxDlmjw-p9V.jpg"
+         />
+        </figure>
+        <figure>
+         <figcaption><p>Schematic of device.</p></figcaption>
+         <img
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/kSDbGpFGAWr4HucBR4Yemjp1.png"
+          width="448"
+          class="small"
+         />
+        </figure>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Bill of materials</header>
+       <div class="section-content">
+        <ul>
+         <li>Arduino Nano 33 IoT</li>
+         <li>3 LEDs</li>
+         <li>Enclosure</li>
+         <li>Printed Label</li>
+         <li>Battery pack or micro-usb cable + AC adapter</li>
+         <li>Wiring</li>
+         <li>Mounting hardware (e.g., Command hooks)</li>
+        </ul>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Handshake guide</header>
+       <div class="section-content">
+        <ol>
+         <li>
+          The client should search for Bluetooth LE devices with service
+          <code>e3099389-0215-400b-890e-a91262d6f618</code> and connect to the
+          first device found. There should only be one device.
+         </li>
+         <li>
+          The client should write to integer characteristic
+          <code>334c7536-1133-4f0e-a4d6-e3cf23f3c6b4.</code> The characteristic
+          only supports writing. Allowed values: <code>1</code> (sad)
+          <code>2</code> (meh) <code>3</code> (happy).
+         </li>
+         <li>That's it! Now the client can disconnect.</li>
+        </ol>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
