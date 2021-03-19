@@ -31,17 +31,18 @@
           using the Internet.
          </li>
          <li>
-          To make a secure voting booths, fraud prevention would be hard. The
-          range of Bluetooth is large enough that there would still need to be
-          defenses against fraudulent voting. The most secure idea I could come
-          up with is a two-booth solution, where the first booth outputs a
-          cryptographically-signed "ballot signature" that the user receives.
-          The user then walks to the second booth to submit a ballot with that
-          signature. The act of walking from the first booth to the second can
-          then be regulated using traditional means (security camera, physical
-          barriers, etc.). This is a solution, which potentially feasible, both
-          requires more security review and offers little advantage over paper
-          ballots, so I decide to not go with this idea.
+          To make a secure voting booth, fraud prevention would be required, but
+          it would be hard. The range of Bluetooth is large enough that there
+          would still need to be defenses against fraudulent voting. The most
+          secure idea I could come up with is a two-booth solution, where the
+          first booth outputs a cryptographically-signed "ballot signature" that
+          the user receives. The user then walks to the second booth to submit a
+          ballot with that signature. The act of walking from the first booth to
+          the second can then be regulated using traditional means (security
+          camera, physical barriers, etc.). This is a solution, which
+          potentially feasible, both requires more security review and offers
+          little advantage over paper ballots, so I decide to not go with this
+          idea.
          </li>
          <li>
           Implementing a comment/message board would require a storage
@@ -63,7 +64,7 @@
        <header class="section-header">Description</header>
        <div class="section-content">
         <p>
-         Social Thermometer is a room that marks the sentiment of a room based
+         <b>Read the Room</b> is a room that marks the sentiment of a room based
          on its recent occupants. It is meant to be installed in common areas
          with no permanent occupants, like break rooms and lounges.
         </p>
@@ -80,9 +81,9 @@
          allows occupants to sense the energy of those around them.
         </p>
         <p>
-         To use Social Thermometer, users use their phones to scan the QR code
-         on the box, which takes them to an app (or website, once Bluetooth APIs
-         for mobile web becomes available). Then, users would tap the sentiment
+         To use Read the Room, users use their phones to scan the QR code on the
+         box, which takes them to an app (or website, once Bluetooth APIs for
+         mobile web becomes available). Then, users would tap the sentiment
          (sad, meh, happy) that matches their current mood. The process is
          anonymous, and there is no mechanism to prevent users from submitting
          multiple votes; however, the device will only accept one vote every
@@ -98,7 +99,7 @@
          latest submission.
         </p>
         <p>
-         Social Thermometer is a good application of BLE, as the entire set of
+         Read the Room is a good application of BLE, as the entire set of
          interactions that we would like to allow only involve users within
          Bluetooth range. Compared to an online voting system, this solution is
          much more scalable. The only web component — the page the QR code links
@@ -109,10 +110,15 @@
         <p></p>
         <figure>
          <video
-          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/attachments/eITHrJD64lbJAgsufJN1jzS3.mp4"
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/attachments/nVcXOHgfeYMELQ7kDunG4jTw.mp4"
           preload="metadata"
           controls=""
          ></video>
+        </figure>
+        <figure>
+         <img
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/uTTgMh9IVYbk3udkQVwa71Fz.png"
+         />
         </figure>
        </div>
       </section>
@@ -185,8 +191,8 @@
            >The video prototype was good even though it doesn't involve a
            working device. The phone webapp should be similarly prototyped as
            well, even if technical limitations currently prevent such an app
-           from being built.</i
-          >
+           from being built. </i
+          >Update: I added a prototype!
          </li>
          <li>
           <i
