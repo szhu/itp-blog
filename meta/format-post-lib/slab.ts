@@ -98,10 +98,22 @@ export async function slabToOps(subdomain: string, id: string) {
   let json = await r.json();
   let content = json[0].payload.data.post.content;
   let ops = JSON.parse(content) as Op[];
+
+  // Remove authorship information
+  for (let op of ops) {
+    if (op.attributes) {
+      delete op.attributes["author"];
+      if (Object.keys(op.attributes).length === 0) {
+        delete op["attributes"];
+      }
+    }
+  }
   return ops;
 }
 
 interface Attributes {
+  author?: string;
+
   // Inline attributes
   bold?: true;
   italic?: true;
@@ -260,6 +272,8 @@ function opsToBlocks(ops: Op[]) {
       // Otherwise, add the op to the current block.
       if (op.attributes || op.insert) {
         bb.current().ops.push(op);
+      } else {
+        // console.log(op);
       }
     }
   }
