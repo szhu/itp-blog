@@ -216,8 +216,7 @@ export default function reformatDoc(document, root) {
   for (let a of root.querySelectorAll("a")) {
     // In jsdom, document.location.origin is "null", but relative links have
     // origin "".
-    let effectiveUrl = new URL(a.href, document.location.href);
-    if (effectiveUrl.origin != document.location.origin) {
+    if ((a.origin || "null") !== document.location.origin) {
       a.target = "_blank";
     }
   }
