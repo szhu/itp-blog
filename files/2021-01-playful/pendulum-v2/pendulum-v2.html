@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Double Pendulum!</title>
+    <style>
+      html {
+        background-color: gainsboro;
+      }
+      body {
+        background-color: white;
+        margin: 0 auto;
+        width: 100vmin;
+        height: 100vmin;
+        position: relative;
+      }
+      .layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vmin;
+        height: 100vmin;
+      }
+      svg {
+        object-fit: contain;
+        pointer-events: none;
+      }
+      .controls {
+        padding: 1em;
+        position: relative;
+        z-index: 1;
+        line-height: 1.5em;
+      }
+      .slider {
+        vertical-align: bottom;
+      }
+    </style>
+    <script>
+      async function openImage() {
+        let canvas = document.getElementById("canvas");
+        let blob = await new Promise((resolve) =>
+          canvas.toBlob(resolve, "image/png")
+        );
+        let url = URL.createObjectURL(blob);
+        open(url);
+      }
+
+      async function getLink() {
+        let canvas = document.getElementById("canvas");
+        let blob = await new Promise((resolve) =>
+          canvas.toBlob(resolve, "image/png")
+        );
+
+        let data = new FormData();
+        data.append("upload", blob, "drawing.png");
+        let response = await fetch(
+          "https://double-pendulum-80222.herokuapp.com/generate-qr",
+          {
+            // mode: "no-cors",
+            method: "POST",
+            body: data,
+          }
+        );
+        let json = await response.json();
+        if (json.success) {
+          document.getElementById("qrcode").src = json.qrUrl;
+        }
+      }
+
+      function hideLink() {
+        document.getElementById("qrcode").removeAttribute("src");
+      }
+
+      let ctx;
+      function init() {
+        let canvas = document.getElementById("canvas");
+        // canvas.width = window.innerWidth;
+        // canvas.height = window.innerHeight;
+        if (canvas.getContext) {
+          ctx = canvas.getContext("2d");
+
+          ctx.fillStyle = "rgba(255,255,255,0.05)";
+          ctx.lineCap = "round";
+          ctx.lineWidth = 3;
+
+          ctx.beginPath();
+
+          canvas.addEventListener("mousemove", (e) => {
+            if (e.which === 1 || e.shiftKey) {
+              // console.log(e.clientX, e.clientY);
+              document.getElementById("angle1").value = e.clientX % 360;
+              document.getElementById("angle2").value = e.clientY % 360;
+              updateAngles(e);
+            }
+
+            // ctx.lineTo(e.clientX, e.clientY);
+            // ctx.stroke();
+          });
+        }
+
+        document
+          .getElementById("angle1")
+          .addEventListener("input", updateAngles);
+        document
+          .getElementById("angle2")
+          .addEventListener("input", updateAngles);
+      }
+
+      function getAngle1() {
+        return (document.getElementById("angle1").value * Math.PI) / 180;
+      }
+      function getAngle2() {
+        return (document.getElementById("angle2").value * Math.PI) / 180;
+      }
+      function setAngle1(angle) {
+        document.getElementById("angle1").value = angle;
+      }
+      function setAngle2(angle) {
+        document.getElementById("angle2").value = angle;
+      }
+
+      let lastX, lastY;
+
+      function updateAngles(e) {
+        if (e.altKey) {
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        ctx.beginPath();
+        ctx.moveTo(lastX * 5, lastY * 5);
+
+        let [x0, y0] = [100, 100];
+        let [x1, y1] = getArmEndpoint(getAngle1(), 40, [x0, y0]);
+        let [x2, y2] = getArmEndpoint(getAngle1(), 40, [x1, y1]);
+        let coords = [
+          [x0, y0],
+          [x1, y1],
+          [x2, y2],
+        ];
+        document.getElementById("pendulum").setAttribute(
+          "d",
+          `
+            M ${x0} ${y0}
+            L ${x1} ${y1}
+            L ${x2} ${y2}
+          `
+        );
+
+        ctx.lineTo(x2 * 5, y2 * 5);
+        lastX = x2;
+        lastY = y2;
+        ctx.stroke();
+      }
+
+      function getArmEndpoint(angle, length, [startX, startY]) {
+        let endX = startX + length * Math.cos(angle);
+        let endY = startY + length * Math.sin(angle);
+        return [endX, endY];
+      }
+
+      const ServiceUuid = "68d458d2-ceac-440f-b61a-bb620043c147";
+      const CharUuid = "055c1935-8461-4c9c-b186-3bb141899a63";
+
+      async function connect() {
+        // debugger;
+        console.log("Requesting Bluetooth Device");
+        const device = await navigator.bluetooth.requestDevice({
+          filters: [{ services: [ServiceUuid] }],
+        });
+
+        console.log("Connect to GATT Server");
+        const server = await device.gatt.connect();
+
+        console.log("Connecting to GATT Server");
+        const service = await server.getPrimaryService(ServiceUuid);
+
+        console.log("Getting Characteristic");
+        let char = await service.getCharacteristic(CharUuid);
+
+        console.log("Starting Notifications");
+        await char.startNotifications();
+
+        console.log("Notifications started");
+        char.addEventListener("characteristicvaluechanged", (e) => {
+          let angle = char.value.getInt32(0, true) / 1000;
+          console.log(angle * 90);
+          setAngle1(angle * 90);
+          updateAngles({ altKey: true });
+        });
+      }
+    </script>
+  </head>
+  <body onload="init();">
+    <div class="controls">
+      <div><b>Double Pendulum!</b> 3 ways to draw:</div>
+      <div>
+        1️⃣ Click and drag,
+        <!--  -->
+        2️⃣ Hold down Shift, or
+        <!--  -->
+        3️⃣ Drag these sliders:
+        <input
+          type="range"
+          min="0"
+          max="359"
+          value="50"
+          class="slider"
+          id="angle1"
+        />
+        <input
+          type="range"
+          min="0"
+          max="359"
+          value="50"
+          class="slider"
+          id="angle2"
+        />
+      </div>
+      <div>
+        To clear the canvas, refresh the page. Hold down Option/Alt to fade out.
+      </div>
+      <div>
+        Export drawing as PNG:
+        <a href="javascript:openImage();">Open in new tab.</a>
+        <a href="javascript:getLink();">Get QR code.</a>
+      </div>
+      <div>
+        Pair with sensor over Bluetooth:
+        <a href="javascript:connect();">Connect.</a>
+      </div>
+      <img id="qrcode" onclick="hideLink();" />
+    </div>
+
+    <canvas id="canvas" width="1000" height="1000" class="layer"></canvas>
+    <svg
+      class="layer"
+      width="200"
+      height="200"
+      viewBox="0 0 200 200"
+      fill="none"
+    >
+      <path
+        id="pendulum"
+        d="
+        M 100 100
+        L 142.5 131.5
+        L 131.5 192"
+        stroke="red"
+        stroke-linecap="round"
+      />
+    </svg>
+
+    <div
+      class="glitchButton"
+      style="position: fixed; top: 20px; right: 20px"
+    ></div>
+    <script src="https://button.glitch.me/button.js" defer></script>
+  </body>
+</html>
