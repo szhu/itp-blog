@@ -1,0 +1,120 @@
+<div id="app"></div>
+<style>
+  @keyframes shake {
+    25% {
+      transform: translate(-4px, 0);
+    }
+    75% {
+      transform: translate(-4px, 0);
+    }
+  }
+  body,
+  #app,
+  .app {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+  }
+  .app {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .app-hot {
+    background: red;
+  }
+  .app-cold {
+    background: #00bcd4;
+  }
+  .button {
+    font: 40px Arial;
+    padding: 1em;
+    border-radius: 1em;
+    min-width: 7em;
+  }
+  .button:focus {
+    outline: none;
+  }
+  .button-isCountingDown-true {
+    animation: shake 0.15s linear infinite;
+    transform: translate(0, 0);
+  }
+  .remaining {
+    font-size: 10px;
+  }
+  .remaining-0 {
+    visibility: hidden;
+  }
+</style>
+<script type="module">
+  import React from "https://jspm.dev/react";
+  import ReactDOM from "https://jspm.dev/react-dom";
+
+  function Element(Component) {
+    return (...args) => React.createElement(Component, ...args);
+  }
+
+  const div = Element("div");
+  const button = Element("button");
+
+  const Fragment = Element(React.Fragment);
+
+  const App = Element(function App({ toWhat = "World" }) {
+    const intervalIdRef = React.useRef();
+    const [remaining, setRemaining] = React.useState(0);
+    const [isHot, setIsHot] = React.useState(false);
+
+    function onMouseDown() {
+      setRemaining(5);
+      clearInterval(intervalIdRef.current);
+      intervalIdRef.current = setInterval(() => {
+        setRemaining((remaining) => {
+          if (remaining > 1) {
+            return remaining - 1;
+          } else {
+            setIsHot(!isHot);
+            clearInterval(intervalIdRef.current);
+            return 0;
+          }
+        });
+      }, 1000);
+    }
+
+    function onMouseUp() {
+      clearInterval(intervalIdRef.current);
+      setRemaining(0);
+    }
+
+    return div({
+      className: `app app-${isHot ? `hot` : `cold`}`,
+      children: button({
+        className: `button button-isCountingDown-${remaining > 0}`,
+        onMouseUp,
+        onMouseDown,
+        children: [
+          div({
+            className: "remaining remaining-0",
+            children: ".",
+          }),
+          div({
+            key: 1,
+            className: "hot-cold",
+            children: isHot ? `Hot!` : `Cold!`,
+          }),
+          div({
+            key: 2,
+            className: `remaining remaining-${remaining}`,
+            children: `Hold down for ${remaining} more second${
+              remaining === 1 ? "" : "s"
+            }!`,
+          }),
+        ],
+      }),
+    });
+  });
+
+  ReactDOM.render(App(), document.getElementById("app"));
+</script>
+<div class="glitchButton" style="position: fixed; top: 20px; right: 20px"></div>
+<script src="https://button.glitch.me/button.js" defer></script>
