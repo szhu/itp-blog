@@ -1,0 +1,33 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg width="800" height="600" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <ellipse stroke="black" stroke-width="1" fill="none" cx="134.5" cy="244.5" rx="30" ry="30" />
+  <text x="111.5" y="250.5" font-family="Times New Roman" font-size="20">initial</text>
+  <ellipse stroke="black" stroke-width="1" fill="none" cx="275.5" cy="107.5" rx="30" ry="30" />
+  <text x="249.5" y="113.5" font-family="Times New Roman" font-size="20">placed</text>
+  <ellipse stroke="black" stroke-width="1" fill="none" cx="409.5" cy="235.5" rx="30" ry="30" />
+  <text x="392.5" y="241.5" font-family="Times New Roman" font-size="20">help</text>
+  <ellipse stroke="black" stroke-width="1" fill="none" cx="669.5" cy="235.5" rx="30" ry="30" />
+  <text x="659.5" y="241.5" font-family="Times New Roman" font-size="20">no</text>
+  <ellipse stroke="black" stroke-width="1" fill="none" cx="275.5" cy="373.5" rx="30" ry="30" />
+  <text x="252.5" y="379.5" font-family="Times New Roman" font-size="20">found</text>
+  <path stroke="black" stroke-width="1" fill="none" d="M 133.402,214.598 A 119.857,119.857 0 0 1 245.642,105.542" />
+  <polygon fill="black" stroke-width="1" points="245.642,105.542 237.358,101.028 237.955,111.011" />
+  <text x="24.5" y="130.5" font-family="Times New Roman" font-size="20">if clicked on hole</text>
+  <path stroke="black" stroke-width="1" fill="none" d="M 245.624,371.578 A 134.778,134.778 0 0 1 139.065,274.088" />
+  <polygon fill="black" stroke-width="1" points="139.065,274.088 136.329,283.117 145.981,280.504" />
+  <text x="113.5" y="359.5" font-family="Times New Roman" font-size="20">after 2s</text>
+  <path stroke="black" stroke-width="1" fill="none" d="M 305.3,104.943 A 111.357,111.357 0 0 1 410.69,205.614" />
+  <polygon fill="black" stroke-width="1" points="410.69,205.614 414.91,197.177 404.955,198.124" />
+  <text x="381.5" y="126.5" font-family="Times New Roman" font-size="20">after 2s</text>
+  <path stroke="black" stroke-width="1" fill="none" d="M 435.569,220.694 A 237.313,237.313 0 0 1 643.431,220.694" />
+  <polygon fill="black" stroke-width="1" points="643.431,220.694 638.429,212.695 634.049,221.685" />
+  <text x="451.5" y="187.5" font-family="Times New Roman" font-size="20">if click on wrong hole</text>
+  <path stroke="black" stroke-width="1" fill="none" d="M 410.524,265.404 A 119.985,119.985 0 0 1 305.422,373.644" />
+  <polygon fill="black" stroke-width="1" points="305.422,373.644 313.963,377.648 312.764,367.72" />
+  <text x="382.5" y="358.5" font-family="Times New Roman" font-size="20">if click on right hole</text>
+  <path stroke="black" stroke-width="1" fill="none" d="M 640.943,244.668 A 378.871,378.871 0 0 1 438.057,244.668" />
+  <polygon fill="black" stroke-width="1" points="438.057,244.668 444.426,251.627 447.103,241.993" />
+  <text x="509.5" y="279.5" font-family="Times New Roman" font-size="20">after 2s</text>
+</svg>

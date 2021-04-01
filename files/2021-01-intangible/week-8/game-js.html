@@ -1,0 +1,157 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <script>
+      let carrotInHole = sessionStorage.carrotInHole;
+      let currentState;
+      let nextPage;
+      let hole = "";
+      if (location.search === "?1") {
+        currentState = "hole-1";
+        hole = "1";
+      } else if (location.search === "?2") {
+        currentState = "hole-2";
+        hole = "2";
+      } else if (location.search === "?3") {
+        currentState = "hole-3";
+        hole = "3";
+      } else if (location.search === "?placed") {
+        currentState = "placed";
+        nextPage = "?";
+      } else if (location.search === "?no") {
+        currentState = "no";
+        nextPage = "?";
+      } else if (location.search === "?found") {
+        currentState = "found";
+        nextPage = "?";
+      } else {
+        if (carrotInHole) {
+          currentState = "help";
+        } else {
+          currentState = "initial";
+        }
+      }
+      if (hole) {
+        if (carrotInHole) {
+          if (hole == carrotInHole) {
+            nextPage = "?found";
+            sessionStorage.carrotInHole = "";
+          } else {
+            nextPage = "?no";
+          }
+        } else {
+          sessionStorage.carrotInHole = hole;
+          nextPage = "?placed";
+        }
+      }
+
+      document.documentElement.classList.add("state-" + currentState);
+      if (nextPage) {
+        setTimeout(() => (window.location = nextPage), 2000);
+      }
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <style>
+      body {
+        text-align: center;
+      }
+      p {
+        height: 15vh;
+      }
+      table {
+        margin: 5em auto;
+      }
+      td {
+        font-size: 10vmin;
+        line-height: 0.5em;
+        min-height: 0.5em;
+        text-align: center;
+      }
+      a {
+        text-decoration: none;
+      }
+
+      .hidden {
+        display: none;
+      }
+      html.state-initial .initial,
+      html.state-placed .placed,
+      html.state-help .help,
+      html.state-no .no,
+      html.state-found .found,
+      html.state-hole-1 .hole-1,
+      html.state-hole-2 .hole-2,
+      html.state-hole-3 .hole-3 {
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="hidden initial">
+      <!--  -->
+      Peter Rabbit needs to store his carrots for the winter. Can you help him
+      pick a hole?
+    </p>
+    <p class="hidden placed">
+      <!--  -->
+      Thank you for your help!
+    </p>
+    <p class="hidden help">
+      <!--  -->
+      Spring is here. Help Peter Rabbit find his stored carrots!
+    </p>
+    <p class="hidden no">
+      <!--  -->
+      No, they're not there…
+    </p>
+    <p class="hidden found">
+      <!--  -->
+      Oh, here they are. Thank you for your help!
+    </p>
+    <p class="hidden hole-1 hole-2 hole-3">
+      <!--  -->
+      &hellip;
+    </p>
+
+    <table>
+      <tr>
+        <td><br /></td>
+        <td colspan="3">
+          <span class="hidden initial placed help no found">🐇</span>
+          <span class="hidden initial found">🥕</span>
+        </td>
+        <td><br /></td>
+      </tr>
+      <tr>
+        <td><br /></td>
+        <td><br /></td>
+        <td><br /></td>
+        <td><br /></td>
+        <td><br /></td>
+      </tr>
+      <tr>
+        <td><br /></td>
+        <td><span class="hidden hole-1">🐇</span></td>
+        <td><span class="hidden hole-2">🐇</span></td>
+        <td><span class="hidden hole-3">🐇</span></td>
+        <td><br /></td>
+      </tr>
+      <tr>
+        <td><br /></td>
+        <script>
+          if (nextPage) {
+            document.write("<td>🕳</td><td>🕳</td><td>🕳</td>");
+          } else {
+            document.write(
+              "<td><a href='?1'>🕳</a></td>" +
+                "<td><a href='?2'>🕳</a></td>" +
+                "<td><a href='?3'>🕳</a></td>"
+            );
+          }
+        </script>
+        <td><br /></td>
+      </tr>
+    </table>
+  </body>
+</html>

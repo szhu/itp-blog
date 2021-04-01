@@ -1,0 +1,131 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>Intangible Interactions Week 8</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">Intangible Interactions Week 8</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">
+      Using Arduino to access APIs (or not)
+     </header>
+     <div class="section-content">
+      <p>
+       I was originally excited to use the Arduino as Wi-Fi and HTTP client,
+       connecting to the internet just like any other computing device and
+       interacting with some cool APIs. However, the sample code never was able
+       to connect to the Wi-Fi router!
+      </p>
+      <p>
+       It turns out that the router in my apartment is only supplying a 5GHz
+       network, and the Arduino's Wi-Fi module only works with 2.4GHz networks.
+       The router is not mine, so I didn't want to reconfigure it. Time for
+       another plan…
+      </p>
+     </div>
+    </section>
+    <section class="section section-level-1">
+     <header class="section-header">Using Arduino as a Wi-Fi AP</header>
+     <div class="section-content">
+      <section class="section section-level-2">
+       <header class="section-header">Idea and demo</header>
+       <div class="section-content">
+        <p>
+         Instead I used the Arduino as a Wi-Fi access point and HTTP server, and
+         used it to serve a small game:
+        </p>
+        <figure>
+         <video
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/attachments/t7fNWg81aoCNVFIsvi7wRvsy.mp4"
+          preload="metadata"
+          controls=""
+         ></video>
+        </figure>
+        <p>
+         To play, the player first taps a hole for the rabbit to hide the
+         carrots in. Then, the player must tape the same hole to retrieve the
+         carrots. This is a trivial task and obviously should be expanded on to
+         make an interesting game. However, even it its current state:
+        </p>
+        <ul>
+         <li>
+          It could be a fun game for small children to teach them object
+          permanence.
+         </li>
+         <li>
+          It could be a fun game for inebriated people to teach them object
+          permanence.
+         </li>
+         <li>
+          Multiple people can connect to the server at the same time to cause a
+          lot of chaos.
+         </li>
+         <li>
+          It can be used as a memory game, or a habit-forming aid, if the player
+          allows for a long time between placing the carrot and retrieving the
+          carrot.
+         </li>
+        </ul>
+        <p>
+         The game is simple, but I made sure it was complex enough to require
+         the server to store game state ✨ to prevent cheating ✨ since the
+         stakes in this game are very high.
+        </p>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Process</header>
+       <div class="section-content">
+        <p>
+         To create the game, I mentally mapped out the game's possible states.
+         Some of the states would be only directly accessible to the server, and
+         some were ok to show the client. I had the server store whether the
+         carrot was stored in a hole, and, if so, which hole. All the remaining
+         aspects of the state were fairly transient, and could be stored in the
+         URL or in a meta refresh tag to indicate the state to advance to after
+         a 2-second delay.
+        </p>
+        <figure>
+         <img
+          src="https://static.slab.com/prod/uploads/xrfkaonr/posts/images/lyq4jTRDuGSrukqJxL9TZqzl.png"
+          width="730"
+          class="small"
+         />
+        </figure>
+        <p>
+         This is a simplified state diagram, not showing the states
+         corresponding to which hole the carrot was stored in, and the hole the
+         player decided to look at.
+        </p>
+        <p>
+         To prototype the code, I made a client-only version that uses only JS
+         and doesn't interact with a server. (The Arduino version of the game
+         also doesn't use JavaScript at all!) Both versions of the game look
+         exactly the same.
+        </p>
+        <p>
+         <a href="../files/2021-01-intangible/week-8/game-js.html"
+          >Play the JS version of the game here.</a
+         >
+        </p>
+        <p>
+         <a href="../files/2021-01-intangible/week-8/week-8.ino"
+          >Arduino code</a
+         >
+         — run on your own Arduino!
+        </p>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
+
