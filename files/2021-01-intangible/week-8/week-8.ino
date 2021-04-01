@@ -105,7 +105,7 @@ void loop() {
   if (client) {
     // if you get a client,
     // print a message out the serial port
-    Serial.println("New client.");
+    Serial.println("Client connected.");
     // make a String to hold incoming data from the client
     String currentLine = "";
 
@@ -143,8 +143,8 @@ void loop() {
             client.print("'>");
             client.print("<head>");
             client.print("<meta charset='utf-8' />");
-            client.print("  <meta name='viewport' content='width=device-width, "
-                         "user-scalable=no' />");
+            client.print("<meta name='viewport' "
+                         "content='width=device-width, user-scalable=no' />");
             if (nextPage) {
               client.print("<meta http-equiv='refresh' content='2; ");
               client.print(nextPage);
@@ -175,7 +175,6 @@ void loop() {
                 "display: none;"
                 "}"
                 "html.state-initial .initial,"
-                "html.state-placed .placed,"
                 "html.state-placed .placed,"
                 "html.state-help .help,"
                 "html.state-no .no,"
@@ -253,7 +252,6 @@ void loop() {
             }
             client.print(
                 //
-
                 "<td><br /></td>"
                 "</tr>"
                 "</table>"
@@ -320,13 +318,13 @@ void loop() {
           currentLine += c;     // add it to the end of the currentLine
         }
 
-        // Check to see if the client request was "GET /H" or "GET /L":
-        if (currentLine.endsWith("GET /H")) {
-          digitalWrite(led, HIGH); // GET /H turns the LED on
-        }
-        if (currentLine.endsWith("GET /L")) {
-          digitalWrite(led, LOW); // GET /L turns the LED off
-        }
+        // // Check to see if the client request was "GET /H" or "GET /L":
+        // if (currentLine.endsWith("GET /H")) {
+        //   digitalWrite(led, HIGH); // GET /H turns the LED on
+        // }
+        // if (currentLine.endsWith("GET /L")) {
+        //   digitalWrite(led, LOW); // GET /L turns the LED off
+        // }
       }
     }
     // close the connection:
