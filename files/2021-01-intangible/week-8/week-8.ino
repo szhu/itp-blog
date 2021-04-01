@@ -190,12 +190,12 @@ void loop() {
                 "<body>"
                 "<p class='hidden initial'>"
                 "<!--  -->"
-                "Peter rabbit needs to store his carrots for the winter. Can "
+                "Peter Rabbit needs to store his carrots for the winter. Can "
                 "you help him pick a hole?"
                 "</p>"
                 "<p class='hidden placed'>"
                 "<!--  -->"
-                "Thank you for your help!"
+                "Okay, let's put them there."
                 "</p>"
                 "<p class='hidden help'>"
                 "<!--  -->"
@@ -208,7 +208,8 @@ void loop() {
                 "</p>"
                 "<p class='hidden found'>"
                 "<!--  -->"
-                "Oh, here they are. Thank you for your help!"
+                "Oh, here they are. Thank you for your help!<br/>"
+                "<a href='https://forms.gle/GxTyKDhAnmh6gDtR7'>ℹ️</a>"
                 "</p>"
                 "<p class='hidden hole-1 hole-2 hole-3'>"
                 "<!--  -->"
@@ -240,10 +241,19 @@ void loop() {
                 "<td><br /></td>"
                 "</tr>"
                 "<tr>"
-                "<td><br /></td>"
-                "<td><a href='?1'>🕳</a></td>"
-                "<td><a href='?2'>🕳</a></td>"
-                "<td><a href='?3'>🕳</a></td>"
+                "<td><br /></td>");
+            if (nextPage) {
+              client.print("<td>🕳</td>"
+                           "<td>🕳</td>"
+                           "<td>🕳</td>");
+            } else {
+              client.print("<td><a href='?1'>🕳</a></td>"
+                           "<td><a href='?2'>🕳</a></td>"
+                           "<td><a href='?3'>🕳</a></td>");
+            }
+            client.print(
+                //
+
                 "<td><br /></td>"
                 "</tr>"
                 "</table>"
@@ -293,7 +303,7 @@ void loop() {
                   }
                 } else {
                   carrotInHole = hole;
-                  nextPage = "?";
+                  nextPage = "?placed";
                 }
               }
 
