@@ -1,4 +1,6 @@
 /*
+  Notice for original code:
+
   WiFi Web Server LED Blink
 
   A simple web server that lets you blink an LED via the web.
@@ -20,9 +22,9 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
-char ssid[] = "my network"; // your network SSID (name)
-char pass[] =
-    "password";   // your network password (use for WPA, or use as key for WEP)
+char ssid[] = "[bunny game] (go to 10.0.0.1)"; // your network SSID (name)
+// char pass[] = "password";
+// your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0; // your network key index number (needed only for WEP)
 
 int led = LED_BUILTIN;
@@ -57,14 +59,14 @@ void setup() {
 
   // by default the local IP address will be 192.168.4.1
   // you can override it with the following:
-  // WiFi.config(IPAddress(10, 0, 0, 1));
+  WiFi.config(IPAddress(10, 0, 0, 1));
 
   // print the network name (SSID);
   Serial.print("Creating access point named: ");
   Serial.println(ssid);
 
   // Create open network. Change this line if you want to create an WEP network:
-  status = WiFi.beginAP(ssid, pass);
+  status = WiFi.beginAP(ssid);
   if (status != WL_AP_LISTENING) {
     Serial.println("Creating access point failed");
     // don't continue
