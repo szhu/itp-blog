@@ -355,7 +355,7 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
   let dom = new JSDOM();
   let document = dom.window.document;
 
-  let currentSection = undefined;
+  let currentSection: any = undefined;
   let currentSectionLevel: number = 0;
   let currentList = undefined;
   let currentListLevel: number = -1;
@@ -445,15 +445,19 @@ function blocksToDocument(blocks: Block[], pathPrefix: string) {
       while (currentSectionLevel > targetParentSectionLevel) {
         // This allows the top-level headers to be either h1 or h2.
         if (currentSection.parentElement.tagName === "SECTION") {
-          currentSection = currentSection.parentElement;
+          currentSection = currentSection!.parentElement;
         }
         currentSectionLevel--;
       }
 
-      let newSection = document.createElement("section");
-      newSection.id = contentsAsText;
-      currentSection.append(newSection);
-      currentSection = newSection;
+      if (contentsAsText.trim()) {
+        let newSection = document.createElement("section");
+        newSection.id = contentsAsText;
+        currentSection.append(newSection);
+        currentSection = newSection;
+      } else if (!currentSection) {
+        throw new Error("First section cannot be empty");
+      }
       currentSectionLevel++;
     } else if (attributes.list) {
       // TODO: Handle the case where adjacent list items are of different kinds.
