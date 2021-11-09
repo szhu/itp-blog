@@ -11,8 +11,8 @@ while [[ -n $1 ]]; do
   # https://superuser.com/a/1045060/110699
   # Modifications: Change bitrate from 5000k -> 2000k
   # Modifications: Remove minrate
-  ffmpeg -hide_banner -loglevel panic -y -i "$src" -c:v libx264 -b:v 1000k -maxrate 8000k -pass 1 -c:a aac -f mp4 /dev/null
-  ffmpeg -hide_banner -loglevel panic    -i "$src" -c:v libx264 -b:v 1000k -maxrate 8000k -pass 2 -c:a aac -movflags faststart "$dst"
+  ffmpeg -y -i "$src" -c:v libx264 -b:v 1000k -maxrate 8000k -pass 1 -c:a aac -f mp4 /dev/null
+  ffmpeg    -i "$src" -c:v libx264 -b:v 1000k -maxrate 8000k -pass 2 -c:a aac -movflags faststart "$dst"
 
   echo "-> $dst"
 
