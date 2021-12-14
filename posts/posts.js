@@ -15,24 +15,16 @@ function hydrate() {
   }
 
   for (let summary of $("summary")) {
-    // Prevent double-clicking on summary elements from selecting text.
-    summary.addEventListener("mousedown", (e) => {
-      if (e.detail > 1) {
-        e.preventDefault();
-      }
-    });
-
     summary.addEventListener("click", (e) => {
-      if (e.detail === 2) {
-        let initialOpen = e.target.parentNode.open;
-        e.target.parentNode.open = !initialOpen;
+      if (e.shiftKey) {
+        let initialOpen = !e.target.parentNode.open;
         for (let details of $("details")) {
           if (details === e.target.parentNode) continue;
           details.open = initialOpen;
         }
       }
     });
-    summary.title = "Double-click to toggle all collapsible items.";
+    summary.title = "Shift-click to toggle all collapsible items.";
   }
 
   function saveDetailsState() {
@@ -54,41 +46,76 @@ function hydrate() {
   loadDetailsState();
 
   for (let media of $("img, video")) {
-    media.addEventListener("dblclick", (e) => {
-      if (e.metaKey || e.ctrlKey || e.shiftKey) {
-        window.open(media.src);
-      } else {
-        location.href = media.src;
+    media.addEventListener("click", function (e) {
+      if (e.metaKey || e.altKey) {
+        window.open(this.src);
+      } else if (e.shiftKey) {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else {
+          this.requestFullscreen();
+        }
       }
     });
-    media.title = "Double-click to view full size.";
+    media.title = "Shift-click to view fullscreen.";
   }
 
   for (let video of $("video")) {
-    video.addEventListener("click", (e) => {
-      if (e.detail > 1) {
-        // Prevents double-click to fullscreen.
-        // Not sure why it's attached to click and not dblclick.
-        e.preventDefault();
+    video.title += " Press and hold to play.";
+    video.loop = true;
+    video.addEventListener("keypress", function (e) {
+      if (e.key !== "f") return;
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        this.requestFullscreen();
       }
     });
 
-    video.addEventListener("mouseenter", () => {
-      video.controls = true;
-      try {
-        video.play();
-      } catch (e) {
-        // It might be this error: DOMException: play() failed because the user
-        // didn't interact with the document first.
-        video.muted = true;
-        video.play();
+    video.addEventListener("pointerdown", async function (e) {
+      if (e.button !== 0 || e.shiftKey || e.metaKey || e.altKey) return;
+      e.preventDefault();
+
+      this.style.cursor = "none";
+      let wasPaused = this.paused;
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      if (this.style.cursor === "none") {
+        // Pressed and held.
+        this.loop = false;
+        await this.play();
+      } else {
+        // Short press (a click).
+        await (wasPaused ? this.play() : this.pause());
       }
     });
-    video.addEventListener("mouseleave", () => {
-      video.controls = false;
-      video.pause();
+
+    video.addEventListener("pointerup", async function (e) {
+      if (e.button !== 0) return;
+      e.preventDefault();
+
+      this.loop = true;
+      if (this.style.cursor === "") return;
+      this.style.cursor = "";
+      this.pause();
     });
-    video.controls = false;
+
+    video.addEventListener("click", function (e) {
+      if (e.button !== 0) return;
+      e.preventDefault();
+    });
+
+    video.addEventListener("play", function (e) {
+      this.removeAttribute("controls");
+      this.focus();
+    });
+
+    video.addEventListener("pause", function (e) {
+      this.controls = true;
+    });
+
+    video.addEventListener("ended", function (e) {
+      this.controls = true;
+    });
   }
 
   // Show link previews only if a mouse is available. Link previews can

@@ -114,37 +114,21 @@ blockquote {
   opacity: 0.8;
 }
 
-details {
-  margin: 12px -0.3em;
-  padding: 2px 0.3em;
-  border-radius: var(--border-radius);
-  background: var(--color-vdim);
-}
-
-summary {
-  cursor: pointer;
-  padding: 0 4px;
-  list-style: none;
-}
-
-summary::-webkit-details-marker {
-  display: none;
-}
-
-summary:hover,
-summary:focus {
-  text-decoration: underline;
-  outline: none;
-}
-
-a {
+a,
+.link {
   color: unset;
   text-decoration: none;
   border-bottom: 2px solid;
 }
 
-a:not(:hover) {
+a:not(:hover),
+summary:not(:hover) > .link {
   border-color: var(--color-dim);
+}
+
+a:active,
+summary:active > .link {
+  opacity: 0.5;
 }
 
 ol {
@@ -178,12 +162,15 @@ hr {
   background: none;
 }
 
+.hidden {
+  display: none;
+}
+
 /** MEDIA **/
 
 figure {
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
+  display: table;
   max-height: calc(90vh - 50px);
   color: var(--color-media-fg);
   background: var(--color-media-bg);
@@ -203,6 +190,22 @@ figure {
     float: right;
     margin-left: 2vw;
   }
+}
+
+.small-block-wrapper {
+  margin: 2rem 0;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 2rem;
+}
+
+.small-block-left,
+.small-block-right {
+  display: block;
+  flex-grow: 1;
+  min-width: 300px;
+  width: 40%;
 }
 
 section:after {
@@ -232,13 +235,20 @@ img,
 video {
   display: block;
   margin: 0 auto;
-  object-fit: contain;
-  min-width: 0;
-  min-height: 0;
   max-width: 100%;
-  max-height: 100%;
+  height: auto;
+  object-fit: contain;
+  max-height: 80vh;
   border-radius: var(--border-radius);
   box-shadow: 0px 0px 5px var(--color-dim);
+}
+
+video:fullscreen {
+  outline: none;
+}
+
+video:not([controls])::-webkit-media-controls {
+  display: none;
 }
 
 img.small,
@@ -293,12 +303,37 @@ figcaption + img {
   }
 }
 
+details {
+  margin: 12px -0.3em;
+  padding: 2px 0.3em;
+  border-radius: var(--border-radius);
+  background: var(--color-vdim);
+}
+
 details[open] > * {
   animation: details-contents 0.2s ease-out;
 }
 
-details[open] > summary {
+details[open] > summary:first-of-type {
   animation: none;
+}
+
+details > summary:first-of-type {
+  cursor: pointer;
+  padding: 0 4px;
+  list-style: none;
+}
+
+details > summary:first-of-type:active {
+  user-select: none;
+}
+
+details[open] > summary:first-of-type > .link {
+  border-bottom: none;
+}
+
+details[open] > summary:first-of-type::after {
+  content: ":";
 }
 
 /* SECTIONS */
