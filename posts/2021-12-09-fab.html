@@ -1,0 +1,240 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>Fabrication Week 5</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">Fabrication Week 5</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Something with a motor</header>
+     <div class="section-content">
+      <p>A few weeks ago, I got a continuous servo kit for another project, but I ended up not using it:</p>
+      <figure class="small-block"><img src="../files/2021-10-fab/week-5/process/Screen Shot 2021-12-16 at 6.02.26 PM.jpg" height="676" width="1234" style="aspect-ratio: 1234 / 676;" /></figure>
+      <p>I decided to use this kit for this week's assignment to create a car.</p>
+      <figure class="small-block"><img src="../files/2021-10-fab/week-5/process/DSC02673.opt.jpg" height="3264" width="4912" style="aspect-ratio: 4912 / 3264;" /></figure>
+      <section class="section section-level-2">
+       <header class="section-header">Mounting</header>
+       <div class="section-content">
+        <p>I worked with <a href="https://sites.google.com/nyu.edu/msrainwater-itp/year-2/fall/intro-to-fabrication" target="_blank">Pauline</a> on this assignment -- we decided to use the same kind of servo and mount for our projects so that we could split the learning curve.</p>
+        <div class="small-block-wrapper">
+         <p class="small-block small-block-left">First, we tested out the servo using <a href="https://www.arduino.cc/en/Tutorial/LibraryExamples/Sweep/" target="_blank">Arduino's Sweep tutorial</a>. Initially, the servo didn't move at all, and it took more than half an hour of modifying the sample code to figure out why. It turns out to be not a code issue at all, but that the servo only works when plugged into 5V out, not 3.3V out. (I'm still not sure why that is.)</p>
+         <figure class="small-block small-block-right"><video src="../files/2021-10-fab/week-5/process/IMG_6131.opt.mp4" height="1440" width="1440" preload="metadata" controls="" style="aspect-ratio: 1440 / 1440;"></video></figure>
+         <p class="small-block small-block-left">Then, we measured the dimensions of the servo to create a mount for it:</p>
+         <figure class="small-block small-block-right"><img src="../files/2021-10-fab/week-5/process/IMG_6136.opt.jpg" height="1410" width="1410" style="aspect-ratio: 1410 / 1410;" /></figure>
+        </div>
+        <p>We wanted to figure out the quickest way to create a sturdy mount for it. We decided to cut up a piece of wood into smaller pieces so that we could piece together a mount like Legos. One of the dimensions of the motor is 0.5 inches, so we made the blocks 0.5-inch squares to keep things simple.</p>
+        <div class="small-block-wrapper">
+         <figure class="small-block small-block-left"><img src="../files/2021-10-fab/week-5/process/IMG_6143.opt.jpg" height="3024" width="3024" style="aspect-ratio: 3024 / 3024;" /></figure>
+         <p class="small-block small-block-right">The building blocks we created.</p>
+        </div>
+        <p>We found that we could put them behind to the servo's screw hole, and then drill through the screw hole, to create holes in the wood that lined up:</p>
+        <div class="small-block-wrapper">
+         <figure class="small-block small-block-left"><img src="../files/2021-10-fab/week-5/process/IMG_6148.opt.jpg" height="3024" width="3024" style="aspect-ratio: 3024 / 3024;" /></figure>
+         <figure class="small-block small-block-right"><img src="../files/2021-10-fab/week-5/process/IMG_6153.opt.jpg" height="3024" width="3024" style="aspect-ratio: 3024 / 3024;" /></figure>
+        </div>
+        <p>Then we glued a few of the blocks together to form a larger block, and screwed each servo into two of these larger blocks:</p>
+        <figure class="small-block"><img src="../files/2021-10-fab/week-5/process/IMG_6155.opt.jpg" height="3024" width="3024" style="aspect-ratio: 3024 / 3024;" /></figure>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Programming the continuous servo</header>
+       <div class="section-content">
+        <div class="small-block-wrapper">
+         <p class="small-block small-block-left">Now we returned to the code (which we hadn't modified from the example). We weren't sure how the servo would respond to specific commands. I created a simple program to test it out by issuing servo commands over Bluetooth Low Energy (BLE).</p>
+         <figure class="small-block small-block-right"><video src="../files/2021-10-fab/week-5/process/IMG_6157.opt.mp4" height="1440" width="1440" preload="metadata" controls="" style="aspect-ratio: 1440 / 1440;"></video></figure>
+        </div>
+        <p>It turns out that <code>servo.write(0)</code> would make it turn full speed in one direction, <code>servo.write(90)</code> would make it stop, and <code>servo.write(180)</code> would make it turn full speed in the other direction. Why those numbers? It seems like the numbers were originally designed for regular servos, but were co-opted for the range of motion permitted by continuous servos.</p>
+        <p>Also, at this point I recalled some advice I received before ordering a continuous servo -- the advice was: don't! -- and I could see why now. Unlike regular servos, continuous servos could only control the approximate speed at which they move and could not control their angle, making it hard to be precise. Indeed, I later discovered that the servos weren't guaranteed to be exactly stationary at <code>90</code>!</p>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Car manufacturing</header>
+       <div class="section-content">
+        <p>With the mounts now created, I glued them to a larger wood board:</p>
+        <figure class="small-block"><img src="../files/2021-10-fab/week-5/process/IMG_6158.opt.jpg" height="3024" width="3024" style="aspect-ratio: 3024 / 3024;" /></figure>
+        <p>Pauline's project was to use a servo to control a music box. Both are visible in the photo as well. At this point we decided to mount everything onto the same board, to create a remote-controlled ice cream truck.</p>
+        <p>I wanted the car to be able to turn but didn't have time to create a conventional steering mechanism, since it would require quite a few more moving parts. I decided to put only two wheels on the car, and use <a href="https://en.wikipedia.org/wiki/Differential_steering" target="_blank">differential steering</a>.</p>
+        <div class="small-block-wrapper">
+         <p class="small-block small-block-left">For stability, I found a came something from the junk shelf (a game controller thumb stick?) that worked perfectly as a "third leg".</p>
+         <figure class="small-block small-block-right"><img src="../files/2021-10-fab/week-5/process/IMG_6159.opt.jpg" height="3024" width="3024" style="aspect-ratio: 3024 / 3024;" /></figure>
+        </div>
+        <p>I updated the code from easier to issue commands to all three servos instead of one.</p>
+        <details>
+         <summary>
+          <span class="link"><code>build-car-arduino.ino</code></span>
+         </summary>
+         <pre>
+#include &lt;ArduinoBLE.h&gt;
+#include &lt;Servo.h&gt;
+
+void exit() {
+  while (true);
+}
+
+#define printValue(val) \
+  Serial.print(#val); \
+  Serial.print(" = "); \
+  Serial.print(val); \
+  Serial.print("  ");
+
+namespace BleConnection {
+  char serviceName[] = "BLE Controlled Ice Cream Car -- Pauline / Sean";
+  BLEService service("21e1aa31-b81f-4c3c-851c-72359b55f3db");
+  BLEWordCharacteristic characteristic("114833ca-f1e2-4d0a-8fff-277881be1ddb", BLERead | BLEWrite);
+  BLEDevice central;
+  bool isConnected = false;
+  bool hasCentral = false;
+
+  void setup() {
+    if (!BLE.begin()) {
+      Serial.println("[BLE] Error: Starting BLE failed!");
+      exit();
+    }
+
+    BLE.setLocalName(serviceName);
+    BLE.setAdvertisedService(service);
+    service.addCharacteristic(characteristic);
+    BLE.addService(service);
+    characteristic.writeValue(0);
+    BLE.advertise();
+  }
+
+  void loop() {
+    if (hasCentral) {
+      isConnected = central.connected();
+      if (!isConnected) {
+        hasCentral = false;
+        Serial.println("[BLE] Disconnected from central.");
+      }
+    } else {
+      central = BLE.central();
+      hasCentral = !!central;
+      if (central &amp;&amp; central.connected()) {
+        isConnected = central.connected();
+        if (isConnected) {
+          Serial.print("[BLE] Connected to central: ");
+          Serial.println(central.address());
+        }
+      }
+    }
+  }
+}
+
+namespace Servos {
+  Servo music;
+  Servo motor1;
+  Servo motor2;
+
+  void attach() {
+    music.attached() || music.attach(10);
+    motor1.attached() || motor1.attach(11);
+    motor2.attached() || motor2.attach(12);
+  }
+
+  void detach() {
+    music.detach();
+    motor1.detach();
+    motor2.detach();
+  }
+
+  void write(int stopValue, int musicValue, int motor1Value, int motor2Value) {
+    attach();
+    musicValue == stopValue ? music.detach() : music.write(musicValue);
+    motor1Value == stopValue ? motor1.detach() : motor1.write(motor1Value);
+    motor2Value == stopValue ? motor2.detach() : motor2.write(motor2Value);
+  }
+}
+
+const int STOP = 90;
+int numReceivedCommands = 0;
+
+void receiveValue() {
+  if (!BleConnection::isConnected) {
+    Servos::detach();
+    return;
+  }
+
+  if (!BleConnection::characteristic.written()) return;
+
+  if (numReceivedCommands == 0) {    
+    numReceivedCommands++;
+    return;
+  }
+
+  word value = BleConnection::characteristic.value();
+  bool isMusicOn = value &amp; 1;
+
+  value &gt;&gt;= 1;
+  int motor1Value = value / 180;
+  int motor2Value = value % 180;
+
+  Serial.print("[receiveValue] ");
+  printValue(isMusicOn);
+  printValue(motor1Value);
+  printValue(motor2Value);
+  Serial.println();
+
+  Servos::write(
+    STOP,
+    isMusicOn ? 180 : STOP,
+    motor1Value + (STOP - 90),
+    motor2Value + (STOP - 90)
+  );
+}
+
+void setup() {
+  BleConnection::setup();
+  if (!BleConnection::isConnected) {
+    numReceivedCommands = 0;
+  }
+}
+
+void loop() {
+  BleConnection::loop();
+  receiveValue();
+}
+</pre
+         >
+        </details>
+        <p>On the controller end, I added an algorithm to translate mouse coordinates into servo commands that would drive the car toward the mouse direction. The algorithm (highlighted on the left) turned out to be a lot simpler than I imagined:</p>
+        <figure class="small-block"><video src="../files/2021-10-fab/week-5/process/Screen Recording 2021-12-09 at 4.27.47 AM.opt.mp4" height="900" width="1650" preload="metadata" controls="" style="aspect-ratio: 1650 / 900;"></video></figure>
+        <p class="hidden">.</p>
+        <figure class="small-block"><video src="../files/2021-10-fab/week-5/process/IMG_6162.opt.mp4" height="1440" width="1440" preload="metadata" controls="" style="aspect-ratio: 1440 / 1440;"></video></figure>
+        <p>After Pauline's part was completed as well, we added a battery and strapped it all together:</p>
+        <figure class="small-block"><video src="../files/2021-10-fab/week-5/process/IMG_6163.opt.mp4" height="1440" width="1440" preload="metadata" controls="" style="aspect-ratio: 1440 / 1440;"></video></figure>
+        <p class="hidden">.</p>
+        <div class="small-block-wrapper">
+         <figure class="small-block small-block-left"><video src="../files/2021-10-fab/week-5/process/IMG_6181.opt.mp4" height="1440" width="1440" preload="metadata" controls="" style="aspect-ratio: 1440 / 1440;"></video></figure>
+         <p class="small-block small-block-right">Peer-approved!</p>
+        </div>
+        <p>The last thing to fix was that it didn't look very much like a ice cream truck! We added a simple, laser-cut shell to fix that.</p>
+        <div class="small-block-wrapper">
+         <figure class="small-block small-block-left"><img src="../files/2021-10-fab/week-5/process/IMG_6187.opt.jpg" height="3024" width="3024" style="aspect-ratio: 3024 / 3024;" /></figure>
+         <figure class="small-block small-block-right"><img src="../files/2021-10-fab/week-5/process/IMG_6190.opt.jpg" height="3024" width="3024" style="aspect-ratio: 3024 / 3024;" /></figure>
+         <figure class="small-block small-block-left"><img src="../files/2021-10-fab/week-5/process/DSC02673.opt.jpg" height="3264" width="4912" style="aspect-ratio: 4912 / 3264;" /></figure>
+         <figure class="small-block small-block-right"><img src="../files/2021-10-fab/week-5/process/DSC02675.opt.jpg" height="3264" width="4912" style="aspect-ratio: 4912 / 3264;" /></figure>
+        </div>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Finished product</header>
+       <div class="section-content">
+        <figure class="small-block"><img src="../files/2021-10-fab/week-5/process/DSC02680.opt.jpg" height="3264" width="4912" style="aspect-ratio: 4912 / 3264;" /></figure>
+        <p class="hidden">.</p>
+        <figure class="small-block"><img src="../files/2021-10-fab/week-5/process/DSC02672.opt.jpg" height="3264" width="4912" style="aspect-ratio: 4912 / 3264;" /></figure>
+        <p class="hidden">.</p>
+        <figure class="small-block"><video src="../files/2021-10-fab/week-5/process/IMG_6201.opt.mp4" height="1440" width="1440" preload="metadata" controls="" style="aspect-ratio: 1440 / 1440;"></video></figure>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
