@@ -118,6 +118,20 @@ function hydrate() {
     });
   }
 
+  for (let media of $("figure > video[title], figure > img[title]")) {
+    let figure = media.parentElement;
+    let title = media.getAttribute("title");
+    media.removeAttribute("title");
+    figure.setAttribute("data-title", title);
+
+    media.addEventListener("click", () => {
+      media.parentNode.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    });
+  }
+
   // Show link previews only if a mouse is available. Link previews can
   // interfere with scrolling if the pointer is coarse.
   if (window.matchMedia("(any-pointer: fine)").matches) {

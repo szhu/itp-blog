@@ -178,6 +178,23 @@ figure {
   text-align: center;
 }
 
+figure {
+  position: relative;
+}
+
+figure[data-title]:hover::after {
+  background: #00000088;
+  content: attr(data-title);
+  font-size: 0.7rem;
+  line-height: 1rem;
+  padding-top: 0.2rem;
+  z-index: 1;
+  position: absolute;
+  top: -0.7rem;
+  left: 0;
+  right: 0;
+}
+
 @media (min-width: 550px) {
   figure.float {
     margin-bottom: 0.5rem;
