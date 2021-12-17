@@ -63,6 +63,8 @@ function hydrate() {
   for (let video of $("video")) {
     video.title += " Press and hold to play.";
     video.loop = true;
+    video.muted = true;
+    video.play();
     video.addEventListener("keypress", function (e) {
       if (e.key !== "f") return;
       if (document.fullscreenElement) {
