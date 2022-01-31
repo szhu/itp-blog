@@ -64,7 +64,9 @@ function hydrate() {
     video.title += " Press and hold to play.";
     video.loop = true;
     video.muted = true;
+    // video.autoplay = true;
     video.play();
+    // video.dataset.autoMuted = true;
     video.addEventListener("keypress", function (e) {
       if (e.key !== "f") return;
       if (document.fullscreenElement) {
@@ -73,6 +75,14 @@ function hydrate() {
         this.requestFullscreen();
       }
     });
+
+    // video.addEventListener("mouseenter", async function (e) {
+    //   video.muted = false;
+    // });
+
+    // video.addEventListener("mouseleave", async function (e) {
+    //   video.muted = true;
+    // });
 
     video.addEventListener("pointerdown", async function (e) {
       if (e.button !== 0 || e.shiftKey || e.metaKey || e.altKey) return;
@@ -88,6 +98,10 @@ function hydrate() {
       } else {
         // Short press (a click).
         await (wasPaused ? this.play() : this.pause());
+      }
+      if (this.dataset.autoMuted) {
+        this.muted = false;
+        this.dataset.autoMuted = false;
       }
     });
 
