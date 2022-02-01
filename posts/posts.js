@@ -211,3 +211,19 @@ function hydrate() {
 }
 
 window.addEventListener("DOMContentLoaded", hydrate);
+
+if (location.href.startsWith("https://szhu.github.io/itp-blog/")) {
+  let div = document.createElement("div");
+  div.style.textAlign = "center";
+  div.style.borderBottom = "1px solid black";
+  div.innerText =
+    "Note: This copy of the site may be slow to update; visit itp.szhu.me instead. ";
+  let a = document.createElement("a");
+  a.href = location.href.replace(
+    "https://szhu.github.io/itp-blog/",
+    "https://itp.szhu.me/"
+  );
+  a.innerText = "Go there now.";
+  div.append(a);
+  document.body.prepend(div);
+}
