@@ -259,6 +259,12 @@ video {
   max-height: 80vh;
 }
 
+img:focus,
+video:focus {
+  outline: 2px solid var(--color-text-bg);
+}
+
+img:fullscreen,
 video:fullscreen {
   outline: none;
 }

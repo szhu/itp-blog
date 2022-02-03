@@ -46,15 +46,34 @@ function hydrate() {
   loadDetailsState();
 
   for (let media of $("img, video")) {
+    setTimeout(() => {
+      media.tabIndex = "-1";
+    }, 0);
     media.addEventListener("click", function (e) {
       if (e.metaKey || e.altKey) {
         window.open(this.src);
       } else if (e.shiftKey) {
         if (document.fullscreenElement) {
+          let element = document.fullscreenElement;
           document.exitFullscreen();
+          setTimeout(() => {
+            element.scrollIntoView({ block: "nearest" });
+          }, 100);
         } else {
           this.requestFullscreen();
         }
+      }
+    });
+    media.addEventListener("keypress", function (e) {
+      if (e.key !== "f") return;
+      if (document.fullscreenElement) {
+        let element = document.fullscreenElement;
+        document.exitFullscreen();
+        setTimeout(() => {
+          element.scrollIntoView({ block: "nearest" });
+        }, 100);
+      } else {
+        this.requestFullscreen();
       }
     });
     media.title = "Shift-click to view fullscreen.";
@@ -64,17 +83,10 @@ function hydrate() {
     video.title += " Press and hold to play.";
     video.loop = true;
     video.muted = true;
+    video.setAttribute("playsinline", "true");
     // video.autoplay = true;
     video.play();
     // video.dataset.autoMuted = true;
-    video.addEventListener("keypress", function (e) {
-      if (e.key !== "f") return;
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        this.requestFullscreen();
-      }
-    });
 
     // video.addEventListener("mouseenter", async function (e) {
     //   video.muted = false;
