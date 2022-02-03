@@ -84,7 +84,7 @@ function hydrate() {
     //   video.muted = true;
     // });
 
-    video.addEventListener("pointerdown", async function (e) {
+    video.addEventListener("mousedown", async function (e) {
       if (e.button !== 0 || e.shiftKey || e.metaKey || e.altKey) return;
       e.preventDefault();
 
@@ -105,7 +105,7 @@ function hydrate() {
       }
     });
 
-    video.addEventListener("pointerup", async function (e) {
+    video.addEventListener("mouseup", async function (e) {
       if (e.button !== 0) return;
       e.preventDefault();
 
