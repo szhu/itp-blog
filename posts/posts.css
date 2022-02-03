@@ -219,9 +219,11 @@ figure[data-title]:hover::after {
 
 .small-block-left,
 .small-block-right {
-  display: block;
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   min-width: 300px;
+  box-sizing: border-box;
   width: 40%;
 }
 
@@ -255,9 +257,8 @@ video {
   max-width: 100%;
   height: auto;
   object-fit: contain;
+  overflow: hidden;
   max-height: 80vh;
-  border-radius: var(--border-radius);
-  box-shadow: 0px 0px 5px var(--color-dim);
 }
 
 video:fullscreen {
