@@ -1,0 +1,192 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>Textile Interfaces Final</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">Textile Interfaces Final</header>
+   <div class="section-content">
+    <p>Cross-posted to Chloe's blog: <a href="https://www.chloechoi.art/itp/textile-interface" target="_blank">https://www.chloechoi.art/itp/textile-interface</a></p>
+    <section class="section section-level-1">
+     <header class="section-header">Final Project - Capacitive Piano</header>
+     <div class="section-content">
+      <p>For our final project, we created a capacitive piano. Our main focus was to utilize textile interfaces to create a product where the user could not tell that electronic components were being used. This design focus led us to work with a capacitive board. Using conductive thread, a capacitive board, and Garageband, we were able to create a functioning instrument that is a hybrid of a piano and a harp.</p>
+      <figure class="small-block"><img class="thumb-image loaded" src="../files/2021-10-textile/final/process/IMG_1550.jpeg" alt="" height="750" width="1000" style="aspect-ratio: 1000 / 750;" /></figure>
+      <p class="hidden">.</p>
+      <figure class="small-block"><video src="../files/2021-10-textile/final/process/IMG_4987.mov" width="1920" height="1440" preload="metadata" controls="" style="aspect-ratio: 1920 / 1440;"></video></figure>
+      <p class="hidden"><span class="ql-cursor">﻿</span></p>
+      <p>After creating our initial piano, we realized that we wanted to create a wider range of notes. Therefore we decided to create an attachment that when held, would allow the user to play a higher octave of notes.</p>
+      <section class="section section-level-2">
+       <header class="section-header">Code</header>
+       <div class="section-content">
+        <details>
+         <summary>
+          <span class="link"><code>cap-piano.ino</code></span>
+         </summary>
+         <pre>
+/*
+ * MIDIUSB_test.ino
+ *
+ * Created: 4/6/2015 10:47:08 AM
+ * Author: gurbrinder grewal
+ * Modified by Arduino LLC (2015)
+ */ 
+
+#include "MIDIUSB.h"
+
+// First parameter is the event type (0x09 = note on, 0x08 = note off).
+// Second parameter is note-on/note-off, combined with the channel.
+// Channel can be anything between 0-15. Typically reported to the user as 1-16.
+// Third parameter is the note number (48 = middle C).
+// Fourth parameter is the velocity (64 = normal, 127 = fastest).
+
+void noteOn(byte channel, byte pitch, byte velocity) {
+  midiEventPacket_t noteOn = {0x09, 0x90 | channel, pitch, velocity};
+  MidiUSB.sendMIDI(noteOn);
+}
+
+void noteOff(byte channel, byte pitch, byte velocity) {
+  midiEventPacket_t noteOff = {0x08, 0x80 | channel, pitch, velocity};
+  MidiUSB.sendMIDI(noteOff);
+}
+
+/*********************************************************
+This is a library for the MPR121 12-channel Capacitive touch sensor
+
+Designed specifically to work with the MPR121 Breakout in the Adafruit shop 
+  ----&gt; https://www.adafruit.com/products/
+
+These sensors use I2C communicate, at least 2 pins are required 
+to interface
+
+Adafruit invests time and resources providing this open source code, 
+please support Adafruit and open-source hardware by purchasing 
+products from Adafruit!
+
+Written by Limor Fried/Ladyada for Adafruit Industries.  
+BSD license, all text above must be included in any redistribution
+**********************************************************/
+
+#include &lt;Wire.h&gt;
+#include "Adafruit_MPR121.h"
+
+#ifndef _BV
+#define _BV(bit) (1 &lt;&lt; (bit)) 
+#endif
+
+// You can have up to 4 on one i2c bus but one is enough for testing!
+Adafruit_MPR121 cap = Adafruit_MPR121();
+
+// Keeps track of the last pins touched
+// so we know when buttons are 'released'
+uint16_t lasttouched = 0;
+uint16_t currtouched = 0;
+
+void setup() {
+  Serial.begin(9600);
+
+  // while (!Serial) { // needed to keep leonardo/micro from starting too fast!
+  //   delay(10);
+  // }
+  
+  Serial.println("Adafruit MPR121 Capacitive Touch sensor test"); 
+  
+  // Default address is 0x5A, if tied to 3.3V its 0x5B
+  // If tied to SDA its 0x5C and if SCL then 0x5D
+  if (!cap.begin(0x5A)) {
+    Serial.println("MPR121 not found, check wiring?");
+    while (1);
+  }
+  Serial.println("MPR121 found!");
+}
+
+int octave = 0;
+
+void loop() {
+  // Get the currently touched pads
+  currtouched = cap.touched();
+
+  octave = (currtouched &amp; _BV(1)) ? 1 : 0;
+  
+  for (uint8_t i=0; i&lt;12; i++) {
+    if (i == 1) continue;
+    
+    // it if *is* touched and *wasnt* touched before, alert!
+    if ((currtouched &amp; _BV(i)) &amp;&amp; !(lasttouched &amp; _BV(i)) ) {      
+      Serial.print(i); Serial.println(" touched");
+
+      Serial.println("Sending note on");
+      noteOn(0, 48 + 12 * octave + i, 127);   // Channel 0, middle C, normal velocity
+      MidiUSB.flush();
+    }
+    // if it *was* touched and now *isnt*, alert!
+    if (!(currtouched &amp; _BV(i)) &amp;&amp; (lasttouched &amp; _BV(i)) ) {
+      Serial.print(i); Serial.println(" released");
+
+      Serial.println("Sending note off");
+      noteOff(0, 48 + 12 * octave + i, 127);  // Channel 0, middle C, normal velocity
+      MidiUSB.flush();
+    }
+  }
+
+  // reset our state
+  lasttouched = currtouched;
+
+  // comment out this line for detailed data from the sensor!
+  return;
+  
+  // debugging info, what
+  Serial.print("\t\t\t\t\t\t\t\t\t\t\t\t\t 0x"); Serial.println(cap.touched(), HEX);
+  Serial.print("Filt: ");
+  for (uint8_t i=0; i&lt;12; i++) {
+    Serial.print(cap.filteredData(i)); Serial.print("\t");
+  }
+  Serial.println();
+  Serial.print("Base: ");
+  for (uint8_t i=0; i&lt;12; i++) {
+    Serial.print(cap.baselineData(i)); Serial.print("\t");
+  }
+  Serial.println();
+  
+  // put a delay so it isn't overwhelming
+  delay(100);
+}
+</pre
+         >
+        </details>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Design Considerations</header>
+       <div class="section-content">
+        <p><b>What is your interface for / to? Physical actuators? Something screen-based? Sound?</b></p>
+        <p>We created a digital musical instrument. It has strings like a harp or guitar, but the arrangement of the inputs is like a piano or other keyboard instrument. It is also an electric instrument -- the strings do not produce sound themselves. (The interface can easily be repurposed for other kinds of finger input.)</p>
+        <p><b>If you are sending data to another software what is it and what communication protocol will you use?</b></p>
+        <p>It interfaces with the computer using MIDI.</p>
+        <p><b>Where does the interface physically live? In a wearable? In an object? On a piece of furniture (table, chair, etc)? In a space (floor, wall, ceiling)?</b></p>
+        <p>Our original plan was to have it be a large, hanging, or wall-mounted piano-like instrument. We eventually decided to create a smaller, tabletop device.</p>
+        <p><b>What is your material palette, conductive, resistive, and non-conductive?</b></p>
+        <p>We used conductive material for the strings.</p>
+        <p><b>What is the scale of the interface? Tiny? Huge? Somewhere in between? What body part is meant to activate it?</b></p>
+        <p>It rests in front of the user and is finger-activated. The strings are as far apart as keys on a piano (0.93in).</p>
+        <p><b>What mood / attitude / approach are you hoping to incite in your users? Is a delicate interaction? Rough? Tender? Formal?</b></p>
+        <p>For our original large-scale version, we were hoping to incite gentle, curious exploration. We weren't sure where we were going with the final, smaller version, but in our testing, it seems to have evoked the same interactions with our classmates.</p>
+        <p><b>What type of switches / sensors are you constructing? Digital, analog, or both? How many?</b></p>
+        <p>The electronics of the device are quite simple: We use 7 conductive threads as a capacitive sensor. The threads are wired to an MPR121 capacitive sensor board, which can handle up to 12 inputs -- perfect for if we wanted to add black keys as well (which was our original plan).</p>
+        <p><b>What is the mapping between the sensor data and whatever is responding to it?</b></p>
+        <p>When the thread is touched, a MIDI note is played. When the thread is released, the note is stopped.</p>
+        <p><b>What materials don’t you have that you might need?</b></p>
+        <p>We were able to find all the materials we wanted, but with more time and resources, we'd ideally like to to build a larger-than-life piano!</p>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
