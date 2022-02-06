@@ -220,9 +220,9 @@ figure[data-title]:hover::after {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  min-width: 300px;
   box-sizing: border-box;
   width: 40%;
+  width: max(300px, 40%);
 }
 
 section:after {
@@ -288,7 +288,7 @@ figcaption + img {
 
 .link-preview {
   background: var(--color-text-bg);
-  border: 1px solid var(--color-text-fg);
+  border: 2px solid var(--color-text-fg);
   border-radius: var(--border-radius);
   box-shadow: 1px 2px 9px 0px var(--color-dim);
   pointer-events: none;
@@ -298,12 +298,11 @@ figcaption + img {
   top: 0;
   left: 0;
 
-  height: 300px;
-  max-height: 50vmin;
-  width: 400px;
-  max-width: 70vmin;
+  height: clamp(0px, 1200px, 140vh);
+  width: clamp(0px, 800px, 140vw);
 
   visibility: hidden;
+  transform-origin: top left;
 }
 
 .link-preview-visible {
@@ -326,8 +325,8 @@ figcaption + img {
 }
 
 details {
-  margin: 12px -0.3em;
-  padding: 2px 0.3em;
+  margin: 12px 0 12px -0.3em;
+  padding: 2px 0 2px 0.3em;
   border-radius: var(--border-radius);
   background: var(--color-vdim);
 }

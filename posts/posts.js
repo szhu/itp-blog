@@ -186,10 +186,12 @@ function hydrate() {
               iframe.classList.remove("link-preview-loading");
             });
 
-            a.append(iframe);
+            a.insertAdjacentElement("afterend", iframe);
           }
 
-          let transform = `translate(${e.clientX - 20}px, ${e.clientY + 20}px)`;
+          let transform =
+            //
+            `translate(${e.clientX - 20}px, ${e.clientY + 20}px) scale(0.5)`;
           iframe.style.transform = transform;
 
           iframe.classList.add("link-preview-visible");
