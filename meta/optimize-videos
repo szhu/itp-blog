@@ -1,0 +1,43 @@
+#!/bin/bash
+set -e
+
+verbose() {
+    echo '$' "$@"
+    "$@"
+}
+
+cleanup-and-exit() {
+  verbose trash -F -- "${processed[@]}"
+  exit "$1"
+}
+
+processed=()
+
+while [[ -n $1 ]]; do
+  src="$1"
+  dst="${1%.*}.opt.mp4"
+
+  if [[ -e $dst ]]; then
+    echo "$src: Skipping"
+  else
+    echo "$src"
+
+    # https://superuser.com/a/424024/110699
+    # https://superuser.com/a/1045060/110699
+    # Modifications: Change bitrate from 5000k -> 1000k
+    # Modifications: Remove minrate
+    ffmpeg -loglevel error -stats -y -i "$src" -c:v libx264 -b:v 1000k -maxrate 8000k -pass 1 -c:a aac -f mp4 /dev/null
+    ffmpeg -loglevel error -stats    -i "$src" -c:v libx264 -b:v 1000k -maxrate 8000k -pass 2 -c:a aac -movflags faststart "$dst"
+  fi
+
+  # https://photo.stackexchange.com/a/69193/53570
+  # https://gist.github.com/jmuspratt/3680d45b0c12f8b32093
+  exiftool "-FileModifyDate<ContentCreateDate" "$dst"
+
+  echo "-> $dst"
+  processed+=("$src")
+
+  shift
+done
+
+cleanup-and-exit 0

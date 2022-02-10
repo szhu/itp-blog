@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+shopt -s nocaseglob nullglob
+
+while [[ -n $1 ]]; do
+  meta/optimize-photos "$1"/*.{jpg,png,heic}
+  meta/optimize-videos "$1"/*.{mov,mp4}
+
+  shift
+done

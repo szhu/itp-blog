@@ -1,0 +1,48 @@
+#!/usr/bin/env fish
+
+function verbose
+    echo '$' $argv
+    env $argv
+end
+
+function cleanup-and-exit
+    verbose trash -F -- $processed $mp4s
+    exit $argv[1]
+end
+
+set processed
+set mp4s
+
+for infile in $argv
+    set jpg (string replace -i -r '\.[a-z]+$' '.opt.jpg' $infile)
+
+    if test -e $jpg
+        echo $jpg already exists
+        cleanup-and-exit 1
+        continue
+    end
+
+    # If the file is infile, look for the live photo video file and trash it.
+    if string match -i -r '\.heic' $infile >/dev/null
+        set mp4 (string replace -i -r '\.heic$' '.mp4' $infile)
+
+        if test -e $mp4
+            set mp4s $mp4s $mp4
+        end
+
+    end
+
+    # https://apple.stackexchange.com/a/410920/31413
+    # https://robservatory.com/use-sips-to-quickly-easily-and-freely-convert-image-files/
+    sips -s format jpeg -s formatOptions 40 $infile --out $jpg
+    test $status -ne 0 && cleanup-and-exit $status
+
+    # https://photo.stackexchange.com/a/69193/53570
+    # https://gist.github.com/jmuspratt/3680d45b0c12f8b32093
+    exiftool "-FileModifyDate<EXIF:DateTimeOriginal" $jpg
+    test $status -ne 0 && cleanup-and-exit $status
+
+    set processed $processed $infile
+end
+
+cleanup-and-exit 0
