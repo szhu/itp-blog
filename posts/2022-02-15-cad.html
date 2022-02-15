@@ -1,0 +1,117 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>CAD Week 3</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">CAD Week 3</header>
+   <div class="section-content">
+    <p><a href="https://itp.nyu.edu/fab/cad/week-3/" target="_blank">https://itp.nyu.edu/fab/cad/week-3/</a></p>
+    <section class="section section-level-1">
+     <header class="section-header">Models</header>
+     <div class="section-content">
+      <section class="section section-level-2">
+       <header class="section-header">Model 1: Keyboard</header>
+       <div class="section-content">
+        <figure class="small-block"><video src="../files/2022-01-cad/week-3/keyboard/Screen Recording 2022-02-15 at 10.19.31 AM.opt.mp4" height="1422" width="2346" preload="metadata" controls="" style="aspect-ratio: 2346 / 1422;"></video></figure>
+        <p>For my first object, I made a keyboard chassis. Why?</p>
+        <ul>
+         <li>I wanted to try out out SVG imports. I'm familiar with working with SVG, so I'm hoping that being familiar with the SVG → CAD process will allow me, for complex shapes, to lean on processes that I'm already with.</li>
+         <li>I wanted to try out the Fillet tool.</li>
+         <li>For my thesis, I want to make a custom, keyboard-like interface, so this was good practice in the same domain.</li>
+        </ul>
+        <p>To make this object, I first found <a href="https://www.vecteezy.com/vector-art/1339948-top-view-of-keyboard-isolated-on-white-background" target="_blank">a vector graphic of a keyboard</a>:</p>
+        <div class="small-block-wrapper">
+         <figure class="small-block small-block-left"><img src="../files/2022-01-cad/week-3/keyboard/keyboard.svg" height="133" width="133" style="aspect-ratio: 133 / 133;" /></figure>
+         <p class="small-block small-block-right">I tried importing the SVG directly into Fusion the resulting sketch was slow and complicated. There were a lot of lines I didn't need. I just needed the outlines of each of the keys.</p>
+        </div>
+        <div class="small-block-wrapper">
+         <p class="small-block small-block-left">I wasn't able to figure out how to remove the lines I didn't want en masse, and doing it manually would have taken forever. Luckily, I know how use JavaScript to manipulate SVGs, and after a minute of playing around with the SVG in Chrome DevTools, I was able to figure out how to remove everything except the key outlines:</p>
+         <figure class="small-block small-block-right"><img src="../files/2022-01-cad/week-3/keyboard/keyboard.edited.svg" height="133" width="133" style="aspect-ratio: 133 / 133;" /></figure>
+        </div>
+        <details>
+         <summary><span class="link">JS code</span></summary>
+         <pre>
+for (let path of document.querySelectorAll(
+  `#g843 path:not([style="fill:#40434a;fill-opacity:1;fill-rule:nonzero;stroke:none"])`
+  //                      ^~~ the shapes I wanted to keep had this style ~~~~~~~~~^
+)) {
+  if (path.children.length === 0) path.remove();
+}
+</pre
+         >
+        </details>
+        <p>The new, trimmed SVG imported fairly quickly. I was able to add a rectangle around it and use the Extrude tool to carve out some recessions for the keys. To make the shape look more polished, I added a fillet to the four vertical sides.</p>
+        <figure class="small-block"><img src="../files/2022-01-cad/week-3/keyboard/Screen Shot 2022-02-15 at 9.32.52 AM.png" height="1382" width="2298" style="aspect-ratio: 2298 / 1382;" /></figure>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Model 2: OK</header>
+       <div class="section-content">
+        <figure class="small-block"><video src="../files/2022-01-cad/week-3/ok/Screen%20Recording%202022-02-15%20at%2010.04.34%20AM.opt.mp4" height="1422" width="2346" preload="metadata" controls="" style="aspect-ratio: 2346 / 1422;"></video></figure>
+        <p>For my second object, I created a 3D model of a computer interface button. Why?</p>
+        <ul>
+         <li>I want to learn CAD because I want to use it to create things that haven't existed before, so I thought it would be good practice to create something that hadn't existed before as a 3D object or model.</li>
+         <li>Computer user interfaces, especially older ones, are embrace skeuomorphism in order to convey a mental model to the user. They tend to be not inconsistent with a physical form, if not outright suggesting one. <a href="2021-11-18-fab.html">This is also not the first time I've 3D-ified a user interface.</a></li>
+         <li>At the outset, I had no idea how I would create this shape. Would I use some kind of "rectangular revolve" tool? I had no clue how to start, and I would be a good challenge.</li>
+         <li>The resulting model could be fun to 3D print, without wasting too much material.</li>
+        </ul>
+        <p>I decided to use the primary button from Mac OS 9 UI, because of its heavy skeuomorphism, simple lines, and iconic look. Here's a screenshot <a href="https://www.oreilly.com/library/view/mac-os-9/0201700042/0201700042_ch09lev1sec8.html" target="_blank">I found off the Internet</a>:</p>
+        <figure class="small-block"><img src="../files/2022-01-cad/week-3/ok/0201700042_ch09lev1sec8_image02.gif" height="108" width="435" style="aspect-ratio: 435 / 108;" /></figure>
+        <p>As mentioned above, I was stuck figuring out how to make create the shape for a while. After a bit of thinking, I realized that I could start with a rectangle and maybe use the Fillet tool aggressively to create curves that rounded in multiple dimensions.</p>
+        <div class="small-block-wrapper">
+         <p class="small-block small-block-left">Amazingly, the tool worked exactly as I had hoped! The only thing I didn't anticipate was I needed to round out the outer edges more than the inner edges, so I had to go back and change that.</p>
+         <figure class="small-block small-block-right"><video src="../files/2022-01-cad/week-3/ok/Screen%20Recording%202022-02-15%20at%2010.04.34%20AM.opt.mp4" height="1422" width="2346" preload="metadata" controls="" style="aspect-ratio: 2346 / 1422;"></video></figure>
+         <p class="small-block small-block-left">Time for the text. I figured out that the Mac OS Classic font was Chicago, and I found <a href="https://webfonts.ffonts.net/ChicagoFLF.font" target="_blank">a lookalike font</a> that I could experiment with. I used Inkscape to convert the text to a SVG path and used the Extrude tool to carve it out of the top face of the button.</p>
+         <figure class="small-block small-block-right"><img src="../files/2022-01-cad/week-3/ok/Screen Shot 2022-02-15 at 10.07.15 AM.png" height="1016" width="1002" style="aspect-ratio: 1002 / 1016;" /></figure>
+        </div>
+        <p>I ran into one issue consistently through this week's homework, but it especially sucked here: I can't seem to move imported SVG sketches in space after the import. I had to import the "OK" shape multiple times until I felt like I got it centered enough.</p>
+        <p>Finished product:</p>
+        <figure class="small-block"><img src="../files/2022-01-cad/week-3/ok/Screen Shot 2022-02-15 at 10.03.03 AM.png" height="1380" width="2386" style="aspect-ratio: 2386 / 1380;" /></figure>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Model 3: Teapot</header>
+       <div class="section-content">
+        <p>For my last object, I tried my best to recreate the <a href="https://en.wikipedia.org/wiki/Utah_teapot" target="_blank">Utah Teapot</a>. Why?</p>
+        <ul>
+         <li>The Teapot is a ubiquitous reference object in computer graphics, so why not?</li>
+         <li>I knew I was definitely going to use the revolve tool, which I hadn't used yet.</li>
+         <li>This is an object with well-known dimensions, so it would be a good candidate for a drawing.</li>
+         <li>I wanted to make something just a little harder than what I was able to do.</li>
+        </ul>
+        <p>I found an image of a side profile of the teapot [<a href="https://www.forceflow.be/utah-teapot/" target="_blank">source</a>], and traced in in Inkscape.</p>
+        <div class="small-block-wrapper">
+         <figure class="small-block small-block-left"><img class="attachment-attachment-thumb size-attachment-thumb" src="../files/2022-01-cad/week-3/teapot/utah-teapot.jpg" alt="" height="540" width="540" style="aspect-ratio: 540 / 540;" /></figure>
+         <figure class="small-block small-block-right"><img src="../files/2022-01-cad/week-3/teapot/Screen%20Shot%202022-02-15%20at%2010.10.47%20AM.opt.jpg" height="1025" width="1322" style="aspect-ratio: 1322 / 1025;" /></figure>
+        </div>
+        <p>Then I exported the line out, and I couldn't use the revolve tool on it. I think it was because the revolve tool is for revolving areas into solids, not revolving lines into surfaces. I'm sure there's a way to get Fusion to do it, but I couldn't figure out how. So I went back to Inkscape, made the stroke path thicker, and outlined the stroke. I was successfully able to revolve that:</p>
+        <figure class="small-block"><img src="../files/2022-01-cad/week-3/teapot/Screen Shot 2022-02-15 at 10.13.48 AM.png" height="1398" width="1390" style="aspect-ratio: 1390 / 1398;" /></figure>
+        <p>Note that the SVG path that is being revolved is visible in green.</p>
+        <p>This is about as far as I got. I ran into two unresolved (un<i>revovled</i>?) issues:</p>
+        <ul>
+         <li>I was only able to figure out how to create the body and lid of the teapot. The handle and spout look like they require more advanced tools than those I've learned.</li>
+         <li>There is a tiny hole at the top and bottom of the shape. Bringing the area to be touching the axis of revolution resulted in the following error -- "The profile crosses the revolve axis" -- even though I was hoping Fusion would be smart and just ignore the overhang.</li>
+        </ul>
+        <p>Given that this is about as good as it was going to get, I moved on to the drawing.</p>
+        <div class="small-block-wrapper">
+         <p class="small-block small-block-left">At this point I realized that I hadn't been keeping track of what dimensions I was making everything. But also I didn't know what dimensions the teapot should have. So I looked it up.</p>
+         <figure class="small-block small-block-right"><img src="../files/2022-01-cad/week-3/teapot/Screen Shot 2022-02-15 at 10.10.47 AM.opt.jpg" height="1025" width="1322" style="aspect-ratio: 1322 / 1025;" /></figure>
+         <figure class="small-block small-block-left"><img src="../files/2022-01-cad/week-3/teapot/Screen Shot 2022-02-15 at 10.11.24 AM.png" height="341" width="551" style="aspect-ratio: 551 / 341;" /></figure>
+        </div>
+        <p>I found that the easiest way for my to adjust the size of the model was to resize the SVG and run Revolve again. Maybe one day I'll be more familiar with how to scale objects directly in Fusion.</p>
+        <p>Finished drawing:</p>
+        <figure class="small-block"><img src="../files/2022-01-cad/week-3/teapot/Screen Shot 2022-02-15 at 10.18.09 AM.png" height="1590" width="1762" style="aspect-ratio: 1762 / 1590;" /></figure>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
