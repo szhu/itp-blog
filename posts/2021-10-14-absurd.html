@@ -1,0 +1,78 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>Designing the Absurd</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">Designing the Absurd</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Project 2: Chindogu</header>
+     <div class="section-content">
+      <section class="section section-level-2">
+       <header class="section-header">Why did you work on this project?</header>
+       <div class="section-content">
+        <ul>
+         <li>To help people communicate more efficiently.</li>
+         <li>facial expression contains a lot of information, have better understanding if they see</li>
+         <li>emotional and okay some indication of some muscle movement indicate people's like, situation condition.</li>
+         <li>I see. That makes a lot of sense and also the body language its products. Right. So with a mask, all of these emotional and like situational cues are covered up and we want to we want to let people express those cues again.</li>
+         <li>the problem with speaking is that only one person can speak at a time. If you can, you know like often when you're talking to someone, you remember how they're you can see their expression as you're talking. So then you can get feedback like as you're talking otherwise, it would be really hard to do that if we didn't have Yeah, without nonverbal cues. Yeah. without interrupting.</li>
+         <li>Yeah, it's kind of why it's easier to talk to someone in person than to like send a Slack message, because you don't know how they're gonna react until you send the whole thing.</li>
+        </ul>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">How did we build this?</header>
+       <div class="section-content">
+        <p>parts</p>
+        <ul>
+         <li>we have a screen</li>
+         <li>we have an IR sensor</li>
+         <li>then we have a 3d printed like, mold for it right, or a 3d printed part that attaches the screen to the mask or attaches all the parts to each other?</li>
+         <li>Is there also a battery? This nine volt battery inside Yeah, this battery okay. So, okay, what are the complicated parts we need to talk about? We need to talk about the Oh, and</li>
+         <li>then we have the Arduino? Yes. Yeah. So we can talk about the Arduino on the screen is one thing.</li>
+        </ul>
+        <p>software</p>
+        <ul>
+         <li>There is a sensor that sensor is basically an IR light receiver. And we are using a library that decodes signals from standard remotes. It's okay. We think just copy and paste in here. We're decoding. I just want to add them. Okay.</li>
+         <li>So, this controller will take because this library takes input from this kind of light sensor. And then when you have standard remotes sending stuff, sending signals to it, it will decode that input into into like a number that we can read.</li>
+         <li>So we used a standard remote, we didn't build our own remote, we use the standard remote and it sends different signals for different buttons. And so we pressed it to just see what code would come out. And then we assign those codes to different things.</li>
+         <li>So what we did is when the user presses a button, they will. We're going to get the code and each code maps to a different image, which we'll go into in a bit. So a different like facial expression image. And so we have X number of facial expression images, and</li>
+         <li>we also added a sticker layer on top of the remote so that so that you can see what facial expression will be initiated when you press the button.</li>
+         <li>One challenge here was to make sure that pixel or sorry to make sure one challenge was to create the images for all the expressions. There's just so many of them and it's a lot of pixels to draw. So we made a JavaScript based pixel image editor that outputs directly into the format that we can put into our code</li>
+        </ul>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">problems</header>
+       <div class="section-content">
+        <ul>
+         <li>having a remote to change your expressions feels like it could be distracting. You have to look at the remote to figure out which facial expression you want to make. If it was easier to feel that different buttons on the remote and you knew which one was which that would make things a lot easier. Yeah. So you have to look us controller to figure out which button to press that kind of is challenging.</li>
+         <li>Yeah. People don't have a way to put it in their own expressions. And one of the nice parts about expressions is that you they are your own right here. You can only use the expressions that we chose.</li>
+         <li>I'm just concluded that first it is heavy. We have to know the first challenge if it is heavy.</li>
+         <li>It's kind of restricted by the screen colors and the pixel. But I think even if the screen was larger, we would still have this problem. People still might be confused how the image on the screen translates to an expression you might make or their face. It's it's never going to be exactly one to one just just the camera inside mask. So we'll never do that. You might as well make a transparent mask. I actually like that the screen is the low rise because then people don't focus on the details right like for example, if someone has, for example, a really big pimple on their lip. Then I can't not notice it while they smile. But this allows people to convey that expression without like they can express however they want.</li>
+        </ul>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">successes</header>
+       <div class="section-content">
+        <ul>
+         <li>It was pretty robust.</li>
+         <li>And so the most important thing is that people when we use the people immediately got what we're trying to do it has its use and why people use it is immediately understood</li>
+         <li>And I think it's easy because we've been wearing a mask for so long that it was nice for people to actually see how he felt emotionally for once.</li>
+        </ul>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
