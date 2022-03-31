@@ -1,0 +1,6 @@
+{
+    "board": "arduino:avr:nano",
+    "sketch": "CrawlGame.ino",
+    "port": "/dev/tty.usbmodem14101",
+    "configuration": "cpu=atmega328"
+}
