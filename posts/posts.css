@@ -217,12 +217,16 @@ figure[data-title]:hover::after {
 
 .small-block-left,
 .small-block-right {
-  display: flex;
-  flex-direction: column;
   flex-grow: 1;
   box-sizing: border-box;
   width: 40%;
   width: max(300px, 40%);
+}
+
+figure.small-block-left,
+figure.small-block-right {
+  display: flex;
+  flex-direction: column;
 }
 
 section:after {
