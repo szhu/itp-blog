@@ -1,0 +1,10 @@
+#!/bin/bash
+
+while [[ $# -gt 0 ]]; do
+  file="$1"
+  xattr -px com.apple.metadata:kMDItemWhereFroms "$file" | xxd -r -p | plutil -convert json - -o "$file".src.json
+  prettier --write "$file".src.json
+  cat "$file".src.json
+  echo
+  shift
+done
