@@ -1,0 +1,64 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="stylesheet" href="posts.css" />
+  <script defer="" src="posts.js"></script>
+
+  <title>CAD Week 13</title>
+ </head>
+ <body>
+  <section class="section section-level-0">
+   <header class="section-header">CAD Week 13</header>
+   <div class="section-content">
+    <section class="section section-level-1">
+     <header class="section-header">Final project!</header>
+     <div class="section-content">
+      <p>See <a href="./2022-04-12-cad.html">Week 10</a> for part 1 and <a href="./2022-04-19-cad.html">Week 11</a> for part 2.</p>
+      <section class="section section-level-2">
+       <header class="section-header">Rendering</header>
+       <div class="section-content">
+        <p>Time to render the the traffic light!</p>
+        <p>Selecting the material for the light covers:</p>
+        <div class="small-block-wrapper">
+         <figure class="small-block small-block-left"><img src="../files/2022-01-cad/week-13/project/20220503-Screen%20Shot%202022-05-03%20at%201.48.53%20AM.png" height="1100" width="1100" style="aspect-ratio: 1100 / 1100;" /></figure>
+         <figure class="small-block small-block-right"><img src="../files/2022-01-cad/week-13/project/20220503-Screen%20Shot%202022-05-03%20at%201.46.49%20AM.png" height="1100" width="1100" style="aspect-ratio: 1100 / 1100;" /></figure>
+        </div>
+        <p>Then I turned on the environment. A highway environment seems appropriate for this.</p>
+        <figure class="small-block"><img src="../files/2022-01-cad/week-13/project/20220503-Screen%20Shot%202022-05-03%20at%201.52.46%20AM.png" height="1100" width="1100" style="aspect-ratio: 1100 / 1100;" /></figure>
+        <p>This looks pretty good, except the lights are still missing.</p>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Adding the lights</header>
+       <div class="section-content">
+        <p>To create the colored part of the light, I created a sphere, and split it across a plane..</p>
+        <figure class="small-block"><img src="../files/2022-01-cad/week-13/project/20220503-Screen%20Shot%202022-05-03%20at%2010.42.29%20AM.png" height="1100" width="1100" style="aspect-ratio: 1100 / 1100;" /></figure>
+        <p>I chose an appropriate material for the light. Out of the built-in materials, "red glass" and "red acrylic" seemed closest to what the real-life would be. However, it seemed to be only a good representation of a light switched off. I chose a very different material simulate a light switched on.</p>
+        <div class="small-block-wrapper">
+         <figure class="small-block small-block-left"><img src="../files/2022-01-cad/week-13/project/20220503-Screen%20Shot%202022-05-03%20at%2010.53.13%20AM.png" height="1100" width="1100" style="aspect-ratio: 1100 / 1100;" /></figure>
+         <figure class="small-block small-block-right"><img src="../files/2022-01-cad/week-13/project/20220503-Screen%20Shot%202022-05-03%20at%2011.03.52%20AM.png" height="1100" width="1100" style="aspect-ratio: 1100 / 1100;" /></figure>
+         <p class="small-block small-block-left">Ideally, I would keep the same material, and add a light source behind it, but it seems like Fusion doesn't support adding light sources.</p>
+         <figure class="small-block small-block-right"><img src="../files/2022-01-cad/week-13/project/20220503-Screen%20Shot%202022-05-03%20at%2011.03.53%20AM.png" alt="" height="654" width="817" style="aspect-ratio: 817 / 654;" /></figure>
+        </div>
+        <p>I then moved it into a component and copied it twice. I ran into a problem -- the copies' appearances were linked. When I changed the appearance of the yellow light, all the other lights would turn yellow as well.</p>
+        <figure class="small-block"><img src="../files/2022-01-cad/week-13/project/20220503-Screen%20Shot%202022-05-03%20at%2011.08.59%20AM.png" height="1100" width="1100" style="aspect-ratio: 1100 / 1100;" /></figure>
+        <p>This took a while to figure out. A solution was to copy the component and use the "Paste as New" command, rather than the "Move/Copy" command. The final model has six light</p>
+       </div>
+      </section>
+      <section class="section section-level-2">
+       <header class="section-header">Final results</header>
+       <div class="section-content">
+        <figure class="small-block"><img src="../files/2022-01-cad/week-13/project/20220503-Screen%20Shot%202022-05-03%20at%2011.55.45%20AM.png" height="1050" width="1050" style="aspect-ratio: 1050 / 1050;" /></figure>
+        <p>I created an animation that simulated the light cycle:</p>
+        <figure class="small-block"><video src="../files/2022-01-cad/week-13/project/20220503-Screen Recording 2022-05-03 at 12.04.57 PM.mov" height="1050" width="1050" preload="metadata" controls="" style="aspect-ratio: 1050 / 1050;"></video></figure>
+        <p>I also created a final rendering with the final model:</p>
+        <figure class="small-block"><img src="../files/2022-01-cad/week-13/project/20220503-Week_13_HW_2022-May-03_04-09-11PM-000_CustomizedView19621796897.png" height="879" width="1200" style="aspect-ratio: 1200 / 879;" /></figure>
+       </div>
+      </section>
+     </div>
+    </section>
+   </div>
+  </section>
+ </body>
+</html>
